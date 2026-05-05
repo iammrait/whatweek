@@ -3,7 +3,7 @@ import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
 import { getIsoWeekNumber, getTodayInTimeZone } from "@/lib/week";
 
-export const alt = "What Week Is It Canada";
+export const alt = "WhatWeek.ca";
 export const size = {
   width: 1200,
   height: 630,

@@ -1,4 +1,4 @@
-# What Week Is It Canada (weekisit)
+# WhatWeek.ca
 
 A modern, responsive, and bilingual (English/French) week number calendar built specifically for Canada. It provides the current ISO week number, an interactive year calendar, and contextual information about federal and provincial public holidays.
 
