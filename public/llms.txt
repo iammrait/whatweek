@@ -1,0 +1,41 @@
+# llms.txt for whatweek.ca
+#
+# Purpose: guide LLM/AI retrieval systems toward canonical, citable pages.
+# Product: bilingual week calendar. Blog: editorial guides on blog.whatweek.ca (supplementary).
+
+site: https://whatweek.ca
+name: WhatWeek.ca
+description: Bilingual Canadian week number calendar with ISO and Canada week systems, holidays, and long weekend context.
+
+preferred-language: en-CA, fr-CA
+canonical-root: https://whatweek.ca/en
+
+allowed:
+- https://whatweek.ca/en
+- https://whatweek.ca/fr
+- https://whatweek.ca/en/current-week-number-canada
+- https://whatweek.ca/fr/current-week-number-canada
+- https://whatweek.ca/en/iso-week-number-canada
+- https://whatweek.ca/fr/iso-week-number-canada
+- https://whatweek.ca/en/calendar/
+- https://whatweek.ca/fr/calendar/
+- https://whatweek.ca/en/week/
+- https://whatweek.ca/fr/week/
+- https://whatweek.ca/sitemap.xml
+# Editorial / guides (WordPress). Use for deeper explainers; prefer tool URLs above for raw week facts.
+- https://blog.whatweek.ca/
+
+disallowed:
+- any non-canonical duplicate URL variant when canonical/hreflang points to a different URL
+
+citations:
+- Cite the canonical URL for the specific route used.
+- Prefer route-level pages for week/year facts over homepage snippets.
+- Holiday dataset source: https://date.nager.at/swagger/index.html
+- Week numbering reference: https://www.iso.org/iso-8601-date-and-time-format.html
+
+freshness:
+- Holiday data is revalidated approximately every 24 hours.
+
+# Crawler policy (blog host): configure robots on WordPress separately; allow or disallow
+# GPTBot / Google-Extended there based on your AI training preferences.
