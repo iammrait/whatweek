@@ -73,6 +73,7 @@ export default async function KeywordIntentPage({ params }: Props) {
 
   const canonical = buildAbsolute(locale, keywordSlug);
   const faq = page.faq(locale, snapshot.currentYear, snapshot.canadaWeek, snapshot.dayOfYear, snapshot.weekYear);
+  const bodySections = page.bodySections?.(locale, snapshot) ?? [];
   const related = keywordPageOrder.filter((item) => item !== keywordSlug).slice(0, 6);
 
   const faqJsonLd = buildFaqJsonLd(faq);
@@ -88,10 +89,12 @@ export default async function KeywordIntentPage({ params }: Props) {
     })),
   };
 
+  const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
+
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(itemListJsonLd) }} />
       <SiteHeader locale={locale} />
       <section className="hero">
         <nav className="breadcrumbs" aria-label="Breadcrumb">
@@ -114,6 +117,23 @@ export default async function KeywordIntentPage({ params }: Props) {
           {locale === "fr" ? `Année-semaine ISO actuelle: ${snapshot.weekYear}-W${String(snapshot.isoWeek).padStart(2, "0")}.` : `Current ISO week-year: ${snapshot.weekYear}-W${String(snapshot.isoWeek).padStart(2, "0")}.`}
         </p>
       </section>
+
+      {bodySections.length > 0 && (
+        <section className="panel contentSection">
+          {bodySections.map((section) => (
+            <article key={section.h2} style={{ marginBottom: "1.25rem" }}>
+              <h2 style={{ marginBottom: "0.4rem" }}>{section.h2}</h2>
+              <p>{section.paragraph}</p>
+              {section.h3?.map((sub) => (
+                <div key={sub.heading} style={{ marginTop: "0.6rem" }}>
+                  <h3 style={{ marginBottom: "0.3rem" }}>{sub.heading}</h3>
+                  <p>{sub.paragraph}</p>
+                </div>
+              ))}
+            </article>
+          ))}
+        </section>
+      )}
 
       <section className="panel contentSection">
         <h2>{locale === "fr" ? "Questions fréquentes" : "Frequently asked questions"}</h2>

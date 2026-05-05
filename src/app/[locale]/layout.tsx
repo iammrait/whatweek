@@ -20,11 +20,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://whatweek.ca"),
   applicationName: "WhatWeek.ca",
   title: {
-    default: "What Week Is It? — Canada Week Number Calendar | WhatWeek.ca",
+    default: "What Week of the Year Is It? Canada Calendar | WhatWeek.ca",
     template: "%s | WhatWeek.ca",
   },
   description:
-    "Find the current week number in Canada. Free bilingual (English & French) calendar with ISO 8601 week numbers, Canadian holidays, and long weekend tracking by province.",
+    "Instantly see what week of the year it is in Canada—the current week number, week dates, how many weeks in the year, and the day of the year, in real time.",
   category: "calendar",
   authors: [{ name: "whatweek.ca" }],
   creator: "whatweek.ca",

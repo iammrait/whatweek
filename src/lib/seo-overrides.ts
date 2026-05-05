@@ -18,11 +18,13 @@ export const seoOverrides: Record<string, SeoOverride> = {
   },
   "/en/what-week-of-the-year-is-it": {
     title: "What week of the year is it in Canada?",
-    description: "Quickly check what week of the year it is today in Canada, including ISO week and date range context.",
+    description:
+      "Get the current week number in Canada—what week of the year it is today, ISO 8601 week, week-year, and day of the year. Live, free, bilingual.",
   },
   "/fr/what-week-of-the-year-is-it": {
-    title: "Quelle semaine de l'année sommes-nous au Canada?",
-    description: "Réponse rapide au numéro de semaine actuel au Canada avec contexte ISO et plage de dates.",
+    title: "Quelle semaine de l'année sommes-nous ?",
+    description:
+      "Numéro de semaine actuel au Canada : quelle semaine de l'année, semaine ISO 8601, année-semaine et jour de l'année—en direct, gratuit, bilingue.",
   },
   "/en/weeks-in-a-year": {
     title: "How many weeks are in a year?",

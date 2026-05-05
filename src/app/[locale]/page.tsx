@@ -17,6 +17,7 @@ import {
   getWeekNumber,
   getWeeksInYear,
   getWeekSystem,
+  getWeekYear,
   getYearCalendar,
   startOfWeek,
 } from "@/lib/week";
@@ -149,6 +150,11 @@ export default async function LocalePage({ params, searchParams }: Props) {
   const weekStart = startOfWeek(today, system);
   const weekEnd = new Date(weekStart);
   weekEnd.setUTCDate(weekStart.getUTCDate() + 6);
+  const dayOfYear = Math.floor((today.getTime() - firstDay.getTime()) / 86_400_000) + 1;
+  const weeksLeft = Math.max(0, weeksInYear - currentWeek);
+  const weekYear = getWeekYear(today, system);
+  const weekRangeText = `${formatDateLong(weekStart, localeCode, timeZone)} – ${formatDateLong(weekEnd, localeCode, timeZone)}`;
+  const dayName = new Intl.DateTimeFormat(localeCode, { weekday: "long", timeZone }).format(today);
   const [holidays, nextLongWeekend] = await Promise.all([
     getHolidaysForDateRange(weekStart, weekEnd, province),
     getNextLongWeekend(year, today, province),
@@ -167,65 +173,20 @@ export default async function LocalePage({ params, searchParams }: Props) {
   const orgId = "https://whatweek.ca/#organization";
   const websiteId = "https://whatweek.ca/#website";
   const webpageId = `${canonical}#webpage`;
+  const faqEntries = dictionary.faq.entries(currentWeek, weeksInYear, year, dayOfYear, weekYear);
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "@id": `${canonical}#faq`,
     isPartOf: { "@id": webpageId },
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: locale === "fr" ? "Quel est le numéro de semaine actuel au Canada ?" : "What is the current week number in Canada?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: locale === "fr" ? `Le numéro de semaine actuel est ${currentWeek}.` : `The current week number is ${currentWeek}.`,
-        },
+    mainEntity: faqEntries.map((entry) => ({
+      "@type": "Question",
+      name: entry.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: entry.a,
       },
-      {
-        "@type": "Question",
-        name: locale === "fr" ? "Le Canada utilise-t-il ISO 8601 ou dimanche-samedi ?" : "Does Canada use ISO 8601 or Sunday-Saturday weeks?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            locale === "fr"
-              ? "Les deux sont utilisés selon le contexte. Le gouvernement et les entreprises utilisent souvent dimanche-samedi, tandis que ISO 8601 (lundi-dimanche) est la norme internationale. WhatWeek.ca prend en charge les deux systèmes."
-              : "Both are used depending on context. Government and business often use Sunday-Saturday, while ISO 8601 (Monday-Sunday) is the international standard. WhatWeek.ca supports both systems.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: locale === "fr" ? "Quand commence la semaine au Canada ?" : "When does the week start in Canada?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            locale === "fr"
-              ? "Au Canada, les semaines commencent traditionnellement le dimanche. Le système ISO 8601, utilisé internationalement, commence les semaines le lundi."
-              : "In Canada, weeks traditionally start on Sunday. The ISO 8601 standard, used internationally, starts weeks on Monday.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: locale === "fr" ? `Combien de semaines en ${year} ?` : `How many weeks in ${year}?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            locale === "fr"
-              ? `L'année ${year} compte ${weeksInYear} semaines ISO.`
-              : `The year ${year} has ${weeksInYear} ISO weeks.`,
-        },
-      },
-      {
-        "@type": "Question",
-        name: locale === "fr" ? "Le numéro de semaine change-t-il selon la province ?" : "Does the week number change by province?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text:
-            locale === "fr"
-              ? "Non, le numéro de semaine est le même dans tout le Canada. Cependant, les jours fériés et les longs week-ends varient selon la province."
-              : "No, the week number is the same across Canada. However, holidays and long weekends vary by province.",
-        },
-      },
-    ],
+    })),
   };
 
   const organizationJsonLd = {
@@ -272,18 +233,23 @@ export default async function LocalePage({ params, searchParams }: Props) {
     isBasedOn: ["https://date.nager.at/swagger/index.html", "https://www.iso.org/iso-8601-date-and-time-format.html"],
   };
 
+  const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
+
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(organizationJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(websiteJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(webpageJsonLd) }} />
       <SiteHeader locale={locale} year={year} province={province} system={system} />
 
       <section className="hero">
         <h1 className="currentWeek" style={{ fontSize: "inherit", fontWeight: 700, margin: 0 }}>
-          {dictionary.currentWeek}: <strong>{dictionary.weekAbbrev} {currentWeek}</strong>
+          {dictionary.home.h1}
         </h1>
+        <p className="subtle" style={{ marginTop: "0.5rem", fontSize: "1.125rem" }}>
+          <strong>{dictionary.home.heroAnswer(currentWeek, year)}</strong>
+        </p>
         <p className="subtle">
           {locale === "fr"
             ? `Système de semaine : ${system === "canada" ? "Canada (dimanche à samedi)" : "ISO 8601 (lundi à dimanche)"}`
@@ -293,9 +259,13 @@ export default async function LocalePage({ params, searchParams }: Props) {
           {formatDateLong(weekStart, localeCode, timeZone)} - {formatDateLong(weekEnd, localeCode, timeZone)}
         </p>
         <p className="subtle" style={{ maxWidth: "800px", margin: "0.75rem auto 0", lineHeight: 1.6 }}>
-          {locale === "fr"
-            ? `Calendrier ${year} pour ${provinceName ?? "le Canada"} : numéros de semaine ${system === "iso" ? "ISO 8601" : "Canada (dimanche à samedi)"}, repères pour la paie, l’école et les congés.`
-            : `${year} calendar for ${provinceName ?? "Canada"}: ${system === "iso" ? "ISO 8601" : "Canada (Sunday–Saturday)"} week numbers—handy for payroll, school, and planning time off.`}
+          {dictionary.home.intro.line1}
+        </p>
+        <p className="subtle" style={{ maxWidth: "800px", margin: "0.4rem auto 0", lineHeight: 1.6 }}>
+          {dictionary.home.intro.line2}
+        </p>
+        <p className="subtle" style={{ maxWidth: "800px", margin: "0.4rem auto 0", lineHeight: 1.6 }}>
+          {dictionary.home.intro.line3}
         </p>
 
         <div className="systemLinks">
@@ -358,6 +328,50 @@ export default async function LocalePage({ params, searchParams }: Props) {
 
       <YearCalendar locale={locale} dictionary={dictionary} months={yearCalendar} year={year} system={system} today={today} />
 
+      <section className="panel contentSection" aria-labelledby="week-of-year-heading">
+        <h2 id="week-of-year-heading">{dictionary.home.weekOfYear.h2}</h2>
+        <p>{dictionary.home.weekOfYear.body(currentWeek, year, weekRangeText)}</p>
+        <h3>{dictionary.home.weekOfYear.h3WeekDates.heading}</h3>
+        <p>{dictionary.home.weekOfYear.h3WeekDates.body(weekRangeText)}</p>
+        <h3>{dictionary.home.weekOfYear.h3WeeksIntoYear.heading}</h3>
+        <p>{dictionary.home.weekOfYear.h3WeeksIntoYear.body(currentWeek, weeksLeft, year)}</p>
+      </section>
+
+      <section className="panel contentSection" aria-labelledby="weeks-in-year-heading">
+        <h2 id="weeks-in-year-heading">{dictionary.home.weeksInYear.h2}</h2>
+        <p>{dictionary.home.weeksInYear.body(year, weeksInYear)}</p>
+        <h3>{dictionary.home.weeksInYear.h3ExtraDays.heading}</h3>
+        <p>{dictionary.home.weeksInYear.h3ExtraDays.body}</p>
+        <h3>{dictionary.home.weeksInYear.h353Weeks.heading}</h3>
+        <p>{dictionary.home.weeksInYear.h353Weeks.body}</p>
+      </section>
+
+      <section className="panel contentSection" aria-labelledby="day-of-year-heading">
+        <h2 id="day-of-year-heading">{dictionary.home.dayOfYear.h2}</h2>
+        <p>{dictionary.home.dayOfYear.body(dayOfYear, year, currentWeek)}</p>
+        <h3>{dictionary.home.dayOfYear.h3DayOfWeek.heading}</h3>
+        <p>{dictionary.home.dayOfYear.h3DayOfWeek.body(dayName)}</p>
+      </section>
+
+      <section className="panel contentSection" aria-labelledby="weeks-months-heading">
+        <h2 id="weeks-months-heading">{dictionary.home.weeksMonths.h2}</h2>
+        <p>{dictionary.home.weeksMonths.body(year)}</p>
+        <h3>{dictionary.home.weeksMonths.h3YearByCalendar.heading}</h3>
+        <p>
+          {dictionary.home.weeksMonths.h3YearByCalendar.body}{" "}
+          <Link href={`/${locale}/calendar/${year}`} prefetch={false}>
+            {locale === "fr" ? `Voir le calendrier ${year}` : `Open the ${year} calendar`}
+          </Link>
+        </p>
+        <h3>{dictionary.home.weeksMonths.h3WeekByYear.heading}</h3>
+        <p>
+          {dictionary.home.weeksMonths.h3WeekByYear.body}{" "}
+          <Link href={`/${locale}/week-by-year`} prefetch={false}>
+            {locale === "fr" ? "Semaine par année" : "Week by year"}
+          </Link>
+        </p>
+      </section>
+
       <section className="panel quickLinks">
         <h2>{locale === "fr" ? "Navigation rapide" : "Quick navigation"}</h2>
         <div className="linkGrid">
@@ -380,6 +394,16 @@ export default async function LocalePage({ params, searchParams }: Props) {
             {locale === "fr" ? "Quel jour de l'année?" : "What day of the year is it?"}
           </Link>
         </div>
+      </section>
+
+      <section className="panel contentSection" aria-labelledby="faq-heading">
+        <h2 id="faq-heading">{dictionary.faq.heading}</h2>
+        {faqEntries.map((entry) => (
+          <article key={entry.q} style={{ marginBottom: "0.9rem" }}>
+            <h3 style={{ marginBottom: "0.4rem" }}>{entry.q}</h3>
+            <p>{entry.a}</p>
+          </article>
+        ))}
       </section>
 
       <BlogTeaser locale={locale} />
