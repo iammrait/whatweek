@@ -48,7 +48,9 @@ export function weekDetailDescription(locale: Locale, year: number, week: number
 }
 
 export function currentWeekCanadaTitle(locale: Locale): string {
-  return locale === "fr" ? "Semaine actuelle au Canada" : "Current week number in Canada";
+  return locale === "fr"
+    ? "Semaine actuelle au Canada — numéros ISO et Canada"
+    : "Current week number in Canada — ISO & Canada weeks";
 }
 
 export function currentWeekCanadaDescription(locale: Locale): string {
@@ -97,14 +99,14 @@ export function calendarYearDescription(locale: Locale, year: number, weeksInYea
   return `${year} week-number calendar for Canada: ${weeksInYear} ISO weeks, monthly grid with week numbers, and links to each week—handy for payroll, school, and holiday planning.`;
 }
 
-/** Home (locale root): short title; layout adds ` | WhatWeek.ca`. */
+/** Home (locale root): concise title to stay within common SERP length bounds. */
 export function homeCalendarTitle(locale: Locale, year: number, geoLabel: string, system: "iso" | "canada"): string {
   if (locale === "fr") {
-    const iso = system === "iso" ? " · ISO" : "";
-    return `Calendrier ${geoLabel} ${year}${iso}`.trim();
+    const systemLabel = system === "iso" ? "ISO 8601" : "dim.–sam.";
+    return `${geoLabel} ${year} : semaines et fériés (${systemLabel})`;
   }
-  const iso = system === "iso" ? " · ISO" : "";
-  return `${geoLabel} week calendar ${year}${iso}`.trim();
+  const systemLabel = system === "iso" ? "ISO 8601" : "Sun–Sat";
+  return `${geoLabel} ${year} week calendar (${systemLabel})`;
 }
 
 export function homeCalendarDescription(
@@ -117,4 +119,32 @@ export function homeCalendarDescription(
     return `Semaines ${system === "iso" ? "ISO 8601" : "Canada (dim–sam)"} pour ${geoLabel}, année ${year}. Numéro de semaine actuel, jours fériés canadiens et longs week-ends—idéal pour organiser travail, école et congés.`;
   }
   return `${system === "iso" ? "ISO 8601" : "Canada (Sun–Sat)"} week numbers for ${geoLabel}, ${year}. Current week, Canadian holidays, and long weekends—plan work, school, and time off with confidence.`;
+}
+
+export function buildLocaleAlternates(path: string) {
+  return {
+    canonical: `https://whatweek.ca/en${path}`,
+    languages: {
+      "en-CA": `https://whatweek.ca/en${path}`,
+      "fr-CA": `https://whatweek.ca/fr${path}`,
+      "x-default": `https://whatweek.ca/en${path}`,
+    },
+  } as const;
+}
+
+export function buildFaqJsonLd(
+  entries: Array<{ question: string; answer: string }>,
+): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: entries.map((entry) => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: entry.answer,
+      },
+    })),
+  };
 }

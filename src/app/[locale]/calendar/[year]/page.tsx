@@ -113,7 +113,9 @@ export default async function CalendarYearPage({ params }: Props) {
       
       <section className="hero">
         <nav className="breadcrumbs" aria-label="Breadcrumb">
-          <Link href={`/${locale}`}>{locale === "fr" ? "Accueil" : "Home"}</Link>
+          <Link href={`/${locale}`} prefetch={false}>
+            {locale === "fr" ? "Accueil" : "Home"}
+          </Link>
           <span> / </span>
           <span>{year}</span>
         </nav>
@@ -126,9 +128,13 @@ export default async function CalendarYearPage({ params }: Props) {
         </p>
 
         <nav className="yearNav" aria-label="Year navigation">
-          <Link href={`/${locale}/calendar/${year - 1}`}>{year - 1}</Link>
+          <Link href={`/${locale}/calendar/${year - 1}`} prefetch={false}>
+            {year - 1}
+          </Link>
           <span className="current">{year}</span>
-          <Link href={`/${locale}/calendar/${year + 1}`}>{year + 1}</Link>
+          <Link href={`/${locale}/calendar/${year + 1}`} prefetch={false}>
+            {year + 1}
+          </Link>
         </nav>
       </section>
 

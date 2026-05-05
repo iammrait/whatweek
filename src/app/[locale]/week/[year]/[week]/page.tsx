@@ -121,9 +121,13 @@ export default async function WeekDetailPage({ params }: Props) {
       
       <section className="hero">
         <nav className="breadcrumbs" aria-label="Breadcrumb">
-          <Link href={`/${locale}`}>{locale === "fr" ? "Accueil" : "Home"}</Link>
+          <Link href={`/${locale}`} prefetch={false}>
+            {locale === "fr" ? "Accueil" : "Home"}
+          </Link>
           <span> / </span>
-          <Link href={`/${locale}/calendar/${year}`}>{year}</Link>
+          <Link href={`/${locale}/calendar/${year}`} prefetch={false}>
+            {year}
+          </Link>
           <span> / </span>
           <span>{locale === "fr" ? "Semaine" : "Week"} {week}</span>
         </nav>
@@ -136,11 +140,11 @@ export default async function WeekDetailPage({ params }: Props) {
         </p>
 
         <nav className="yearNav" aria-label="Week navigation">
-          <Link href={`/${locale}/week/${prevYear}/${prevWeek}`}>
+          <Link href={`/${locale}/week/${prevYear}/${prevWeek}`} prefetch={false}>
             {locale === "fr" ? "Précédente" : "Previous"}
           </Link>
           <span className="current">{locale === "fr" ? "Semaine" : "Week"} {week}</span>
-          <Link href={`/${locale}/week/${nextYear}/${nextWeek}`}>
+          <Link href={`/${locale}/week/${nextYear}/${nextWeek}`} prefetch={false}>
             {locale === "fr" ? "Suivante" : "Next"}
           </Link>
         </nav>
@@ -158,8 +162,18 @@ export default async function WeekDetailPage({ params }: Props) {
       <section className="panel quickLinks">
         <h2>{locale === "fr" ? "Liens utiles" : "Useful links"}</h2>
         <div className="linkGrid">
-          <Link href={`/${locale}/calendar/${year}`}>{locale === "fr" ? `Calendrier ${year}` : `${year} Calendar`}</Link>
-          <Link href={`/${locale}/current-week-number-canada`}>{locale === "fr" ? "Semaine Actuelle" : "Current Week"}</Link>
+          <Link href={`/${locale}/calendar/${year}`} prefetch={false}>
+            {locale === "fr" ? `Calendrier ${year}` : `${year} Calendar`}
+          </Link>
+          <Link href={`/${locale}/current-week-number-canada`} prefetch={false}>
+            {locale === "fr" ? "Semaine Actuelle" : "Current Week"}
+          </Link>
+          <Link href={`/${locale}/what-week-of-the-year-is-it`} prefetch={false}>
+            {locale === "fr" ? "Quelle semaine de l'année?" : "What week of the year is it?"}
+          </Link>
+          <Link href={`/${locale}/weeks-in-a-year`} prefetch={false}>
+            {locale === "fr" ? "Semaines dans une année" : "Weeks in a year"}
+          </Link>
         </div>
       </section>
     </main>

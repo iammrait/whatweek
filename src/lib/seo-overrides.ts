@@ -8,9 +8,30 @@ export type SeoOverride = {
 };
 
 export const seoOverrides: Record<string, SeoOverride> = {
-  // Add your mappings from the CSV here!
-  // Example:
-  // "/en/week/2026/1": { title: "Week 1 of 2026 in Canada | WhatWeek.ca", description: "Date range for week 1 in 2026 in Canada, with ISO context. This timeline is useful for business planning, payroll, and holidays." },
+  "/en/current-week-number-canada": {
+    title: "Current week number in Canada today",
+    description: "Find the current week number in Canada now, including Canada and ISO week systems with exact date ranges.",
+  },
+  "/fr/current-week-number-canada": {
+    title: "Numéro de semaine actuel au Canada aujourd'hui",
+    description: "Consultez le numéro de semaine actuel au Canada avec les systèmes Canada et ISO et les dates exactes.",
+  },
+  "/en/what-week-of-the-year-is-it": {
+    title: "What week of the year is it in Canada?",
+    description: "Quickly check what week of the year it is today in Canada, including ISO week and date range context.",
+  },
+  "/fr/what-week-of-the-year-is-it": {
+    title: "Quelle semaine de l'année sommes-nous au Canada?",
+    description: "Réponse rapide au numéro de semaine actuel au Canada avec contexte ISO et plage de dates.",
+  },
+  "/en/weeks-in-a-year": {
+    title: "How many weeks are in a year?",
+    description: "See how many weeks are in a year and navigate to Canada year calendars with week numbers.",
+  },
+  "/fr/weeks-in-a-year": {
+    title: "Combien de semaines dans une année?",
+    description: "Découvrez combien de semaines compte une année et accédez aux calendriers canadiens par année.",
+  },
 };
 
 /**

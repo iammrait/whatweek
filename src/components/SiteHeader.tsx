@@ -44,6 +44,12 @@ export function SiteHeader({ locale, year, province, system }: Props) {
         </div>
       </Link>
       <div className="headerTools">
+        <Link href={`/${locale}/what-week-of-the-year-is-it`} prefetch={false} className="headerBlogLink">
+          {locale === "fr" ? "Semaine actuelle" : "Week tools"}
+        </Link>
+        <Link href={`/${locale}/about`} prefetch={false} className="headerBlogLink">
+          {dictionary.aboutNav}
+        </Link>
         <a
           href="https://blog.whatweek.ca/"
           className="headerBlogLink"

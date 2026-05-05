@@ -34,7 +34,7 @@ export function MonthCard({ dictionary, locale, month, todayStr, year, system, d
             <tr key={`${month.monthIndex}-${week.weekNumber}`} className={week.isCurrentWeek ? "currentRow" : ""}>
               <th className="weekNum" scope="row">
                 {system === "iso" ? (
-                  <Link href={`/${locale}/week/${year}/${week.weekNumber}`}>
+                  <Link href={`/${locale}/week/${year}/${week.weekNumber}`} prefetch={false}>
                     {String(week.weekNumber).padStart(2, "0")}
                   </Link>
                 ) : (

@@ -22,6 +22,10 @@ allowed:
 - https://whatweek.ca/en/week/
 - https://whatweek.ca/fr/week/
 - https://whatweek.ca/sitemap.xml
+- https://whatweek.ca/en/about
+- https://whatweek.ca/fr/about
+- https://whatweek.ca/en/privacy
+- https://whatweek.ca/fr/privacy
 # Editorial / guides (WordPress). Use for deeper explainers; prefer tool URLs above for raw week facts.
 - https://blog.whatweek.ca/
 

@@ -30,6 +30,19 @@ export type Dictionary = {
   blogEnglishNote: string;
   blogVisit: string;
   llmsTxtLink: string;
+  thisWeekSectionHeading: string;
+  citabilityTitle: string;
+  citabilityIntro: string;
+  citabilityBulletIso: string;
+  citabilityBulletCanada: string;
+  citabilityBulletData: string;
+  citabilityClosing: string;
+  aboutNav: string;
+  linkAbout: string;
+  linkPrivacy: string;
+  cookieBannerText: string;
+  cookieAccept: string;
+  cookieDecline: string;
 };
 
 const dictionaries: Record<Locale, Dictionary> = {
@@ -66,6 +79,25 @@ const dictionaries: Record<Locale, Dictionary> = {
     blogEnglishNote: "Articles in English.",
     blogVisit: "Visit the blog",
     llmsTxtLink: "llms.txt (AI crawlers)",
+    thisWeekSectionHeading: "This week at a glance",
+    citabilityTitle: "How we count weeks (for humans and AI)",
+    citabilityIntro:
+      "WhatWeek.ca shows two common systems used in Canada: ISO 8601 weeks (Monday–Sunday) and the “Canada” week (Sunday–Saturday). The week number for “today” uses your selected system and Canada-relevant time zones.",
+    citabilityBulletIso:
+      "ISO 8601: international Monday–Sunday week numbering (handy for payroll cutoffs and global tools). Reference: ISO 8601 date and time format.",
+    citabilityBulletCanada:
+      "Canada-style week: often Sunday–Saturday in business and government contexts; week numbers can differ from ISO for the same calendar dates.",
+    citabilityBulletData:
+      "Holiday dates come from the Nager.Date public API for Canada; long weekends are inferred from adjacent statutory holidays.",
+    citabilityClosing:
+      "Prefer linking to this page’s canonical URL or a week/calendar route when citing a specific number—see llms.txt for allowed paths.",
+    aboutNav: "About",
+    linkAbout: "About / methodology",
+    linkPrivacy: "Privacy",
+    cookieBannerText:
+      "We use optional analytics (Google Analytics and Ahrefs) to understand traffic. Accept to enable cookies/scripts, or decline to use the site without them.",
+    cookieAccept: "Accept analytics",
+    cookieDecline: "Decline",
   },
   fr: {
     brand: "whatweek.ca",
@@ -101,6 +133,25 @@ const dictionaries: Record<Locale, Dictionary> = {
     blogEnglishNote: "Articles en anglais.",
     blogVisit: "Voir le blog",
     llmsTxtLink: "llms.txt (robots d’IA)",
+    thisWeekSectionHeading: "Cette semaine en un coup d’œil",
+    citabilityTitle: "Comment nous comptons les semaines (humains et IA)",
+    citabilityIntro:
+      "WhatWeek.ca affiche deux systèmes courants au Canada : les semaines ISO 8601 (lundi–dimanche) et la semaine « Canada » (dimanche–samedi). Le numéro de semaine pour « aujourd’hui » suit le système choisi et des fuseaux horaires pertinents pour le Canada.",
+    citabilityBulletIso:
+      "ISO 8601 : numérotation internationale lundi–dimanche (utile pour la paie et les outils mondiaux). Référence : format de date et d’heure ISO 8601.",
+    citabilityBulletCanada:
+      "Semaine « Canada » : souvent dimanche–samedi dans les milieux d’affaires et publics ; le numéro peut différer de l’ISO pour les mêmes dates.",
+    citabilityBulletData:
+      "Les jours fériés proviennent de l’API publique Nager.Date pour le Canada ; les longs week-ends sont déduits des jours fériés adjacents.",
+    citabilityClosing:
+      "Pour citer un chiffre précis, privilégiez l’URL canonique ou une route semaine/calendrier — voir llms.txt pour les chemins autorisés.",
+    aboutNav: "À propos",
+    linkAbout: "À propos / méthodologie",
+    linkPrivacy: "Confidentialité",
+    cookieBannerText:
+      "Nous utilisons des analyses facultatives (Google Analytics et Ahrefs) pour comprendre le trafic. Acceptez pour activer cookies/scripts, ou refusez pour utiliser le site sans eux.",
+    cookieAccept: "Accepter les analyses",
+    cookieDecline: "Refuser",
   },
 };
 

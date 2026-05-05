@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { locales } from "@/lib/i18n";
+import { keywordPageOrder } from "@/lib/keyword-targets";
 import { getWeeksInIsoYear, startOfIsoWeek } from "@/lib/week";
 
 const BASE_URL = "https://whatweek.ca";
@@ -47,29 +48,54 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
   const currentWeekStart = startOfIsoWeek(now);
 
   if (id === "base") {
-    return locales.flatMap((locale) => [
-      {
-        url: toAbsolute(`/${locale}`),
-        lastModified: now,
-        changeFrequency: "daily",
-        priority: 1,
-        alternates: localeAlternates(""),
-      },
-      {
-        url: toAbsolute(`/${locale}/current-week-number-canada`),
+    return locales.flatMap((locale) => {
+      const keywordEntries: MetadataRoute.Sitemap = keywordPageOrder.map((slug) => ({
+        url: toAbsolute(`/${locale}/${slug}`),
         lastModified: currentWeekStart,
-        changeFrequency: "daily",
-        priority: 0.9,
-        alternates: localeAlternates("/current-week-number-canada"),
-      },
-      {
-        url: toAbsolute(`/${locale}/iso-week-number-canada`),
-        lastModified: currentWeekStart,
-        changeFrequency: "daily",
-        priority: 0.8,
-        alternates: localeAlternates("/iso-week-number-canada"),
-      },
-    ]);
+        changeFrequency: "weekly",
+        priority: 0.78,
+        alternates: localeAlternates(`/${slug}`),
+      }));
+
+      return [
+        {
+          url: toAbsolute(`/${locale}`),
+          lastModified: now,
+          changeFrequency: "daily",
+          priority: 1,
+          alternates: localeAlternates(""),
+        },
+        {
+          url: toAbsolute(`/${locale}/current-week-number-canada`),
+          lastModified: currentWeekStart,
+          changeFrequency: "daily",
+          priority: 0.9,
+          alternates: localeAlternates("/current-week-number-canada"),
+        },
+        {
+          url: toAbsolute(`/${locale}/iso-week-number-canada`),
+          lastModified: currentWeekStart,
+          changeFrequency: "daily",
+          priority: 0.8,
+          alternates: localeAlternates("/iso-week-number-canada"),
+        },
+        ...keywordEntries,
+        {
+          url: toAbsolute(`/${locale}/about`),
+          lastModified: now,
+          changeFrequency: "monthly",
+          priority: 0.5,
+          alternates: localeAlternates("/about"),
+        },
+        {
+          url: toAbsolute(`/${locale}/privacy`),
+          lastModified: now,
+          changeFrequency: "monthly",
+          priority: 0.4,
+          alternates: localeAlternates("/privacy"),
+        },
+      ];
+    });
   }
 
   const [locale, yearToken] = id.split("-");

@@ -246,8 +246,17 @@ export default async function LocalePage({ params, searchParams }: Props) {
     url: "https://whatweek.ca",
     inLanguage: locale === "fr" ? "fr-CA" : "en-CA",
     publisher: { "@id": orgId },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: "https://whatweek.ca/en/what-week-of-the-year-is-it",
+      },
+      "query-input": "required name=search_term",
+    },
   };
 
+  const dateModified = new Date().toISOString().slice(0, 10);
   const webpageJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -255,6 +264,7 @@ export default async function LocalePage({ params, searchParams }: Props) {
     url: canonical,
     name: webpageTitle,
     description: webpageDescription,
+    dateModified,
     inLanguage: locale === "fr" ? "fr-CA" : "en-CA",
     isPartOf: { "@id": websiteId },
     about: { "@id": orgId },
@@ -291,6 +301,7 @@ export default async function LocalePage({ params, searchParams }: Props) {
         <div className="systemLinks">
           <Link
             href={buildHomeHref(locale, { year, province, system: "iso" })}
+            prefetch={false}
             className={system === "iso" ? "systemActive" : undefined}
             aria-current={system === "iso" ? "page" : undefined}
           >
@@ -298,6 +309,7 @@ export default async function LocalePage({ params, searchParams }: Props) {
           </Link>
           <Link
             href={buildHomeHref(locale, { year, province, system: "canada" })}
+            prefetch={false}
             className={system === "canada" ? "systemActive" : undefined}
             aria-current={system === "canada" ? "page" : undefined}
           >
@@ -316,19 +328,32 @@ export default async function LocalePage({ params, searchParams }: Props) {
         />
 
         <nav className="yearNav" aria-label={dictionary.yearLabel}>
-          <Link href={buildHomeHref(locale, { year: year - 1, province, system })} aria-label={dictionary.prevYear}>
+          <Link
+            href={buildHomeHref(locale, { year: year - 1, province, system })}
+            prefetch={false}
+            aria-label={dictionary.prevYear}
+          >
             {year - 1}
           </Link>
           <span>{year}</span>
-          <Link href={buildHomeHref(locale, { year: year + 1, province, system })} aria-label={dictionary.nextYear}>
+          <Link
+            href={buildHomeHref(locale, { year: year + 1, province, system })}
+            prefetch={false}
+            aria-label={dictionary.nextYear}
+          >
             {year + 1}
           </Link>
         </nav>
       </section>
 
-      <section className="cards">
-        <HolidayPanel locale={locale} dictionary={dictionary} holidays={holidays} />
-        <LongWeekendCard locale={locale} dictionary={dictionary} longWeekend={nextLongWeekend} />
+      <section className="cardsSection" aria-labelledby="this-week-heading">
+        <h2 id="this-week-heading" className="cardsSectionTitle">
+          {dictionary.thisWeekSectionHeading}
+        </h2>
+        <div className="cards">
+          <HolidayPanel locale={locale} dictionary={dictionary} holidays={holidays} />
+          <LongWeekendCard locale={locale} dictionary={dictionary} longWeekend={nextLongWeekend} />
+        </div>
       </section>
 
       <YearCalendar locale={locale} dictionary={dictionary} months={yearCalendar} year={year} system={system} today={today} />
@@ -336,10 +361,24 @@ export default async function LocalePage({ params, searchParams }: Props) {
       <section className="panel quickLinks">
         <h2>{locale === "fr" ? "Navigation rapide" : "Quick navigation"}</h2>
         <div className="linkGrid">
-          <Link href={`/${locale}/calendar/${year}`}>{locale === "fr" ? `Calendrier ${year}` : `${year} Calendar`}</Link>
-          <Link href={`/${locale}/calendar/${year + 1}`}>{locale === "fr" ? `Calendrier ${year + 1}` : `${year + 1} Calendar`}</Link>
-          <Link href={`/${locale}/current-week-number-canada`}>{locale === "fr" ? "Semaine actuelle" : "Current Week"}</Link>
-          <Link href={`/${locale}/iso-week-number-canada`}>{locale === "fr" ? "Semaines ISO" : "ISO Weeks"}</Link>
+          <Link href={`/${locale}/calendar/${year}`} prefetch={false}>
+            {locale === "fr" ? `Calendrier ${year}` : `${year} Calendar`}
+          </Link>
+          <Link href={`/${locale}/calendar/${year + 1}`} prefetch={false}>
+            {locale === "fr" ? `Calendrier ${year + 1}` : `${year + 1} Calendar`}
+          </Link>
+          <Link href={`/${locale}/current-week-number-canada`} prefetch={false}>
+            {locale === "fr" ? "Semaine actuelle" : "Current Week"}
+          </Link>
+          <Link href={`/${locale}/iso-week-number-canada`} prefetch={false}>
+            {locale === "fr" ? "Semaines ISO" : "ISO Weeks"}
+          </Link>
+          <Link href={`/${locale}/what-week-of-the-year-is-it`} prefetch={false}>
+            {locale === "fr" ? "Quelle semaine de l'année?" : "What week of the year is it?"}
+          </Link>
+          <Link href={`/${locale}/what-day-of-the-year-is-it`} prefetch={false}>
+            {locale === "fr" ? "Quel jour de l'année?" : "What day of the year is it?"}
+          </Link>
         </div>
       </section>
 
@@ -360,6 +399,14 @@ export default async function LocalePage({ params, searchParams }: Props) {
           </a>
         </p>
         <p className="subtle">
+          <Link href={`/${locale}/about`} prefetch={false}>
+            {dictionary.linkAbout}
+          </Link>
+          {" · "}
+          <Link href={`/${locale}/privacy`} prefetch={false}>
+            {dictionary.linkPrivacy}
+          </Link>
+          {" · "}
           <a href="https://blog.whatweek.ca/" target="_blank" rel="noopener noreferrer">
             {dictionary.blogFooterGuides}
           </a>

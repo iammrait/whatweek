@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
-import { HtmlLangUpdater } from "@/components/HtmlLangUpdater";
+import { ConsentAndAnalytics } from "@/components/ConsentAndAnalytics";
+import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import "../globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -43,31 +45,21 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }>) {
-  const { locale } = await params;
-  const lang = locale === "fr" ? "fr-CA" : "en-CA";
+  const { locale: localeInput } = await params;
+  const lang = localeInput === "fr" ? "fr-CA" : "en-CA";
+  const locale: Locale = isLocale(localeInput) ? localeInput : "en";
+  const d = getDictionary(locale);
 
   return (
     <html lang={lang} className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
-        <Script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-G5NQRCTLPC"
+        <ConsentAndAnalytics
+          bannerText={d.cookieBannerText}
+          acceptLabel={d.cookieAccept}
+          declineLabel={d.cookieDecline}
+          gaMeasurementId="G-G5NQRCTLPC"
+          ahrefsDataKey="IMDOwtpPpFNiBLHGoA1t4Q"
         />
-        <Script id="google-analytics">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-G5NQRCTLPC');
-          `}
-        </Script>
-        <Script
-          async
-          src="https://analytics.ahrefs.com/analytics.js"
-          data-key="IMDOwtpPpFNiBLHGoA1t4Q"
-        />
-        <HtmlLangUpdater />
         {children}
       </body>
     </html>

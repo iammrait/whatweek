@@ -22,6 +22,8 @@ const metadataFiles = [
   "src/app/[locale]/week/[year]/[week]/page.tsx",
   "src/app/[locale]/current-week-number-canada/page.tsx",
   "src/app/[locale]/iso-week-number-canada/page.tsx",
+  "src/app/[locale]/about/page.tsx",
+  "src/app/[locale]/privacy/page.tsx",
 ];
 
 for (const relativePath of metadataFiles) {

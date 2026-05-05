@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { SiteHeader } from "@/components/SiteHeader";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
 import { formatDateLong, getCanadaWeekNumber, getIsoWeekNumber, getTodayInTimeZone, startOfCanadaWeek, startOfIsoWeek } from "@/lib/week";
@@ -58,7 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CurrentWeekNumberCanadaPage({ params }: Props) {
   const { locale: localeInput } = await params;
-  if (!isLocale(localeInput)) return null;
+  if (!isLocale(localeInput)) notFound();
   const locale: Locale = localeInput;
   const dictionary = getDictionary(locale);
   const localeCode = locale === "fr" ? "fr-CA" : "en-CA";
@@ -72,9 +74,36 @@ export default async function CurrentWeekNumberCanadaPage({ params }: Props) {
   const isoEnd = new Date(isoStart);
   isoEnd.setUTCDate(isoStart.getUTCDate() + 6);
 
+  const canonical = `https://whatweek.ca/${locale}/current-week-number-canada`;
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: locale === "fr" ? "Accueil" : "Home",
+        item: `https://whatweek.ca/${locale}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: locale === "fr" ? "Semaine actuelle" : "Current week",
+        item: canonical,
+      },
+    ],
+  };
+
   return (
     <main className="container">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <SiteHeader locale={locale} />
       <section className="hero">
+        <nav className="breadcrumbs" aria-label="Breadcrumb">
+          <Link href={`/${locale}`}>{locale === "fr" ? "Accueil" : "Home"}</Link>
+          <span> / </span>
+          <span>{locale === "fr" ? "Semaine actuelle" : "Current week"}</span>
+        </nav>
         <h1>{locale === "fr" ? "Numéro de semaine actuel au Canada" : "Current Week Number in Canada"}</h1>
         <p className="subtle" style={{ maxWidth: "800px", margin: "1rem auto", lineHeight: 1.6 }}>
           {locale === "fr"
@@ -96,6 +125,23 @@ export default async function CurrentWeekNumberCanadaPage({ params }: Props) {
         <p>
           <Link href={`/${locale}`}>{dictionary.brand}</Link>
         </p>
+      </section>
+      <section className="panel quickLinks">
+        <h2>{locale === "fr" ? "Outils de semaine liés" : "Related week tools"}</h2>
+        <div className="linkGrid">
+          <Link href={`/${locale}/what-week-of-the-year-is-it`} prefetch={false}>
+            {locale === "fr" ? "Quelle semaine de l'année?" : "What week of the year is it?"}
+          </Link>
+          <Link href={`/${locale}/what-year-week-is-it`} prefetch={false}>
+            {locale === "fr" ? "Quelle année-semaine?" : "What year week is it?"}
+          </Link>
+          <Link href={`/${locale}/what-day-of-the-year-is-it`} prefetch={false}>
+            {locale === "fr" ? "Quel jour de l'année?" : "What day of the year is it?"}
+          </Link>
+          <Link href={`/${locale}/weeks-in-a-year`} prefetch={false}>
+            {locale === "fr" ? "Semaines dans une année" : "Weeks in a year"}
+          </Link>
+        </div>
       </section>
     </main>
   );
