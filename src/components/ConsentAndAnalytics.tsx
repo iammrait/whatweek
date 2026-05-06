@@ -36,11 +36,13 @@ export function ConsentAndAnalytics({
   }, []);
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "1") setConsent("granted");
-    else if (stored === "0") setConsent("denied");
-    else setConsent("unset");
-    setHydrated(true);
+    queueMicrotask(() => {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === "1") setConsent("granted");
+      else if (stored === "0") setConsent("denied");
+      else setConsent("unset");
+      setHydrated(true);
+    });
   }, []);
 
   if (!hydrated) return null;

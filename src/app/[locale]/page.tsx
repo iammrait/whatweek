@@ -47,10 +47,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const hasSearchParams = Boolean(query.year || query.province || query.system);
 
   const dictionary = getDictionary(locale);
-  const title =
-    locale === "fr"
-      ? "Quelle semaine sommes-nous? Numéro de semaine actuel au Canada — WhatWeek.ca"
-      : "What Week Is It? Current Week Number Canada — WhatWeek.ca";
+  const title = dictionary.metadataHomeTitle;
   const description =
     locale === "fr"
       ? "Voyez instantanément quelle semaine de l'année sommes-nous au Canada. Consultez le numéro de semaine actuel, les semaines parcourues, le jour de l'année et le calendrier complet."
@@ -227,6 +224,7 @@ export default async function LocalePage({ params, searchParams }: Props) {
     dateModified,
     inLanguage: locale === "fr" ? "fr-CA" : "en-CA",
     isPartOf: { "@id": websiteId },
+    author: { "@id": orgId },
     about: { "@id": orgId },
     citation: ["https://date.nager.at/swagger/index.html"],
     isBasedOn: ["https://date.nager.at/swagger/index.html", "https://www.iso.org/iso-8601-date-and-time-format.html"],
@@ -307,6 +305,21 @@ export default async function LocalePage({ params, searchParams }: Props) {
             {year + 1}
           </Link>
         </nav>
+      </section>
+
+      <section className="panel contentSection" aria-labelledby="author-trust-heading">
+        <h2 id="author-trust-heading">{dictionary.authorTrust.h2}</h2>
+        <p style={{ lineHeight: 1.65 }}>{dictionary.authorTrust.lead}</p>
+        <ul style={{ paddingLeft: "1.25rem", lineHeight: 1.65 }}>
+          {dictionary.authorTrust.bullets.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+        <p className="subtle" style={{ marginTop: "0.75rem" }}>
+          <Link href={`/${locale}/about`} prefetch={false}>
+            {dictionary.linkAbout}
+          </Link>
+        </p>
       </section>
 
       <section className="cardsSection" aria-labelledby="this-week-heading">

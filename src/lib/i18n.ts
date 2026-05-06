@@ -44,6 +44,13 @@ export type Dictionary = {
   cookieAccept: string;
   cookieDecline: string;
   headerTagline: string;
+  /** Homepage `<title>` / Open Graph title (keep ~30–65 chars for SERP). */
+  metadataHomeTitle: string;
+  authorTrust: {
+    h2: string;
+    lead: string;
+    bullets: readonly [string, string, string];
+  };
   home: {
     h1: string;
     heroAnswer: (week: number, year: number) => string;
@@ -91,6 +98,17 @@ const dictionaries: Record<Locale, Dictionary> = {
     title: (province) => province ? `Calendar with week numbers for ${province}` : "Calendar with week numbers for Canada",
     headerTagline:
       "See what week of the year it is right now in Canada, including the current week number and the dates this week starts and ends.",
+    metadataHomeTitle: "Current Week Number Canada | WhatWeek.ca",
+    authorTrust: {
+      h2: "Who maintains this reference",
+      lead:
+        "WhatWeek.ca is edited as a practical, bilingual reference for Canadian week numbers, ISO 8601 vs Sunday–Saturday counting, and holiday context. Figures on this page follow the week system and time-zone rules shown above.",
+      bullets: [
+        "Definitions align with ISO 8601 (Monday–Sunday) and the common Canada-style week (Sunday–Saturday); you can switch systems without changing provinces.",
+        "Public holiday dates come from the Nager.Date API (Canada) and are revalidated on the server about every 24 hours.",
+        "This is not payroll or legal advice—always confirm cutoffs with your employer, union, or counsel.",
+      ],
+    },
     currentWeek: "Current week number",
     yearLabel: "Year",
     prevYear: "Previous year",
@@ -254,6 +272,17 @@ const dictionaries: Record<Locale, Dictionary> = {
     title: (province) => province ? `Calendrier avec numéro de semaine pour ${province}` : "Calendrier avec numéro de semaine pour le Canada",
     headerTagline:
       "Voyez en direct quelle semaine de l’année nous sommes au Canada, avec le numéro de semaine actuel et les dates de début et de fin de la semaine.",
+    metadataHomeTitle: "Numéro de semaine actuel Canada | WhatWeek.ca",
+    authorTrust: {
+      h2: "Qui entretient cette référence",
+      lead:
+        "WhatWeek.ca est rédigé comme référence pratique bilingue sur les numéros de semaine au Canada, l’ISO 8601 vs la semaine dimanche–samedi, et le contexte des jours fériés. Les chiffres de cette page suivent le système de semaine et les règles de fuseau affichés ci-dessus.",
+      bullets: [
+        "Les définitions suivent l’ISO 8601 (lundi–dimanche) et la semaine « Canada » (dimanche–samedi) ; vous pouvez changer de système sans changer de province.",
+        "Les jours fériés proviennent de l’API Nager.Date (Canada) et sont revalidés côté serveur environ toutes les 24 h.",
+        "Ce n’est pas un avis de paie ou juridique—confirmez toujours les coupures avec votre employeur, syndicat ou conseiller.",
+      ],
+    },
     currentWeek: "Numéro de semaine actuel",
     yearLabel: "Année",
     prevYear: "Année précédente",

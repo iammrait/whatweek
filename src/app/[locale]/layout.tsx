@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://whatweek.ca"),
   applicationName: "WhatWeek.ca",
   title: {
-    default: "What Week Is It? Current Week Number Canada — WhatWeek.ca",
+    default: "Current Week Number Canada | WhatWeek.ca",
     template: "%s | WhatWeek.ca",
   },
   description:
