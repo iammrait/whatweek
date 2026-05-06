@@ -307,21 +307,6 @@ export default async function LocalePage({ params, searchParams }: Props) {
         </nav>
       </section>
 
-      <section className="panel contentSection" aria-labelledby="author-trust-heading">
-        <h2 id="author-trust-heading">{dictionary.authorTrust.h2}</h2>
-        <p style={{ lineHeight: 1.65 }}>{dictionary.authorTrust.lead}</p>
-        <ul style={{ paddingLeft: "1.25rem", lineHeight: 1.65 }}>
-          {dictionary.authorTrust.bullets.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-        <p className="subtle" style={{ marginTop: "0.75rem" }}>
-          <Link href={`/${locale}/about`} prefetch={false}>
-            {dictionary.linkAbout}
-          </Link>
-        </p>
-      </section>
-
       <section className="cardsSection" aria-labelledby="this-week-heading">
         <h2 id="this-week-heading" className="cardsSectionTitle">
           {dictionary.thisWeekSectionHeading}

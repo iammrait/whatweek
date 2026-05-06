@@ -182,12 +182,49 @@ export default async function AboutPage({ params }: Props) {
         </p>
       </section>
 
-      <section className="panel contentSection">
-        <h2>{locale === "fr" ? "Méthodologie et responsabilité éditoriale" : "Methodology & editorial responsibility"}</h2>
+      <section className="panel contentSection" aria-labelledby="maintainer-heading">
+        <h2 id="maintainer-heading">{locale === "fr" ? "Qui entretient cette référence" : "Who maintains this reference"}</h2>
         <p style={{ lineHeight: 1.65 }}>
           {locale === "fr"
-            ? "WhatWeek.ca est maintenu comme outil de référence pratique sur les semaines et le calendrier canadien. Les données brutes sont sourcées publiquement, puis normalisées pour les vues semaine/calendrier et la localisation bilingue."
-            : "WhatWeek.ca is maintained as a practical reference for Canadian week and calendar lookup. Raw data is publicly sourced, then normalized for week/calendar views and bilingual localization."}
+            ? "WhatWeek.ca est rédigé comme référence pratique bilingue sur les numéros de semaine au Canada, l’ISO 8601 vs la semaine dimanche–samedi, et le contexte des jours fériés. Les chiffres affichés sur le calendrier suivent le système de semaine et les règles de fuseau que vous y choisissez."
+            : "WhatWeek.ca is edited as a practical, bilingual reference for Canadian week numbers, ISO 8601 vs Sunday–Saturday counting, and holiday context. Figures on the calendar follow the week system and time-zone rules you choose there."}
+        </p>
+        <ul style={{ paddingLeft: "1.25rem", lineHeight: 1.65 }}>
+          {locale === "fr" ? (
+            <>
+              <li>
+                Les définitions suivent l’ISO 8601 (lundi–dimanche) et la semaine « Canada » (dimanche–samedi) ; vous pouvez
+                changer de système sans changer de province.
+              </li>
+              <li>
+                Les jours fériés proviennent de l’API Nager.Date (Canada) et sont revalidés côté serveur environ toutes les
+                24 h.
+              </li>
+              <li>
+                Ce n’est pas un avis de paie ou juridique—confirmez toujours les coupures avec votre employeur, syndicat ou
+                conseiller.
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                Definitions align with ISO 8601 (Monday–Sunday) and the common Canada-style week (Sunday–Saturday); you can
+                switch systems without changing provinces.
+              </li>
+              <li>
+                Public holiday dates come from the Nager.Date API (Canada) and are revalidated on the server about every 24
+                hours.
+              </li>
+              <li>
+                This is not payroll or legal advice—always confirm cutoffs with your employer, union, or counsel.
+              </li>
+            </>
+          )}
+        </ul>
+        <p style={{ lineHeight: 1.65, marginTop: "0.75rem" }}>
+          {locale === "fr"
+            ? "WhatWeek.ca est aussi maintenu comme outil de référence pratique sur les semaines et le calendrier canadien. Les données brutes sont sourcées publiquement, puis normalisées pour les vues semaine/calendrier et la localisation bilingue."
+            : "WhatWeek.ca is also maintained as a practical reference for Canadian week and calendar lookup. Raw data is publicly sourced, then normalized for week/calendar views and bilingual localization."}
         </p>
       </section>
 
