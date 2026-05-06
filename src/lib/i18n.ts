@@ -43,9 +43,11 @@ export type Dictionary = {
   cookieBannerText: string;
   cookieAccept: string;
   cookieDecline: string;
+  headerTagline: string;
   home: {
     h1: string;
     heroAnswer: (week: number, year: number) => string;
+    heroSupporting: string;
     intro: { line1: string; line2: string; line3: string };
     weekOfYear: {
       h2: string;
@@ -87,6 +89,8 @@ const dictionaries: Record<Locale, Dictionary> = {
   en: {
     brand: "whatweek.ca",
     title: (province) => province ? `Calendar with week numbers for ${province}` : "Calendar with week numbers for Canada",
+    headerTagline:
+      "See what week of the year it is right now in Canada, including the current week number and the dates this week starts and ends.",
     currentWeek: "Current week number",
     yearLabel: "Year",
     prevYear: "Previous year",
@@ -138,7 +142,9 @@ const dictionaries: Record<Locale, Dictionary> = {
     cookieDecline: "Decline",
     home: {
       h1: "What Week of the Year Is It?",
-      heroAnswer: (week, year) => `It's week ${week} of ${year} in Canada.`,
+      heroAnswer: (week, year) => `It’s week ${week} of ${year} in Canada.`,
+      heroSupporting:
+        "Current week number, week dates, day of the year and weeks into the year — updated live.",
       intro: {
         line1:
           "See what week of the year it is right now in Canada, including the current week number and the dates this week starts and ends.",
@@ -246,6 +252,8 @@ const dictionaries: Record<Locale, Dictionary> = {
   fr: {
     brand: "whatweek.ca",
     title: (province) => province ? `Calendrier avec numéro de semaine pour ${province}` : "Calendrier avec numéro de semaine pour le Canada",
+    headerTagline:
+      "Voyez en direct quelle semaine de l’année nous sommes au Canada, avec le numéro de semaine actuel et les dates de début et de fin de la semaine.",
     currentWeek: "Numéro de semaine actuel",
     yearLabel: "Année",
     prevYear: "Année précédente",
@@ -299,6 +307,8 @@ const dictionaries: Record<Locale, Dictionary> = {
     home: {
       h1: "Quelle semaine de l'année sommes-nous ?",
       heroAnswer: (week, year) => `Nous sommes à la semaine ${week} de ${year} au Canada.`,
+      heroSupporting:
+        "Numéro de semaine actuel, dates de la semaine, jour de l’année et semaines parcourues — mis à jour en direct.",
       intro: {
         line1:
           "Voyez en direct quelle semaine de l'année nous sommes au Canada, avec le numéro de semaine actuel et les dates de début et de fin de la semaine.",

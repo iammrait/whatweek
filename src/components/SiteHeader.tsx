@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { getDictionary, type Locale } from "@/lib/i18n";
-import { provinceNames, type ProvinceCode } from "@/lib/provinces";
+import { type ProvinceCode } from "@/lib/provinces";
 import { getWeekNumber, type WeekSystem } from "@/lib/week";
 
 type Props = {
@@ -32,7 +32,6 @@ export function buildHomeHref(
 export function SiteHeader({ locale, year, province, system }: Props) {
   const currentWeek = getWeekNumber(new Date(), system || "canada");
   const dictionary = getDictionary(locale);
-  const provinceName = province ? provinceNames[province][locale] : undefined;
 
   return (
     <header className="header">
@@ -40,7 +39,7 @@ export function SiteHeader({ locale, year, province, system }: Props) {
         <div className="headerLogo" aria-hidden="true">W{currentWeek}</div>
         <div>
           <div className="siteTitle">what<span className="headerDomain">week</span>.ca</div>
-          <p>{dictionary.title(provinceName)}</p>
+          <p>{dictionary.headerTagline}</p>
         </div>
       </Link>
       <div className="headerTools">

@@ -9,8 +9,7 @@ import { ProvinceSelect } from "@/components/ProvinceSelect";
 import { YearCalendar } from "@/components/YearCalendar";
 import { getHolidaysForDateRange, getNextLongWeekend } from "@/lib/holidays-ca";
 import { getDictionary, isLocale, locales, toLocaleCode, type Locale } from "@/lib/i18n";
-import { homeCalendarDescription, homeCalendarTitle } from "@/lib/seo-metadata";
-import { defaultCanadaTimeZone, getProvinceTimeZone, isProvinceCode, provinceNames, type ProvinceCode } from "@/lib/provinces";
+import { getProvinceTimeZone, isProvinceCode, provinceNames, type ProvinceCode } from "@/lib/provinces";
 import {
   formatDateLong,
   getTodayInTimeZone,
@@ -46,21 +45,21 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   if (!isLocale(locale)) return {};
   const query = await searchParams;
   const hasSearchParams = Boolean(query.year || query.province || query.system);
-  const province = resolveProvince(locale, query.province);
-  const provinceName = province ? provinceNames[province][locale] : undefined;
-  const system = getWeekSystem(query.system);
 
   const dictionary = getDictionary(locale);
-  const geoSegment = provinceName ?? "Canada";
-  const todayMeta = getTodayInTimeZone(defaultCanadaTimeZone);
-  const calendarYear = getYearFromQuery(query.year, todayMeta.getUTCFullYear());
-  const title = homeCalendarTitle(locale, calendarYear, geoSegment, system);
-  const description = homeCalendarDescription(locale, calendarYear, geoSegment, system);
+  const title =
+    locale === "fr"
+      ? "Quelle semaine sommes-nous? Numéro de semaine actuel au Canada — WhatWeek.ca"
+      : "What Week Is It? Current Week Number Canada — WhatWeek.ca";
+  const description =
+    locale === "fr"
+      ? "Voyez instantanément quelle semaine de l'année sommes-nous au Canada. Consultez le numéro de semaine actuel, les semaines parcourues, le jour de l'année et le calendrier complet."
+      : "Instantly see what week of the year it is in Canada. View the current week number, weeks into the year, day of the year and full calendar.";
   const canonical = `https://whatweek.ca/${locale}`;
   const ogImage = `https://whatweek.ca/${locale}/opengraph-image`;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords:
       locale === "fr"
@@ -251,21 +250,10 @@ export default async function LocalePage({ params, searchParams }: Props) {
           <strong>{dictionary.home.heroAnswer(currentWeek, year)}</strong>
         </p>
         <p className="subtle">
-          {locale === "fr"
-            ? `Système de semaine : ${system === "canada" ? "Canada (dimanche à samedi)" : "ISO 8601 (lundi à dimanche)"}`
-            : `Week system: ${system === "canada" ? "Canada (Sunday to Saturday)" : "ISO 8601 (Monday to Sunday)"}`}
+          {formatDateLong(weekStart, localeCode, timeZone)} – {formatDateLong(weekEnd, localeCode, timeZone)}
         </p>
-        <p className="subtle">
-          {formatDateLong(weekStart, localeCode, timeZone)} - {formatDateLong(weekEnd, localeCode, timeZone)}
-        </p>
-        <p className="subtle" style={{ maxWidth: "800px", margin: "0.75rem auto 0", lineHeight: 1.6 }}>
-          {dictionary.home.intro.line1}
-        </p>
-        <p className="subtle" style={{ maxWidth: "800px", margin: "0.4rem auto 0", lineHeight: 1.6 }}>
-          {dictionary.home.intro.line2}
-        </p>
-        <p className="subtle" style={{ maxWidth: "800px", margin: "0.4rem auto 0", lineHeight: 1.6 }}>
-          {dictionary.home.intro.line3}
+        <p className="subtle" style={{ maxWidth: "800px", margin: "0.5rem auto 0", lineHeight: 1.6 }}>
+          {dictionary.home.heroSupporting}
         </p>
 
         <div className="systemLinks">
@@ -286,6 +274,11 @@ export default async function LocalePage({ params, searchParams }: Props) {
             Canada
           </Link>
         </div>
+        <p className="subtle" style={{ fontSize: "0.85rem", marginTop: "0.35rem" }}>
+          {locale === "fr"
+            ? `Système de semaine : ${system === "canada" ? "Canada (dimanche à samedi)" : "ISO 8601 (lundi à dimanche)"}`
+            : `Week system: ${system === "canada" ? "Canada (Sunday to Saturday)" : "ISO 8601 (Monday to Sunday)"}`}
+        </p>
 
         <ProvinceSelect
           provinceLabel={dictionary.provinceLabel}
