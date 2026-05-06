@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { locales } from "@/lib/i18n";
 import { keywordPageOrder } from "@/lib/keyword-targets";
-import { getWeeksInIsoYear, startOfIsoWeek } from "@/lib/week";
+import { getWeeksInIsoYear } from "@/lib/week";
+import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 
 const BASE_URL = "https://whatweek.ca";
 const MIN_YEAR = 1900;
@@ -23,12 +24,18 @@ function localeAlternates(pathWithoutLocale: string) {
   } as const;
 }
 
-function buildWeekLastModified(year: number, week: number, now: Date): Date {
-  const jan4 = new Date(Date.UTC(year, 0, 4, 12, 0, 0));
-  const firstWeekStart = startOfIsoWeek(jan4);
-  const weekStart = new Date(firstWeekStart);
-  weekStart.setUTCDate(firstWeekStart.getUTCDate() + (week - 1) * 7);
-  return weekStart > now ? now : weekStart;
+async function buildEntry(
+  locale: "en" | "fr",
+  pathWithoutLocale: string,
+  options: Omit<MetadataRoute.Sitemap[number], "url" | "alternates" | "lastModified">,
+): Promise<MetadataRoute.Sitemap[number]> {
+  const lastModified = await getSitemapLastmod(locale, pathWithoutLocale);
+  return {
+    url: toAbsolute(`/${locale}${pathWithoutLocale}`),
+    ...(lastModified ? { lastModified } : {}),
+    alternates: localeAlternates(pathWithoutLocale),
+    ...options,
+  };
 }
 
 export async function generateSitemaps(): Promise<Array<{ id: SitemapBucketId }>> {
@@ -44,58 +51,46 @@ export async function generateSitemaps(): Promise<Array<{ id: SitemapBucketId }>
 export default async function sitemap(props: { id: Promise<string> }): Promise<MetadataRoute.Sitemap> {
   const rawId = await props.id;
   const id = rawId as SitemapBucketId;
-  const now = new Date();
-  const currentWeekStart = startOfIsoWeek(now);
 
   if (id === "base") {
-    return locales.flatMap((locale) => {
-      const keywordEntries: MetadataRoute.Sitemap = keywordPageOrder.map((slug) => ({
-        url: toAbsolute(`/${locale}/${slug}`),
-        lastModified: currentWeekStart,
-        changeFrequency: "weekly",
-        priority: 0.78,
-        alternates: localeAlternates(`/${slug}`),
-      }));
+    const entriesByLocale = await Promise.all(
+      locales.map(async (locale) => {
+        const typedLocale = locale as "en" | "fr";
+        const keywordEntries = await Promise.all(
+          keywordPageOrder.map((slug) =>
+            buildEntry(typedLocale, `/${slug}`, {
+              changeFrequency: "weekly",
+              priority: 0.78,
+            }),
+          ),
+        );
 
-      return [
-        {
-          url: toAbsolute(`/${locale}`),
-          lastModified: now,
-          changeFrequency: "daily",
-          priority: 1,
-          alternates: localeAlternates(""),
-        },
-        {
-          url: toAbsolute(`/${locale}/current-week-number-canada`),
-          lastModified: currentWeekStart,
-          changeFrequency: "daily",
-          priority: 0.9,
-          alternates: localeAlternates("/current-week-number-canada"),
-        },
-        {
-          url: toAbsolute(`/${locale}/iso-week-number-canada`),
-          lastModified: currentWeekStart,
-          changeFrequency: "daily",
-          priority: 0.8,
-          alternates: localeAlternates("/iso-week-number-canada"),
-        },
-        ...keywordEntries,
-        {
-          url: toAbsolute(`/${locale}/about`),
-          lastModified: now,
-          changeFrequency: "monthly",
-          priority: 0.5,
-          alternates: localeAlternates("/about"),
-        },
-        {
-          url: toAbsolute(`/${locale}/privacy`),
-          lastModified: now,
-          changeFrequency: "monthly",
-          priority: 0.4,
-          alternates: localeAlternates("/privacy"),
-        },
-      ];
-    });
+        return [
+          await buildEntry(typedLocale, "", {
+            changeFrequency: "daily",
+            priority: 1,
+          }),
+          await buildEntry(typedLocale, "/current-week-number-canada", {
+            changeFrequency: "daily",
+            priority: 0.9,
+          }),
+          await buildEntry(typedLocale, "/iso-week-number-canada", {
+            changeFrequency: "daily",
+            priority: 0.8,
+          }),
+          ...keywordEntries,
+          await buildEntry(typedLocale, "/about", {
+            changeFrequency: "monthly",
+            priority: 0.5,
+          }),
+          await buildEntry(typedLocale, "/privacy", {
+            changeFrequency: "monthly",
+            priority: 0.4,
+          }),
+        ];
+      }),
+    );
+    return entriesByLocale.flat();
   }
 
   const [locale, yearToken] = id.split("-");
@@ -104,25 +99,21 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
     return [];
   }
 
-  const calendarPath = `/${locale}/calendar/${year}`;
-  const calendarEntry: MetadataRoute.Sitemap[number] = {
-    url: toAbsolute(calendarPath),
-    lastModified: new Date(Date.UTC(year, 11, 31, 12, 0, 0)),
+  const typedLocale = locale as "en" | "fr";
+  const calendarEntry = await buildEntry(typedLocale, `/calendar/${year}`, {
     changeFrequency: "yearly",
     priority: 0.8,
-    alternates: localeAlternates(`/calendar/${year}`),
-  };
-
-  const weekEntries: MetadataRoute.Sitemap = Array.from({ length: getWeeksInIsoYear(year) }, (_, index) => {
-    const week = index + 1;
-    return {
-      url: toAbsolute(`/${locale}/week/${year}/${week}`),
-      lastModified: buildWeekLastModified(year, week, now),
-      changeFrequency: "yearly",
-      priority: 0.7,
-      alternates: localeAlternates(`/week/${year}/${week}`),
-    };
   });
+
+  const weekEntries = await Promise.all(
+    Array.from({ length: getWeeksInIsoYear(year) }, (_, index) => {
+      const week = index + 1;
+      return buildEntry(typedLocale, `/week/${year}/${week}`, {
+        changeFrequency: "yearly",
+        priority: 0.7,
+      });
+    }),
+  );
 
   return [calendarEntry, ...weekEntries];
 }
