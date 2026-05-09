@@ -326,52 +326,47 @@ export default async function LocalePage({ params, searchParams }: Props) {
 
       <YearCalendar locale={locale} dictionary={dictionary} months={yearCalendar} year={year} system={system} today={today} />
 
-      <section className="panel contentSection" aria-labelledby="week-of-year-heading">
-        <h2 id="week-of-year-heading">{dictionary.home.weekOfYear.h2}</h2>
-        <p>{dictionary.home.weekOfYear.body(currentWeek, year, weekRangeText)}</p>
-        <h3>{dictionary.home.weekOfYear.h3WeekDates.heading}</h3>
-        <p>{dictionary.home.weekOfYear.h3WeekDates.body(weekRangeText)}</p>
-        <h3>{dictionary.home.weekOfYear.h3WeeksIntoYear.heading}</h3>
-        <p>{dictionary.home.weekOfYear.h3WeeksIntoYear.body(currentWeek, weeksLeft, year)}</p>
-      </section>
-
-      <section className="panel contentSection" aria-labelledby="weeks-in-year-heading">
-        <h2 id="weeks-in-year-heading">{dictionary.home.weeksInYear.h2}</h2>
-        <p>{dictionary.home.weeksInYear.body(year, weeksInYear)}</p>
-        <h3>{dictionary.home.weeksInYear.h3ExtraDays.heading}</h3>
-        <p>{dictionary.home.weeksInYear.h3ExtraDays.body}</p>
-        <h3>{dictionary.home.weeksInYear.h353Weeks.heading}</h3>
-        <p>{dictionary.home.weeksInYear.h353Weeks.body}</p>
-      </section>
-
-      <section className="panel contentSection" aria-labelledby="day-of-year-heading">
-        <h2 id="day-of-year-heading">{dictionary.home.dayOfYear.h2}</h2>
-        <p>{dictionary.home.dayOfYear.body(dayOfYear, year, currentWeek)}</p>
-        <h3>{dictionary.home.dayOfYear.h3DayOfWeek.heading}</h3>
-        <p>{dictionary.home.dayOfYear.h3DayOfWeek.body(dayName)}</p>
-      </section>
-
-      <section className="panel contentSection" aria-labelledby="weeks-months-heading">
-        <h2 id="weeks-months-heading">{dictionary.home.weeksMonths.h2}</h2>
-        <p>{dictionary.home.weeksMonths.body(year)}</p>
-        <h3>{dictionary.home.weeksMonths.h3YearByCalendar.heading}</h3>
-        <p>
-          {dictionary.home.weeksMonths.h3YearByCalendar.body}{" "}
-          <Link href={`/${locale}/calendar/${year}`} prefetch={false}>
-            {locale === "fr" ? `Voir le calendrier ${year}` : `Open the ${year} calendar`}
+      <section className="panel quickLinks">
+        <h2>{locale === "fr" ? "Outils de semaine" : "Week tools"}</h2>
+        <div className="linkGrid">
+          <Link href={`/${locale}/what-week-of-the-year-is-it`} prefetch={false}>
+            {locale === "fr" ? "Quelle semaine?" : "What week is it?"}
           </Link>
-        </p>
-        <h3>{dictionary.home.weeksMonths.h3WeekByYear.heading}</h3>
-        <p>
-          {dictionary.home.weeksMonths.h3WeekByYear.body}{" "}
-          <Link href={`/${locale}/week-by-year`} prefetch={false}>
-            {locale === "fr" ? "Semaine par année" : "Week by year"}
+          <Link href={`/${locale}/week-dates-and-iso-number`} prefetch={false}>
+            {locale === "fr" ? "Dates et numéro ISO" : "Week dates & ISO number"}
           </Link>
-        </p>
+          <Link href={`/${locale}/weeks-into-the-year`} prefetch={false}>
+            {locale === "fr" ? "Semaines parcourues" : "Weeks into the year"}
+          </Link>
+          <Link href={`/${locale}/what-week-number`} prefetch={false}>
+            {locale === "fr" ? "Numéro de semaine?" : "What week number?"}
+          </Link>
+          <Link href={`/${locale}/weeks-in-a-year`} prefetch={false}>
+            {locale === "fr" ? "Semaines dans l'année" : "Weeks in a year"}
+          </Link>
+          <Link href={`/${locale}/what-day-of-the-year-is-it`} prefetch={false}>
+            {locale === "fr" ? "Jour de l'année?" : "Day of the year?"}
+          </Link>
+          <Link href={`/${locale}/day-of-year-and-weekday`} prefetch={false}>
+            {locale === "fr" ? "Jour & jour sem." : "Day of year & weekday"}
+          </Link>
+          <Link href={`/${locale}/what-day-of-the-week`} prefetch={false}>
+            {locale === "fr" ? "Jour de la semaine?" : "Day of the week?"}
+          </Link>
+          <Link href={`/${locale}/weeks-and-months-calendar`} prefetch={false}>
+            {locale === "fr" ? "Semaines et mois" : "Weeks and months"}
+          </Link>
+          <Link href={`/${locale}/calendar-year-view`} prefetch={false}>
+            {locale === "fr" ? "Calendrier annuel" : "Calendar year view"}
+          </Link>
+          <Link href={`/${locale}/week-by-year-index`} prefetch={false}>
+            {locale === "fr" ? "Semaine par année" : "Week by year index"}
+          </Link>
+        </div>
       </section>
 
       <section className="panel quickLinks">
-        <h2>{locale === "fr" ? "Navigation rapide" : "Quick navigation"}</h2>
+        <h2>{locale === "fr" ? "Calendriers et outils" : "Calendars & tools"}</h2>
         <div className="linkGrid">
           <Link href={`/${locale}/calendar/${year}`} prefetch={false}>
             {locale === "fr" ? `Calendrier ${year}` : `${year} Calendar`}
@@ -379,17 +374,17 @@ export default async function LocalePage({ params, searchParams }: Props) {
           <Link href={`/${locale}/calendar/${year + 1}`} prefetch={false}>
             {locale === "fr" ? `Calendrier ${year + 1}` : `${year + 1} Calendar`}
           </Link>
-          <Link href={`/${locale}/current-week-number-canada`} prefetch={false}>
-            {locale === "fr" ? "Semaine actuelle" : "Current Week"}
+          <Link href={`/${locale}/date-to-week`} prefetch={false}>
+            {locale === "fr" ? "Date ↔ Semaine" : "Date ↔ Week converter"}
           </Link>
-          <Link href={`/${locale}/iso-week-number-canada`} prefetch={false}>
-            {locale === "fr" ? "Semaines ISO" : "ISO Weeks"}
+          <Link href={`/${locale}/business-days-calculator`} prefetch={false}>
+            {locale === "fr" ? "Jours ouvrables" : "Business days"}
           </Link>
-          <Link href={`/${locale}/what-week-of-the-year-is-it`} prefetch={false}>
-            {locale === "fr" ? "Quelle semaine de l'année?" : "What week of the year is it?"}
+          <Link href={`/${locale}/pay-period-calculator`} prefetch={false}>
+            {locale === "fr" ? "Période de paie" : "Pay period"}
           </Link>
-          <Link href={`/${locale}/what-day-of-the-year-is-it`} prefetch={false}>
-            {locale === "fr" ? "Quel jour de l'année?" : "What day of the year is it?"}
+          <Link href={`/${locale}/long-weekends/${year}`} prefetch={false}>
+            {locale === "fr" ? "Longs week-ends" : "Long weekends"}
           </Link>
         </div>
       </section>
