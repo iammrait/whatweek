@@ -89,12 +89,15 @@ export default async function KeywordIntentPage({ params }: Props) {
     })),
   };
 
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [faqJsonLd, itemListJsonLd],
+  };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(itemListJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} />
       <section className="hero">
         <nav className="breadcrumbs" aria-label="Breadcrumb">

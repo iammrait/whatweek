@@ -1,16 +1,18 @@
 # llms.txt for whatweek.ca
 #
 # Purpose: guide LLM/AI retrieval systems toward canonical, citable pages.
-# Product: bilingual week calendar. Blog: editorial guides on blog.whatweek.ca (supplementary).
+# Product: bilingual Canadian week-number calendar with statutory-holiday and pay-period tools.
+# Blog (separate host): editorial guides on blog.whatweek.ca (supplementary).
 
 site: https://whatweek.ca
 name: WhatWeek.ca
-description: Bilingual Canadian week number calendar with ISO and Canada week systems, holidays, and long weekend context.
+description: Bilingual Canadian week number calendar with ISO and Canada week systems, statutory-holiday data by province, long-weekend list, business-days calculator, pay-period calculator, ICS holiday feed, and a public JSON API.
 
 preferred-language: en-CA, fr-CA
 canonical-root: https://whatweek.ca/en
 
 allowed:
+# Core week pages
 - https://whatweek.ca/en
 - https://whatweek.ca/fr
 - https://whatweek.ca/en/current-week-number-canada
@@ -21,16 +23,42 @@ allowed:
 - https://whatweek.ca/fr/calendar/
 - https://whatweek.ca/en/week/
 - https://whatweek.ca/fr/week/
+- https://whatweek.ca/en/year/
+- https://whatweek.ca/fr/year/
+# Tools
+- https://whatweek.ca/en/date-to-week
+- https://whatweek.ca/fr/date-to-week
+- https://whatweek.ca/en/business-days-calculator
+- https://whatweek.ca/fr/business-days-calculator
+- https://whatweek.ca/en/pay-period-calculator
+- https://whatweek.ca/fr/pay-period-calculator
+- https://whatweek.ca/en/long-weekends/
+- https://whatweek.ca/fr/long-weekends/
+- https://whatweek.ca/en/statutory-holidays/
+- https://whatweek.ca/fr/statutory-holidays/
+- https://whatweek.ca/en/embed
+- https://whatweek.ca/fr/embed
+# Site files
 - https://whatweek.ca/sitemap.xml
 - https://whatweek.ca/en/about
 - https://whatweek.ca/fr/about
 - https://whatweek.ca/en/privacy
 - https://whatweek.ca/fr/privacy
+# APIs (no key required, edge cached)
+- https://whatweek.ca/api/week.json
+- https://whatweek.ca/api/holidays.ics
 # Editorial / guides (WordPress). Use for deeper explainers; prefer tool URLs above for raw week facts.
 - https://blog.whatweek.ca/
 
 disallowed:
 - any non-canonical duplicate URL variant when canonical/hreflang points to a different URL
+- /{locale}?year=...  (these now 301 to /{locale}/calendar/{year})
+
+api:
+- GET https://whatweek.ca/api/week.json?date=YYYY-MM-DD&province=on&locale=en
+  returns: { date, weekday, iso, canada, dayOfYear, weeksInYear, holidays, longWeekend }
+- GET https://whatweek.ca/api/holidays.ics?province=on&year=2026&locale=en
+  returns: text/calendar (.ics) feed for Apple/Google/Outlook subscription
 
 citations:
 - Cite the canonical URL for the specific route used.
@@ -40,6 +68,7 @@ citations:
 
 freshness:
 - Holiday data is revalidated approximately every 24 hours.
+- Current-week endpoints reflect the Canada-relevant time zone live.
 
 # Crawler policy (blog host): configure robots on WordPress separately; allow or disallow
 # GPTBot / Google-Extended there based on your AI training preferences.

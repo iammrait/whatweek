@@ -196,10 +196,62 @@ export async function fetchCanadaHolidaysFromNager(year: number): Promise<Holida
   }
 }
 
-async function getHolidaysForYear(year: number): Promise<Holiday[]> {
+async function getHolidaysForYearRaw(year: number): Promise<Holiday[]> {
   const fromApi = await fetchCanadaHolidaysFromNager(year);
   if (fromApi && fromApi.length > 0) return fromApi;
   return getFederalHolidays(year);
+}
+
+export async function getHolidaysForYear(year: number): Promise<Holiday[]> {
+  return getHolidaysForYearRaw(year);
+}
+
+export async function getHolidaysForYearByProvince(
+  year: number,
+  province: ProvinceCode | null = null,
+): Promise<Holiday[]> {
+  const all = await getHolidaysForYear(year);
+  return all.filter((holiday) => matchesProvince(holiday, province));
+}
+
+export async function getLongWeekendsForYear(
+  year: number,
+  province: ProvinceCode | null = null,
+): Promise<LongWeekend[]> {
+  const holidays = await getHolidaysForYear(year);
+  const seen = new Set<string>();
+  const out: LongWeekend[] = [];
+
+  for (const holiday of holidays) {
+    if (!matchesProvince(holiday, province)) continue;
+    const day = holiday.date.getUTCDay();
+    let start: Date;
+    let end: Date;
+    if (day === 1) {
+      start = new Date(holiday.date);
+      start.setUTCDate(start.getUTCDate() - 2);
+      end = new Date(holiday.date);
+    } else if (day === 5) {
+      start = new Date(holiday.date);
+      end = new Date(holiday.date);
+      end.setUTCDate(end.getUTCDate() + 2);
+    } else {
+      continue;
+    }
+
+    const key = start.toISOString().slice(0, 10);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({
+      labelEn: `${holiday.nameEn} weekend`,
+      labelFr: `Long week-end - ${holiday.nameFr}`,
+      start,
+      end,
+    });
+  }
+
+  out.sort((a, b) => a.start.getTime() - b.start.getTime());
+  return out;
 }
 
 export async function getHolidaysForIsoWeek(

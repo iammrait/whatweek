@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { getDictionary, type Locale } from "@/lib/i18n";
 import { type ProvinceCode } from "@/lib/provinces";
 import { getWeekNumber, type WeekSystem } from "@/lib/week";
@@ -32,6 +33,7 @@ export function buildHomeHref(
 export function SiteHeader({ locale, year, province, system }: Props) {
   const currentWeek = getWeekNumber(new Date(), system || "canada");
   const dictionary = getDictionary(locale);
+  const isFr = locale === "fr";
 
   return (
     <header className="header">
@@ -44,7 +46,7 @@ export function SiteHeader({ locale, year, province, system }: Props) {
       </Link>
       <div className="headerTools">
         <Link href={`/${locale}/what-week-of-the-year-is-it`} prefetch={false} className="headerBlogLink">
-          {locale === "fr" ? "Semaine actuelle" : "Week tools"}
+          {isFr ? "Semaine actuelle" : "Week tools"}
         </Link>
         <Link href={`/${locale}/about`} prefetch={false} className="headerBlogLink">
           {dictionary.aboutNav}
@@ -57,6 +59,12 @@ export function SiteHeader({ locale, year, province, system }: Props) {
         >
           {dictionary.blogNav}
         </a>
+        <ThemeToggle
+          labelLight={isFr ? "Clair" : "Light"}
+          labelDark={isFr ? "Sombre" : "Dark"}
+          labelAuto={isFr ? "Auto" : "Auto"}
+          ariaLabel={isFr ? "Thème" : "Theme"}
+        />
         <LanguageToggle locale={locale} year={year} province={province} system={system} />
       </div>
     </header>

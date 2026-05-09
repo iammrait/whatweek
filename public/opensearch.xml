@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>WhatWeek.ca</ShortName>
+  <Description>Canadian week-number calendar with holidays and long weekends.</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="32" height="32" type="image/svg+xml">https://whatweek.ca/icon.svg</Image>
+  <Url type="text/html"
+       template="https://whatweek.ca/en/date-to-week?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml"
+       rel="self"
+       template="https://whatweek.ca/opensearch.xml"/>
+  <moz:SearchForm>https://whatweek.ca/en</moz:SearchForm>
+  <Language>en-CA</Language>
+  <Language>fr-CA</Language>
+</OpenSearchDescription>

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ConsentAndAnalytics } from "@/components/ConsentAndAnalytics";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { themeBootstrapScript } from "@/components/ThemeToggle";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import "../globals.css";
 
@@ -52,6 +54,18 @@ export default async function RootLayout({
 
   return (
     <html lang={lang} className={`${geistSans.variable} ${geistMono.variable}`}>
+      <head>
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link
+          rel="search"
+          type="application/opensearchdescription+xml"
+          title="WhatWeek.ca"
+          href="/opensearch.xml"
+        />
+        <meta name="theme-color" content="#e11d48" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+      </head>
       <body>
         <ConsentAndAnalytics
           bannerText={d.cookieBannerText}
@@ -60,6 +74,7 @@ export default async function RootLayout({
           gaMeasurementId="G-G5NQRCTLPC"
           ahrefsDataKey="IMDOwtpPpFNiBLHGoA1t4Q"
         />
+        <ServiceWorkerRegister />
         {children}
       </body>
     </html>

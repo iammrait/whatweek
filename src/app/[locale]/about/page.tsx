@@ -80,10 +80,14 @@ export default async function AboutPage({ params }: Props) {
     isPartOf: { "@id": "https://whatweek.ca/#website" },
   };
 
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbJsonLd, webPageJsonLd],
+  };
+
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }} />
       <SiteHeader locale={locale} />
       <section className="hero">
         <nav className="breadcrumbs" aria-label="Breadcrumb">

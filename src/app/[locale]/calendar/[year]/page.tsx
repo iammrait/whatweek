@@ -105,10 +105,14 @@ export default async function CalendarYearPage({ params }: Props) {
     ],
   };
 
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbJsonLd, faqJsonLd],
+  };
+
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }} />
       <SiteHeader locale={locale} year={year} />
       
       <section className="hero">

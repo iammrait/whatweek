@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { BlogTeaser } from "@/components/BlogTeaser";
 import { HolidayPanel } from "@/components/HolidayPanel";
 import { SiteHeader, buildHomeHref } from "@/components/SiteHeader";
@@ -137,6 +137,10 @@ export default async function LocalePage({ params, searchParams }: Props) {
   const defaultYear = today.getUTCFullYear();
   const year = getYearFromQuery(query.year, defaultYear);
 
+  if (query.year !== undefined && year !== defaultYear) {
+    redirect(`/${locale}/calendar/${year}`);
+  }
+
   const currentWeek = getWeekNumber(today, system);
   const localeCode = toLocaleCode(locale);
   const weeksInYear = getWeeksInYear(year, system);
@@ -175,6 +179,10 @@ export default async function LocalePage({ params, searchParams }: Props) {
     "@type": "FAQPage",
     "@id": `${canonical}#faq`,
     isPartOf: { "@id": webpageId },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["#faq-heading", ".heroLead", ".currentWeek"],
+    },
     mainEntity: faqEntries.map((entry) => ({
       "@type": "Question",
       name: entry.q,
@@ -230,34 +238,32 @@ export default async function LocalePage({ params, searchParams }: Props) {
     isBasedOn: ["https://date.nager.at/swagger/index.html", "https://www.iso.org/iso-8601-date-and-time-format.html"],
   };
 
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [organizationJsonLd, websiteJsonLd, webpageJsonLd, faqJsonLd],
+  };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(organizationJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(websiteJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(webpageJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} year={year} province={province} system={system} />
 
       <section className="hero">
-        <h1 className="currentWeek" style={{ fontSize: "inherit", fontWeight: 700, margin: 0 }}>
-          {dictionary.home.h1}
-        </h1>
-        <p className="subtle" style={{ marginTop: "0.5rem", fontSize: "1.125rem" }}>
+        <h1 className="homeH1">{dictionary.home.h1}</h1>
+        <p className="subtle homeHeroAnswer">
           <strong>{dictionary.home.heroAnswer(currentWeek, year)}</strong>
         </p>
         <p className="subtle">
           {formatDateLong(weekStart, localeCode, timeZone)} – {formatDateLong(weekEnd, localeCode, timeZone)}
         </p>
-        <p className="subtle" style={{ maxWidth: "800px", margin: "0.5rem auto 0", lineHeight: 1.6 }}>
-          {dictionary.home.heroSupporting}
-        </p>
+        <p className="subtle heroLead">{dictionary.home.heroSupporting}</p>
 
         <div className="systemLinks">
           <Link
             href={buildHomeHref(locale, { year, province, system: "iso" })}
             prefetch={false}
+            rel="nofollow"
             className={system === "iso" ? "systemActive" : undefined}
             aria-current={system === "iso" ? "page" : undefined}
           >
@@ -266,13 +272,14 @@ export default async function LocalePage({ params, searchParams }: Props) {
           <Link
             href={buildHomeHref(locale, { year, province, system: "canada" })}
             prefetch={false}
+            rel="nofollow"
             className={system === "canada" ? "systemActive" : undefined}
             aria-current={system === "canada" ? "page" : undefined}
           >
             Canada
           </Link>
         </div>
-        <p className="subtle" style={{ fontSize: "0.85rem", marginTop: "0.35rem" }}>
+        <p className="subtle systemNote">
           {locale === "fr"
             ? `Système de semaine : ${system === "canada" ? "Canada (dimanche à samedi)" : "ISO 8601 (lundi à dimanche)"}`
             : `Week system: ${system === "canada" ? "Canada (Sunday to Saturday)" : "ISO 8601 (Monday to Sunday)"}`}
@@ -290,7 +297,7 @@ export default async function LocalePage({ params, searchParams }: Props) {
 
         <nav className="yearNav" aria-label={dictionary.yearLabel}>
           <Link
-            href={buildHomeHref(locale, { year: year - 1, province, system })}
+            href={`/${locale}/calendar/${year - 1}`}
             prefetch={false}
             aria-label={dictionary.prevYear}
           >
@@ -298,7 +305,7 @@ export default async function LocalePage({ params, searchParams }: Props) {
           </Link>
           <span>{year}</span>
           <Link
-            href={buildHomeHref(locale, { year: year + 1, province, system })}
+            href={`/${locale}/calendar/${year + 1}`}
             prefetch={false}
             aria-label={dictionary.nextYear}
           >
@@ -390,8 +397,8 @@ export default async function LocalePage({ params, searchParams }: Props) {
       <section className="panel contentSection" aria-labelledby="faq-heading">
         <h2 id="faq-heading">{dictionary.faq.heading}</h2>
         {faqEntries.map((entry) => (
-          <article key={entry.q} style={{ marginBottom: "0.9rem" }}>
-            <h3 style={{ marginBottom: "0.4rem" }}>{entry.q}</h3>
+          <article key={entry.q} className="faqEntry">
+            <h3>{entry.q}</h3>
             <p>{entry.a}</p>
           </article>
         ))}

@@ -1,12 +1,16 @@
 import type { MetadataRoute } from "next";
 import { locales } from "@/lib/i18n";
 import { keywordPageOrder } from "@/lib/keyword-targets";
+import { provinceCodes } from "@/lib/provinces";
 import { getWeeksInIsoYear } from "@/lib/week";
 import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 
 const BASE_URL = "https://whatweek.ca";
 const MIN_YEAR = 1900;
 const MAX_YEAR = 2100;
+const NOW_YEAR = new Date().getUTCFullYear();
+const TOOL_YEAR_MIN = NOW_YEAR - 2;
+const TOOL_YEAR_MAX = NOW_YEAR + 4;
 
 type SitemapBucketId = "base" | `${"en" | "fr"}-${number}`;
 
@@ -78,6 +82,22 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
             changeFrequency: "daily",
             priority: 0.8,
           }),
+          await buildEntry(typedLocale, "/date-to-week", {
+            changeFrequency: "weekly",
+            priority: 0.85,
+          }),
+          await buildEntry(typedLocale, "/business-days-calculator", {
+            changeFrequency: "weekly",
+            priority: 0.85,
+          }),
+          await buildEntry(typedLocale, "/pay-period-calculator", {
+            changeFrequency: "weekly",
+            priority: 0.85,
+          }),
+          await buildEntry(typedLocale, "/embed", {
+            changeFrequency: "monthly",
+            priority: 0.4,
+          }),
           ...keywordEntries,
           await buildEntry(typedLocale, "/about", {
             changeFrequency: "monthly",
@@ -115,5 +135,28 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
     }),
   );
 
-  return [calendarEntry, ...weekEntries];
+  const toolEntries: MetadataRoute.Sitemap = [];
+  if (year >= TOOL_YEAR_MIN && year <= TOOL_YEAR_MAX) {
+    toolEntries.push(
+      await buildEntry(typedLocale, `/year/${year}`, {
+        changeFrequency: "monthly",
+        priority: 0.75,
+      }),
+      await buildEntry(typedLocale, `/long-weekends/${year}`, {
+        changeFrequency: "monthly",
+        priority: 0.75,
+      }),
+    );
+    for (const province of provinceCodes) {
+      const slug = province.replace("CA-", "").toLowerCase();
+      toolEntries.push(
+        await buildEntry(typedLocale, `/statutory-holidays/${slug}/${year}`, {
+          changeFrequency: "monthly",
+          priority: 0.7,
+        }),
+      );
+    }
+  }
+
+  return [calendarEntry, ...weekEntries, ...toolEntries];
 }
