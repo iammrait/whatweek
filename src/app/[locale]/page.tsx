@@ -329,8 +329,11 @@ export default async function LocalePage({ params, searchParams }: Props) {
       <section className="panel quickLinks">
         <h2>{locale === "fr" ? "Outils et calendriers" : "Tools & calendars"}</h2>
         <div className="linkGrid">
-          <Link href={`/${locale}/what-week-of-the-year-is-it`} prefetch={false}>
+          <Link href={`/${locale}/what-week-is-it`} prefetch={false}>
             {locale === "fr" ? "Quelle semaine?" : "What week is it?"}
+          </Link>
+          <Link href={`/${locale}/what-week-of-the-year-is-it`} prefetch={false}>
+            {locale === "fr" ? "Semaine de l'année?" : "What week of the year?"}
           </Link>
           <Link href={`/${locale}/week-dates-and-iso-number`} prefetch={false}>
             {locale === "fr" ? "Dates et numéro ISO" : "Week dates & ISO number"}

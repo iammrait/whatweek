@@ -16,15 +16,25 @@ export const seoOverrides: Record<string, SeoOverride> = {
     title: "Numéro de semaine actuel au Canada aujourd'hui",
     description: "Consultez le numéro de semaine actuel au Canada avec les systèmes Canada et ISO et les dates exactes.",
   },
-  "/en/what-week-of-the-year-is-it": {
-    title: "What Week Is It? | Current Week Number Today",
+  "/en/what-week-is-it": {
+    title: "What Week Is It? Live Answer for Canada",
     description:
-      "What week is it right now? Instant answer for today's week number — ISO 8601, Canada Sun–Sat, day of year, and week-year. Live, free, bilingual.",
+      "What week is it? Live answer for Canada — current week number, this week's start and end dates, updated in real time. Free, bilingual.",
+  },
+  "/fr/what-week-is-it": {
+    title: "Quelle semaine sommes-nous? Réponse en direct",
+    description:
+      "Quelle semaine sommes-nous? Réponse en direct pour le Canada — semaine actuelle, dates de début et de fin, mise à jour en temps réel.",
+  },
+  "/en/what-week-of-the-year-is-it": {
+    title: "What Week of the Year Is It? Live for Canada",
+    description:
+      "What week of the year is it? Current Canada week number, weeks elapsed, weeks remaining — live, ISO and Canada Sun–Sat systems, bilingual.",
   },
   "/fr/what-week-of-the-year-is-it": {
-    title: "Quelle semaine sommes-nous? | WhatWeek.ca",
+    title: "Quelle semaine de l'année sommes-nous? | WhatWeek.ca",
     description:
-      "Quelle semaine sommes-nous? Réponse instantanée : semaine actuelle, ISO 8601, Canada dim–sam, jour de l'année — aujourd'hui.",
+      "Quelle semaine de l'année sommes-nous? Numéro de semaine en cours au Canada, semaines parcourues, semaines restantes — mis à jour en direct.",
   },
   "/en/weeks-in-a-year": {
     title: "How many weeks are in a year?",

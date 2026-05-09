@@ -3,6 +3,7 @@ import { defaultCanadaTimeZone } from "@/lib/provinces";
 import { getCanadaWeekNumber, getIsoWeekNumber, getTodayInTimeZone, getWeekYear, getWeeksInIsoYear, startOfIsoWeek } from "@/lib/week";
 
 export type KeywordPageKey =
+  | "what-week-is-it"
   | "what-week-of-the-year-is-it"
   | "what-year-week-is-it"
   | "weeks-in-a-year"
@@ -27,16 +28,18 @@ export type KeywordTargetEntry = {
 };
 
 export const keywordTargetMap: KeywordTargetEntry[] = [
-  // Core "what week is it" cluster
-  { keyword: "what week is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "what week is it today", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "what week is it right now", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "what week is it this week", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "what week of the year is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "what week of the year is it today", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "week today", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "current week", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "which week is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  // Core "what week is it" cluster (short query → /what-week-is-it)
+  { keyword: "what week is it", canonicalPath: "/what-week-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what week is it today", canonicalPath: "/what-week-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what week is it right now", canonicalPath: "/what-week-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what week is it this week", canonicalPath: "/what-week-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "week today", canonicalPath: "/what-week-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "current week", canonicalPath: "/what-week-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "which week is it", canonicalPath: "/what-week-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  // "What week of the year is it" cluster (long query → /what-week-of-the-year-is-it)
+  { keyword: "what week of the year is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/what-week-is-it", intent: "primary" },
+  { keyword: "what week of the year is it today", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/what-week-is-it", intent: "primary" },
+  { keyword: "what week of the year is it right now", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/what-week-is-it", intent: "primary" },
   { keyword: "what week number is it", canonicalPath: "/what-week-number", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
   // Week dates and ISO
   { keyword: "week dates and ISO week number", canonicalPath: "/week-dates-and-iso-number", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
@@ -104,17 +107,100 @@ type PageContent = {
 };
 
 export const keywordPages: Record<KeywordPageKey, PageContent> = {
-  "what-week-of-the-year-is-it": {
-    title: (locale) => (locale === "fr" ? "Quelle semaine sommes-nous? | WhatWeek.ca" : "What Week Is It? | Current Week Number Today"),
+  "what-week-is-it": {
+    title: (locale) => (locale === "fr" ? "Quelle semaine sommes-nous? Réponse en direct" : "What Week Is It? Live Answer for Canada"),
     description: (locale) =>
       locale === "fr"
-        ? "Quelle semaine sommes-nous? Réponse instantanée : semaine actuelle, ISO 8601, Canada dim–sam, jour de l'année — aujourd'hui."
-        : "What week is it right now? Instant answer for today's week number — ISO 8601, Canada Sun–Sat, day of year, and week-year. Live, free, bilingual.",
+        ? "Quelle semaine sommes-nous? Réponse en direct pour le Canada — semaine actuelle, dates de début et de fin, mise à jour en temps réel."
+        : "What week is it? Live answer for Canada — current week number, start and end dates, updated in real time. Free, bilingual.",
     h1: (locale) => (locale === "fr" ? "Quelle semaine sommes-nous?" : "What week is it?"),
     intro: (locale) =>
       locale === "fr"
-        ? "Voici la semaine actuelle au Canada aujourd'hui, avec le numéro de semaine Canada et ISO pour planifier paie, école et échéances."
-        : "Here is the current week of the year in Canada today, with both Canada and ISO week numbers for payroll, school, and planning.",
+        ? "Réponse rapide pour la semaine actuelle au Canada, avec les dates de la semaine et le numéro de semaine."
+        : "Quick answer for the current week in Canada, with this week's dates and the current week number.",
+    faq: (locale, currentYear, weekNumber) => {
+      const weeksInYear = getWeeksInIsoYear(currentYear);
+      const weeksLeft = Math.max(0, weeksInYear - weekNumber);
+      return [
+        {
+          question: locale === "fr" ? "Quelle semaine sommes-nous aujourd'hui?" : "What week is it today?",
+          answer:
+            locale === "fr"
+              ? `Aujourd'hui nous sommes à la semaine ${weekNumber} de ${currentYear}.`
+              : `Today is in week ${weekNumber} of ${currentYear}.`,
+        },
+        {
+          question: locale === "fr" ? "Quelle est la semaine en cours?" : "What is the current week?",
+          answer:
+            locale === "fr"
+              ? `La semaine en cours est la semaine ${weekNumber} (${currentYear}).`
+              : `The current week is week ${weekNumber} (${currentYear}).`,
+        },
+        {
+          question: locale === "fr" ? "Combien de semaines reste-t-il dans l'année?" : "How many weeks are left in the year?",
+          answer:
+            locale === "fr"
+              ? `Il reste ${weeksLeft} semaines après la semaine ${weekNumber}.`
+              : `There are ${weeksLeft} weeks left after week ${weekNumber}.`,
+        },
+        {
+          question: locale === "fr" ? "Quelle semaine sera-t-il la semaine prochaine?" : "What week will it be next week?",
+          answer:
+            locale === "fr"
+              ? `La semaine prochaine sera la semaine ${weekNumber + 1}.`
+              : `Next week will be week ${weekNumber + 1}.`,
+        },
+      ];
+    },
+    bodySections: (locale, snap) => {
+      const { canadaWeek, isoWeek, currentYear, weekStart, weekEnd } = snap;
+      const localeCode = locale === "fr" ? "fr-CA" : "en-CA";
+      const opts: Intl.DateTimeFormatOptions = { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" };
+      const startStr = new Intl.DateTimeFormat(localeCode, opts).format(weekStart);
+      const endStr = new Intl.DateTimeFormat(localeCode, opts).format(weekEnd);
+      if (locale === "fr") {
+        return [
+          {
+            h2: `Cette semaine au Canada — semaine ${canadaWeek}`,
+            paragraph: `C'est la semaine ${canadaWeek} de ${currentYear}. Elle commence le ${startStr} et se termine le ${endStr}. La numérotation suit le calendrier canadien (dimanche à samedi).`,
+          },
+          {
+            h2: `Semaine ISO et semaine Canada`,
+            paragraph: `Selon le système, vous verrez parfois ${isoWeek} (ISO 8601, lundi au dimanche) ou ${canadaWeek} (Canada, dimanche au samedi). Les deux numéros sont presque toujours identiques; ils peuvent décaler d'une unité autour du 1ᵉʳ janvier et du 31 décembre.`,
+          },
+          {
+            h2: `Comment lire le numéro de semaine`,
+            paragraph: `Le numéro de semaine indique simplement quelle est la position de la semaine dans l'année. La semaine 1 contient le premier jeudi de l'année (selon ISO) ou le premier dimanche (selon Canada). Aujourd'hui, nous sommes à la semaine ${canadaWeek}.`,
+          },
+        ];
+      }
+      return [
+        {
+          h2: `This week in Canada — week ${canadaWeek}`,
+          paragraph: `It's week ${canadaWeek} of ${currentYear}. The week starts on ${startStr} and ends on ${endStr}. The numbering follows the Canadian calendar (Sunday to Saturday).`,
+        },
+        {
+          h2: `ISO week vs. Canada week`,
+          paragraph: `Depending on the system, you may see ${isoWeek} (ISO 8601, Monday to Sunday) or ${canadaWeek} (Canada, Sunday to Saturday). Both numbers are almost always identical; they can differ by one around January 1 and December 31.`,
+        },
+        {
+          h2: `How to read the week number`,
+          paragraph: `The week number simply tells you where the week sits in the year. Week 1 is the one that contains the first Thursday of the year (ISO) or the first Sunday (Canada). Today we're in week ${canadaWeek}.`,
+        },
+      ];
+    },
+  },
+  "what-week-of-the-year-is-it": {
+    title: (locale) => (locale === "fr" ? "Quelle semaine de l'année sommes-nous? | WhatWeek.ca" : "What Week of the Year Is It? Live for Canada"),
+    description: (locale) =>
+      locale === "fr"
+        ? "Quelle semaine de l'année sommes-nous? Numéro de semaine en cours au Canada, semaines parcourues, semaines restantes — mis à jour en direct."
+        : "What week of the year is it? Current Canada week number, weeks elapsed, weeks remaining — live, ISO and Canada Sun–Sat systems, bilingual.",
+    h1: (locale) => (locale === "fr" ? "Quelle semaine de l'année sommes-nous?" : "What week of the year is it?"),
+    intro: (locale) =>
+      locale === "fr"
+        ? "Numéro de semaine actuel dans l'année au Canada, avec le contexte ISO et le total des semaines parcourues sur l'année."
+        : "Current week of the year in Canada, with ISO context, weeks elapsed so far, and weeks remaining until the end of the year.",
     faq: (locale, currentYear, weekNumber, dayOfYear, weekYear) => {
       const weeksInYear = getWeeksInIsoYear(currentYear);
       const weeksLeft = Math.max(0, weeksInYear - weekNumber);
@@ -670,6 +756,7 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
 };
 
 export const keywordPageOrder: KeywordPageKey[] = [
+  "what-week-is-it",
   "what-week-of-the-year-is-it",
   "what-year-week-is-it",
   "weeks-in-a-year",

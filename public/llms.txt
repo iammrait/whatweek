@@ -15,6 +15,10 @@ allowed:
 # Core week pages
 - https://whatweek.ca/en
 - https://whatweek.ca/fr
+- https://whatweek.ca/en/what-week-is-it
+- https://whatweek.ca/fr/what-week-is-it
+- https://whatweek.ca/en/what-week-of-the-year-is-it
+- https://whatweek.ca/fr/what-week-of-the-year-is-it
 - https://whatweek.ca/en/current-week-number-canada
 - https://whatweek.ca/fr/current-week-number-canada
 - https://whatweek.ca/en/iso-week-number-canada
