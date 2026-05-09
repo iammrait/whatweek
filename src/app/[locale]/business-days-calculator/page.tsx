@@ -141,9 +141,20 @@ export default async function BusinessDaysPage({ params }: Props) {
     ],
   };
 
+  const softwareAppJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: isFr ? "Calculatrice de jours ouvrables au Canada" : "Canadian Business Days Calculator",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Any",
+    url: `https://whatweek.ca/${locale}/business-days-calculator`,
+    inLanguage: isFr ? "fr-CA" : "en-CA",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "CAD" },
+  };
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [faqJsonLd, howToJsonLd],
+    "@graph": [faqJsonLd, howToJsonLd, softwareAppJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

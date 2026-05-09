@@ -130,9 +130,20 @@ export default async function DateToWeekPage({ params }: Props) {
     ],
   };
 
+  const softwareAppJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: isFr ? "Convertisseur date ↔ numéro de semaine" : "Date ↔ Week Number Converter",
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any",
+    url: `https://whatweek.ca/${locale}/date-to-week`,
+    inLanguage: isFr ? "fr-CA" : "en-CA",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "CAD" },
+  };
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [faqJsonLd, howToJsonLd],
+    "@graph": [faqJsonLd, howToJsonLd, softwareAppJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

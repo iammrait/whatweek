@@ -109,11 +109,70 @@ export default async function PayPeriodPage({ params }: Props) {
   ];
 
   const faqJsonLd = buildFaqJsonLd(faq);
+
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: isFr ? "Générer un calendrier de paie au Canada" : "Generate a Canadian pay schedule",
+    description: isFr
+      ? "Étapes pour produire un calendrier de paie complet avec jours fériés statutaires et décalages de week-end."
+      : "Steps to generate a complete pay schedule with statutory holidays and weekend shifts handled automatically.",
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: isFr ? "Choisir la première paie" : "Pick the first payday",
+        text: isFr
+          ? "Sélectionnez la date d'ancrage (votre première paie de la période)."
+          : "Select the anchor date (your first payday in the cycle).",
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: isFr ? "Choisir la fréquence" : "Pick the frequency",
+        text: isFr
+          ? "Hebdomadaire, aux 2 semaines, bimensuel ou mensuel."
+          : "Weekly, bi-weekly, semi-monthly, or monthly.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: isFr ? "Choisir la province" : "Pick the province",
+        text: isFr
+          ? "Sélectionnez la province pour appliquer les jours fériés statutaires correspondants."
+          : "Select the province so the right statutory holiday set is applied.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 4,
+        name: isFr ? "Lire le calendrier" : "Read the schedule",
+        text: isFr
+          ? "Le calendrier complet apparaît, avec les paies décalées automatiquement quand elles tombent un week-end ou un jour férié."
+          : "The full schedule appears, with paydays shifted automatically when they fall on a weekend or holiday.",
+      },
+    ],
+  };
+
+  const softwareAppJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: isFr ? "Calculatrice de périodes de paie au Canada" : "Canadian Pay Period Calculator",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Any",
+    url: `https://whatweek.ca/${locale}/pay-period-calculator`,
+    inLanguage: isFr ? "fr-CA" : "en-CA",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "CAD" },
+  };
+
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [faqJsonLd, howToJsonLd, softwareAppJsonLd],
+  };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} year={startYear} />
 
       <section className="hero">
