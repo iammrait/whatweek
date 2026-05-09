@@ -45,6 +45,24 @@ export default async function EmbedDocsPage({ params }: Props) {
   style="border:0;border-radius:12px;background:transparent">
 </iframe>`;
 
+  const monthSnippet = `<iframe
+  src="https://whatweek.ca/${locale}/embed/month"
+  title="WhatWeek.ca current month with week numbers"
+  width="360"
+  height="320"
+  loading="lazy"
+  style="border:0;border-radius:12px;background:transparent">
+</iframe>`;
+
+  const yearSnippet = `<iframe
+  src="https://whatweek.ca/${locale}/embed/year"
+  title="WhatWeek.ca year week numbers"
+  width="480"
+  height="360"
+  loading="lazy"
+  style="border:0;border-radius:12px;background:transparent">
+</iframe>`;
+
   const apiSnippet = `curl "https://whatweek.ca/api/week.json?province=on&locale=${locale}"`;
 
   return (
@@ -79,7 +97,7 @@ export default async function EmbedDocsPage({ params }: Props) {
       </section>
 
       <section className="panel contentSection">
-        <h2>{isFr ? "Code à coller" : "Copy-paste snippet"}</h2>
+        <h2>{isFr ? "Code à coller — semaine" : "Copy-paste snippet — week"}</h2>
         <pre className="codeBlock">
           <code>{iframeSnippet}</code>
         </pre>
@@ -93,6 +111,53 @@ export default async function EmbedDocsPage({ params }: Props) {
             <code>on</code>, <code>qc</code>, <code>bc</code>, …)
           </li>
         </ul>
+      </section>
+
+      <section className="panel contentSection">
+        <h2>{isFr ? "Widget mois" : "Month widget"}</h2>
+        <p className="subtle">
+          {isFr
+            ? "Calendrier du mois en cours avec les numéros de semaine en colonne."
+            : "Current month grid with week numbers in the leading column."}
+        </p>
+        <iframe
+          src={`/${locale}/embed/month`}
+          title={isFr ? "Aperçu du widget mois" : "Month widget preview"}
+          width={360}
+          height={320}
+          loading="lazy"
+          style={{ border: 0, borderRadius: 12, background: "transparent" }}
+        />
+        <pre className="codeBlock">
+          <code>{monthSnippet}</code>
+        </pre>
+        <p className="subtle">
+          <code>?system=iso</code> {isFr ? "pour ISO 8601" : "for ISO 8601"} ·{" "}
+          <code>?system=canada</code> {isFr ? "pour dim–sam" : "for Sun–Sat"}
+        </p>
+      </section>
+
+      <section className="panel contentSection">
+        <h2>{isFr ? "Widget année" : "Year widget"}</h2>
+        <p className="subtle">
+          {isFr
+            ? "Mini-grille des 12 mois avec la semaine en cours surlignée."
+            : "Mini-grid of all 12 months with the current week highlighted."}
+        </p>
+        <iframe
+          src={`/${locale}/embed/year`}
+          title={isFr ? "Aperçu du widget année" : "Year widget preview"}
+          width={480}
+          height={360}
+          loading="lazy"
+          style={{ border: 0, borderRadius: 12, background: "transparent" }}
+        />
+        <pre className="codeBlock">
+          <code>{yearSnippet}</code>
+        </pre>
+        <p className="subtle">
+          <code>?year=2026</code> {isFr ? "pour une année spécifique" : "for a specific year"}
+        </p>
       </section>
 
       <section className="panel contentSection">

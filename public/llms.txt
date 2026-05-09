@@ -42,6 +42,12 @@ allowed:
 - https://whatweek.ca/fr/statutory-holidays/
 - https://whatweek.ca/en/embed
 - https://whatweek.ca/fr/embed
+- https://whatweek.ca/en/embed/week
+- https://whatweek.ca/fr/embed/week
+- https://whatweek.ca/en/embed/month
+- https://whatweek.ca/fr/embed/month
+- https://whatweek.ca/en/embed/year
+- https://whatweek.ca/fr/embed/year
 # Site files
 - https://whatweek.ca/sitemap.xml
 - https://whatweek.ca/en/about
