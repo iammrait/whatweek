@@ -20,13 +20,19 @@ export type KeywordTargetEntry = {
 };
 
 export const keywordTargetMap: KeywordTargetEntry[] = [
-  { keyword: "what week of the year is it", canonicalPath: "/current-week-number-canada", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  { keyword: "what week is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what week is it today", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what week is it right now", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what week is it this week", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what week of the year is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what week of the year is it today", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
   { keyword: "weeks of the year", canonicalPath: "/weeks-in-a-year", supportPath: "/year-by-calendar", intent: "primary" },
   { keyword: "what year is it", canonicalPath: "/what-year-week-is-it", supportPath: "/current-week-number-canada", intent: "supporting" },
   { keyword: "weeks in a year", canonicalPath: "/weeks-in-a-year", supportPath: "/calendar/[year]", intent: "primary" },
   { keyword: "how many weeks for year", canonicalPath: "/weeks-in-a-year", supportPath: "/calendar/[year]", intent: "primary" },
-  { keyword: "What's the Current Week Number", canonicalPath: "/current-week-number-canada", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  { keyword: "what's the current week number", canonicalPath: "/current-week-number-canada", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
   { keyword: "what year week is it", canonicalPath: "/what-year-week-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "current week number", canonicalPath: "/current-week-number-canada", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
   { keyword: "what day of the year is it", canonicalPath: "/what-day-of-the-year-is-it", supportPath: "/what-day-of-the-week", intent: "primary" },
   { keyword: "weeks and months", canonicalPath: "/weeks-and-months", supportPath: "/year-by-calendar", intent: "primary" },
   { keyword: "year by calendar", canonicalPath: "/year-by-calendar", supportPath: "/weeks-in-a-year", intent: "primary" },
@@ -37,6 +43,9 @@ export const keywordTargetMap: KeywordTargetEntry[] = [
   { keyword: "what week of the year is it this week", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
   { keyword: "weeks into the year", canonicalPath: "/what-day-of-the-year-is-it", supportPath: "/weeks-in-a-year", intent: "supporting" },
   { keyword: "week today", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "current week", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "which week is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what week number is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
 ];
 
 export type BodySection = {
@@ -58,12 +67,12 @@ type PageContent = {
 
 export const keywordPages: Record<KeywordPageKey, PageContent> = {
   "what-week-of-the-year-is-it": {
-    title: (locale) => (locale === "fr" ? "Quelle semaine de l'année sommes-nous au Canada?" : "What Week of the Year Is It in Canada?"),
+    title: (locale) => (locale === "fr" ? "Quelle semaine sommes-nous? | WhatWeek.ca" : "What Week Is It? | Current Week Number Today"),
     description: (locale) =>
       locale === "fr"
-        ? "Réponse instantanée : numéro de semaine actuel au Canada (Canada et ISO), avec les dates de début et de fin."
-        : "Instant answer for the current week of the year in Canada, including Canada and ISO week numbers with start/end dates.",
-    h1: (locale) => (locale === "fr" ? "Quelle semaine de l'année sommes-nous?" : "What Week of the Year Is It?"),
+        ? "Quelle semaine sommes-nous? Réponse instantanée : semaine actuelle, ISO 8601, Canada dim–sam, jour de l'année — aujourd'hui."
+        : "What week is it right now? Instant answer for today's week number — ISO 8601, Canada Sun–Sat, day of year, and week-year. Live, free, bilingual.",
+    h1: (locale) => (locale === "fr" ? "Quelle semaine sommes-nous?" : "What week is it?"),
     intro: (locale) =>
       locale === "fr"
         ? "Voici la semaine actuelle au Canada aujourd'hui, avec le numéro de semaine Canada et ISO pour planifier paie, école et échéances."

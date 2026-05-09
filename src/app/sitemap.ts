@@ -64,7 +64,7 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
           keywordPageOrder.map((slug) =>
             buildEntry(typedLocale, `/${slug}`, {
               changeFrequency: "weekly",
-              priority: 0.78,
+              priority: slug === "what-week-of-the-year-is-it" ? 0.95 : 0.78,
             }),
           ),
         );
@@ -73,6 +73,10 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
           await buildEntry(typedLocale, "", {
             changeFrequency: "daily",
             priority: 1,
+          }),
+          await buildEntry(typedLocale, "/what-week-of-the-year-is-it", {
+            changeFrequency: "daily",
+            priority: 0.95,
           }),
           await buildEntry(typedLocale, "/current-week-number-canada", {
             changeFrequency: "daily",
