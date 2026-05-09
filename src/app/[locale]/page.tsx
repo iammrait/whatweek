@@ -327,7 +327,7 @@ export default async function LocalePage({ params, searchParams }: Props) {
       <YearCalendar locale={locale} dictionary={dictionary} months={yearCalendar} year={year} system={system} today={today} />
 
       <section className="panel quickLinks">
-        <h2>{locale === "fr" ? "Outils de semaine" : "Week tools"}</h2>
+        <h2>{locale === "fr" ? "Outils et calendriers" : "Tools & calendars"}</h2>
         <div className="linkGrid">
           <Link href={`/${locale}/what-week-of-the-year-is-it`} prefetch={false}>
             {locale === "fr" ? "Quelle semaine?" : "What week is it?"}
@@ -362,12 +362,6 @@ export default async function LocalePage({ params, searchParams }: Props) {
           <Link href={`/${locale}/week-by-year-index`} prefetch={false}>
             {locale === "fr" ? "Semaine par année" : "Week by year index"}
           </Link>
-        </div>
-      </section>
-
-      <section className="panel quickLinks">
-        <h2>{locale === "fr" ? "Calendriers et outils" : "Calendars & tools"}</h2>
-        <div className="linkGrid">
           <Link href={`/${locale}/calendar/${year}`} prefetch={false}>
             {locale === "fr" ? `Calendrier ${year}` : `${year} Calendar`}
           </Link>
