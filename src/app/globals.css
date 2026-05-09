@@ -87,6 +87,21 @@ body {
   margin: 0;
 }
 
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -257,6 +272,45 @@ a {
   text-underline-offset: 2px;
 }
 
+.todayHolidayBanner {
+  margin: 0 auto 1rem;
+  max-width: 960px;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: var(--accent-soft, color-mix(in oklab, var(--accent, #4a72ff) 12%, transparent));
+  border: 1px solid color-mix(in oklab, var(--accent, #4a72ff) 35%, transparent);
+}
+
+.todayHolidayBannerInner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.85rem;
+  align-items: center;
+}
+
+.todayHolidayBannerBadge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--accent, #4a72ff);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.todayHolidayBannerText {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.todayHolidayBannerLink {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 .hero {
   display: flex;
   flex-direction: column;
@@ -386,6 +440,7 @@ a {
   border-color: var(--accent);
   background: var(--accent);
   color: #fff;
+  box-shadow: inset 0 0 0 2px var(--surface);
 }
 
 .provinceForm {
@@ -462,6 +517,7 @@ a {
   border-color: var(--accent);
   background: var(--accent);
   color: #fff;
+  box-shadow: inset 0 0 0 2px var(--surface);
 }
 .langToggle .langActive:hover {
   background: var(--accent-deep);
@@ -802,6 +858,7 @@ a {
 .themeToggle .themeActive {
   background: var(--accent);
   color: #fff;
+  box-shadow: inset 0 0 0 2px var(--surface);
 }
 
 .themeToggle button:hover:not(.themeActive) {
@@ -1091,6 +1148,133 @@ a {
 .embedWidget .embedBrand a {
   color: var(--accent);
   text-decoration: underline;
+}
+
+/* Month embed */
+.embedMonth {
+  font-size: 0.85rem;
+}
+
+.embedMonthHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.embedMonthTitle {
+  font-size: 1rem;
+}
+
+.embedMonthSystem {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.embedMonthGrid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.embedMonthGrid th,
+.embedMonthGrid td {
+  text-align: center;
+  padding: 0.25rem 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.embedMonthGrid thead th {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+
+.embedMonthGrid tbody th.embedMonthWk {
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.7rem;
+  border-right: 1px solid var(--line);
+}
+
+.embedMonthOut {
+  color: var(--muted);
+  opacity: 0.45;
+}
+
+.embedMonthToday {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+/* Year embed */
+.embedYear {
+  font-size: 0.8rem;
+}
+
+.embedYearHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.embedYearTitle {
+  font-size: 1.1rem;
+}
+
+.embedYearSystem {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.embedYearGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.embedYearMonth {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+}
+
+.embedYearMonthLabel {
+  font-weight: 600;
+  font-size: 0.75rem;
+  margin-bottom: 0.2rem;
+}
+
+.embedYearWeekList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.3rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.embedYearCurrent {
+  color: #fff;
+  background: var(--accent);
+  padding: 0 0.3rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .embedYearGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* ─── Print ─── */

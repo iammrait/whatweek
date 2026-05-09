@@ -6,6 +6,7 @@ import { HolidayPanel } from "@/components/HolidayPanel";
 import { SiteHeader, buildHomeHref } from "@/components/SiteHeader";
 import { LongWeekendCard } from "@/components/LongWeekendCard";
 import { ProvinceSelect } from "@/components/ProvinceSelect";
+import { TodayHolidayBanner } from "@/components/TodayHolidayBanner";
 import { YearCalendar } from "@/components/YearCalendar";
 import { getHolidaysForDateRange, getNextLongWeekend } from "@/lib/holidays-ca";
 import { getDictionary, isLocale, locales, toLocaleCode, type Locale } from "@/lib/i18n";
@@ -160,6 +161,11 @@ export default async function LocalePage({ params, searchParams }: Props) {
     getNextLongWeekend(year, today, province),
   ]);
 
+  const todayKey = `${today.getUTCFullYear()}-${today.getUTCMonth()}-${today.getUTCDate()}`;
+  const todayHoliday = holidays.find(
+    (h) => `${h.date.getUTCFullYear()}-${h.date.getUTCMonth()}-${h.date.getUTCDate()}` === todayKey,
+  ) ?? null;
+
   const provinceName = province ? provinceNames[province][locale] : undefined;
   const canonical = buildHomeHref(locale, { year, province, system, absolute: true });
   const webpageTitle =
@@ -238,9 +244,36 @@ export default async function LocalePage({ params, searchParams }: Props) {
     isBasedOn: ["https://date.nager.at/swagger/index.html", "https://www.iso.org/iso-8601-date-and-time-format.html"],
   };
 
+  const todayHolidayEvent = todayHoliday
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        name: locale === "fr" ? todayHoliday.nameFr : todayHoliday.nameEn,
+        startDate: todayHoliday.date.toISOString().slice(0, 10),
+        endDate: todayHoliday.date.toISOString().slice(0, 10),
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        eventStatus: "https://schema.org/EventScheduled",
+        location: {
+          "@type": "Place",
+          name: provinceName ?? (locale === "fr" ? "Canada" : "Canada"),
+          address: {
+            "@type": "PostalAddress",
+            addressCountry: "CA",
+            ...(province ? { addressRegion: province.replace("CA-", "") } : {}),
+          },
+        },
+      }
+    : null;
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [organizationJsonLd, websiteJsonLd, webpageJsonLd, faqJsonLd],
+    "@graph": [
+      organizationJsonLd,
+      websiteJsonLd,
+      webpageJsonLd,
+      faqJsonLd,
+      ...(todayHolidayEvent ? [todayHolidayEvent] : []),
+    ],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
@@ -248,6 +281,10 @@ export default async function LocalePage({ params, searchParams }: Props) {
     <main className="container">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} year={year} province={province} system={system} />
+
+      {todayHoliday && (
+        <TodayHolidayBanner locale={locale} holiday={todayHoliday} province={province} year={year} />
+      )}
 
       <section className="hero">
         <h1 className="homeH1">{dictionary.home.h1}</h1>
