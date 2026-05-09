@@ -1,4 +1,4 @@
-const CACHE_NAME = "whatweek-v2";
+const CACHE_NAME = "whatweek-v3";
 const PRECACHE_URLS = ["/en", "/fr", "/icon.svg"];
 
 self.addEventListener("install", (event) => {
@@ -24,21 +24,17 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Network-first for HTML pages, falling back to cache when offline.
+  // HTML: always bypass the HTTP cache (otherwise fetch() can return yesterday's document while
+  // online). Do not store documents in the Cache API — that duplicated stale HTML behind SW.
   const acceptsHtml = request.headers.get("accept")?.includes("text/html");
   if (acceptsHtml) {
+    const noStoreRequest = new Request(request, { cache: "no-store" });
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)).catch(() => undefined);
-          return response;
-        })
-        .catch(() =>
-          caches.match(request).then((cached) =>
-            cached ?? caches.match("/en").then((fallback) => fallback ?? Response.error()),
-          ),
+      fetch(noStoreRequest).catch(() =>
+        caches.match(request).then((cached) =>
+          cached ?? caches.match("/en").then((fallback) => fallback ?? Response.error()),
         ),
+      ),
     );
     return;
   }

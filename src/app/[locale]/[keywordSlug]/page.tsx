@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
-import { isLocale, locales, type Locale } from "@/lib/i18n";
+import { isLocale, type Locale } from "@/lib/i18n";
 import { getKeywordSnapshot, keywordPageOrder, keywordPages, type KeywordPageKey } from "@/lib/keyword-targets";
 import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { defaultCanadaTimeZone } from "@/lib/provinces";
 import { getSeoOverride } from "@/lib/seo-overrides";
 
 type Props = {
@@ -20,10 +21,6 @@ function isKeywordPageKey(value: string): value is KeywordPageKey {
 
 function buildAbsolute(locale: Locale, slug: KeywordPageKey): string {
   return `https://whatweek.ca/${locale}/${slug}`;
-}
-
-export function generateStaticParams() {
-  return locales.flatMap((locale) => keywordPageOrder.map((keywordSlug) => ({ locale, keywordSlug })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -71,7 +68,7 @@ export default async function KeywordIntentPage({ params }: Props) {
   const snapshot = getKeywordSnapshot();
   const todayLabel = new Intl.DateTimeFormat(locale === "fr" ? "fr-CA" : "en-CA", {
     dateStyle: "full",
-    timeZone: "UTC",
+    timeZone: defaultCanadaTimeZone,
   }).format(snapshot.today);
 
   const canonical = buildAbsolute(locale, keywordSlug);
