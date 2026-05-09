@@ -126,7 +126,7 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
           question: locale === "fr" ? "Quelle semaine sommes-nous aujourd'hui?" : "What week is it today?",
           answer:
             locale === "fr"
-              ? `Aujourd'hui nous sommes à la semaine ${weekNumber} de ${currentYear}.`
+              ? `Aujourd'hui, nous sommes en semaine ${weekNumber} de ${currentYear}.`
               : `Today is in week ${weekNumber} of ${currentYear}.`,
         },
         {
@@ -144,7 +144,7 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
               : `There are ${weeksLeft} weeks left after week ${weekNumber}.`,
         },
         {
-          question: locale === "fr" ? "Quelle semaine sera-t-il la semaine prochaine?" : "What week will it be next week?",
+          question: locale === "fr" ? "En quelle semaine serons-nous la semaine prochaine?" : "What week will it be next week?",
           answer:
             locale === "fr"
               ? `La semaine prochaine sera la semaine ${weekNumber + 1}.`
@@ -170,7 +170,7 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
           },
           {
             h2: `Comment lire le numéro de semaine`,
-            paragraph: `Le numéro de semaine indique simplement quelle est la position de la semaine dans l'année. La semaine 1 contient le premier jeudi de l'année (selon ISO) ou le premier dimanche (selon Canada). Aujourd'hui, nous sommes à la semaine ${canadaWeek}.`,
+            paragraph: `Le numéro de semaine indique la position de la semaine dans l'année. La semaine 1 contient le premier jeudi de l'année (selon ISO) ou le premier dimanche (selon Canada). Aujourd'hui, nous sommes en semaine ${canadaWeek}.`,
           },
         ];
       }
@@ -248,7 +248,7 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
           question: locale === "fr" ? "Quel jour de l'année sommes-nous?" : "What day of the year is it?",
           answer:
             locale === "fr"
-              ? `Aujourd'hui est le jour ${dayOfYear} de ${currentYear}, dans la semaine ${weekNumber}.`
+              ? `Aujourd'hui, c'est le jour ${dayOfYear} de ${currentYear}, dans la semaine ${weekNumber}.`
               : `Today is day ${dayOfYear} of ${currentYear}, inside week ${weekNumber}.`,
         },
         {
@@ -265,24 +265,24 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
       if (locale === "fr") {
         return [
           {
-            h2: "Quelle semaine de l'année sommes-nous au Canada en ce moment ?",
-            paragraph: `WhatWeek.ca calcule la semaine de l'année en direct avec un fuseau horaire canadien : la valeur affichée est toujours celle d'aujourd'hui. Le Canada est actuellement à la semaine ${canadaWeek} de ${currentYear}. La même date peut donner deux numéros différents selon le système : ISO 8601 (lundi–dimanche) est la norme internationale, tandis que les calendriers de paie, scolaires et d'entreprise au Canada utilisent souvent dimanche–samedi.`,
+            h2: "Quelle semaine de l'année sommes-nous au Canada en ce moment?",
+            paragraph: `Le Canada est actuellement en semaine ${canadaWeek} de ${currentYear}. La même date peut donner deux numéros différents selon le système choisi : ISO 8601 (lundi–dimanche) est la norme internationale, tandis que les calendriers de paie, scolaires et d'entreprise au Canada utilisent souvent dimanche–samedi.`,
           },
           {
-            h2: "« Semaine du jour » vs. semaine de l'année (ISO 8601 vs. dim.–sam.)",
-            paragraph: `La semaine ISO ${isoWeek} et la semaine Canada ${canadaWeek} coïncident généralement, mais elles peuvent différer de 1 autour du 1ᵉʳ janvier et du 31 décembre. Choisissez le système utilisé par vos outils, puis conservez-le toute l'année. Mélanger les deux en cours d'année est la cause la plus fréquente d'erreurs de paie, de planification et de reporting.`,
+            h2: "« Semaine du jour » et semaine de l'année (ISO 8601 vs dim.–sam.)",
+            paragraph: `La semaine ISO ${isoWeek} et la semaine Canada ${canadaWeek} coïncident généralement, mais elles peuvent varier de 1 autour du 1ᵉʳ janvier et du 31 décembre. Choisissez le système utilisé par vos outils, puis conservez-le toute l'année. Mélanger les deux en cours d'année est la cause la plus fréquente d'erreurs de paie, de planification et de rapports.`,
           },
           {
-            h2: "Combien de semaines avons-nous parcourues dans l'année ?",
-            paragraph: `Nous sommes à ${canadaWeek} semaines dans ${currentYear}. Compter les semaines parcourues est utile pour les bilans OKR, l'avancement des projets, les sessions scolaires et les campagnes saisonnières. Le calcul correspond simplement au numéro de semaine actuel selon le système choisi.`,
+            h2: "Combien de semaines avons-nous parcourues dans l'année?",
+            paragraph: `Nous sommes à ${canadaWeek} semaines dans ${currentYear}. Compter les semaines écoulées aide à suivre les bilans trimestriels, l'avancement des projets et les sessions scolaires. Le calcul correspond simplement au numéro de semaine actuel selon le système choisi.`,
           },
           {
-            h2: "Combien de semaines reste-t-il dans l'année ?",
-            paragraph: `${currentYear} contient ${weeksInYear} semaines ISO, ce qui laisse ${weeksLeft} semaines après la semaine ${canadaWeek}. Pratique pour cadrer les échéances de fin de trimestre, planifier le prochain long week-end et budgéter les jours de congé restants. Certaines années se terminent à la semaine 53 plutôt que 52—vérifiez avant de présumer.`,
+            h2: "Combien de semaines reste-t-il dans l'année?",
+            paragraph: `${currentYear} contient ${weeksInYear} semaines ISO, ce qui laisse ${weeksLeft} semaines après la semaine ${canadaWeek}. Pratique pour fixer les échéances de fin de trimestre, planifier le prochain long week-end et budgéter les jours de congé restants. Certaines années se terminent à la semaine 53 plutôt que 52 — vérifiez avant de conclure.`,
           },
           {
-            h2: "Quel jour de l'année sommes-nous ?",
-            paragraph: `Aujourd'hui est le jour ${dayOfYear} de ${currentYear}, dans la semaine ${canadaWeek}. Le jour de l'année (jour ordinal, jour julien, DOY) va de 1 à 365, ou 366 lors d'une année bissextile. Il complète le numéro de semaine pour suivre des objectifs annuels au jour près—ingénierie, sciences, agriculture, projets longs.`,
+            h2: "Quel jour de l'année sommes-nous?",
+            paragraph: `Aujourd'hui, c'est le jour ${dayOfYear} de ${currentYear}, en semaine ${canadaWeek}. Le jour de l'année (aussi appelé jour ordinal ou jour julien) va de 1 le 1ᵉʳ janvier à 365 ou 366 le 31 décembre. Il complète le numéro de semaine pour suivre des objectifs au jour près.`,
           },
         ];
       }
@@ -319,7 +319,7 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
     h1: (locale) => (locale === "fr" ? "Quelle année-semaine sommes-nous?" : "What Year Week Is It?"),
     intro: (locale) =>
       locale === "fr"
-        ? "Cette page affiche l'année-semaine courante et le numéro de semaine du Canada pour aligner vos opérations et rapports."
+        ? "Année-semaine courante et numéro de semaine au Canada, pour aligner vos opérations et rapports."
         : "This page shows the current week-year and Canada week number to align reports, operations, and planning.",
     faq: (locale, currentYear, weekNumber, _d, weekYear) => [
       {
@@ -389,16 +389,16 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
     h1: (locale) => (locale === "fr" ? "Quel jour de l'année sommes-nous?" : "What Day of the Year Is It?"),
     intro: (locale) =>
       locale === "fr"
-        ? "Affiche le numéro du jour dans l'année, utile pour le suivi d'objectifs, la production et les échéanciers."
+        ? "Le numéro du jour dans l'année — utile pour le suivi d'objectifs, la production et les échéanciers."
         : "Shows the day number in the current year, useful for goal tracking, production plans, and annual timelines.",
     faq: (locale, currentYear, weekNumber, dayOfYear) => [
       {
-        question: locale === "fr" ? "Quel jour de l'année est aujourd'hui?" : "What day of the year is today?",
-        answer: locale === "fr" ? `Aujourd'hui est le jour ${dayOfYear} de ${currentYear}.` : `Today is day ${dayOfYear} of ${currentYear}.`,
+        question: locale === "fr" ? "Quel jour de l'année sommes-nous aujourd'hui?" : "What day of the year is today?",
+        answer: locale === "fr" ? `Aujourd'hui, c'est le jour ${dayOfYear} de ${currentYear}.` : `Today is day ${dayOfYear} of ${currentYear}.`,
       },
       {
         question: locale === "fr" ? "Ce jour correspond à quelle semaine?" : "Which week does this day fall in?",
-        answer: locale === "fr" ? `Ce jour est dans la semaine ${weekNumber}.` : `This day falls in week ${weekNumber}.`,
+        answer: locale === "fr" ? `Ce jour fait partie de la semaine ${weekNumber}.` : `This day falls in week ${weekNumber}.`,
       },
     ],
     bodySections: (locale, snap) => {
@@ -406,10 +406,10 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
       const daysLeft = (new Date(currentYear, 11, 31).getDate()) - dayOfYear;
       if (locale === "fr") {
         return [
-          { h2: `Quel jour de l'année sommes-nous? — Jour ${dayOfYear} sur 365`, paragraph: `Nous sommes le jour ${dayOfYear} de ${currentYear}, dans la semaine Canada ${canadaWeek}. Le jour de l'année (jour ordinal, jour julien, DOY) va de 1 le 1ᵉʳ janvier à 365 ou 366 le 31 décembre.` },
-          { h2: "Jour de l'année et jour de la semaine", paragraph: `Le jour de l'année vous dit où vous êtes dans l'année, tandis que le "${dayName}" vous dit quel jour de la semaine nous sommes aujourd'hui. Ensemble, ils permettent de reconstituer n'importe quelle date sans calendrier — utile pour les ingénieurs, les planificateurs et tous ceux qui alignent des cadences hebdomadaires sur des objectifs annuels.` },
-          { h2: `Progression annuelle : ${dayOfYear} sur 365, ${Math.round((dayOfYear / (new Date(currentYear, 11, 31).getDate())) * 100)}%`, paragraph: `${currentYear} contient ${weeksInYear} semaines ISO. Nous sommes à ${Math.round((dayOfYear / (new Date(currentYear, 11, 31).getDate())) * 100)}% de l'année. Il reste ${daysLeft} jours — utile pour les bilans OKR, les plans de production et les échéanciers.` },
-          { h2: "Jour ordinal et jour julien", paragraph: "Le jour ordinal (DOY) est le nombre de jours depuis le 1ᵉʳ janvier. Janvier 1 = jour 1, janvier 31 = jour 31, etc. Il complète le numéro de semaine pour suivre des objectifs annuels au jour près." },
+          { h2: `Quel jour de l'année sommes-nous? — Jour ${dayOfYear} sur 365`, paragraph: `Aujourd'hui, c'est le jour ${dayOfYear} de ${currentYear}, dans la semaine Canada ${canadaWeek}. Le jour de l'année (aussi appelé jour ordinal ou jour julien) va de 1 le 1ᵉʳ janvier à 365 — ou 366 lors d'une année bissextile — le 31 décembre.` },
+          { h2: "Jour de l'année et jour de la semaine", paragraph: `Le jour de l'année indique où vous en êtes dans l'année, tandis que le « ${dayName} » indique quel jour de la semaine nous sommes aujourd'hui. Ensemble, ils permettent de retrouver n'importe quelle date sans calendrier — pratique pour les ingénieurs, les planificateurs et toute personne qui aligne des cadences hebdomadaires sur des objectifs annuels.` },
+          { h2: `Progression annuelle : ${dayOfYear} sur 365, ${Math.round((dayOfYear / (new Date(currentYear, 11, 31).getDate())) * 100)}%`, paragraph: `${currentYear} contient ${weeksInYear} semaines ISO. Nous sommes à ${Math.round((dayOfYear / (new Date(currentYear, 11, 31).getDate())) * 100)}% de l'année. Il reste ${daysLeft} jours — utile pour suivre les bilans trimestriels, les plans de production et les échéanciers.` },
+          { h2: "Jour ordinal et jour julien", paragraph: "Le jour ordinal correspond au nombre de jours depuis le 1ᵉʳ janvier. Le 1ᵉʳ janvier = jour 1, le 31 janvier = jour 31, et ainsi de suite. Il complète le numéro de semaine pour suivre des objectifs annuels au jour près." },
         ];
       }
       return [
@@ -570,7 +570,7 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
         return [
           { h2: "Semaine actuelle — dates ISO et Canada", paragraph: `Nous sommes à la semaine ISO ${isoWeek} en ${currentYear}. La semaine ISO ${isoWeek} va du lundi ${isoStart} au dimanche ${isoEnd}. Au Canada, avec le système dim.–sam., nous sommes à la semaine Canada ${canadaWeek}.` },
           { h2: "Différence entre ISO 8601 et Canada (dim.–sam.)", paragraph: "Les deux systèmes coïncident la plupart du temps, mais peuvent différer de 1 autour du 1ᵉʳ janvier et du 31 décembre. ISO 8601 commence le lundi, tandis que le système Canada commence le dimanche. Choisissez le système utilisé par vos outils de paie ou d'école." },
-          { h2: `Semaines parcourues dans l'année — ${canadaWeek} sur ${weeksInYear}`, paragraph: `Nous sommes ${canadaWeek} semaines dans ${currentYear}, avec ${Math.max(0, weeksInYear - canadaWeek)} semaines restantes. Ce nombre est utile pour les bilans OKR, l'avancement des projets et la planification scolaire.` },
+          { h2: `Semaines parcourues dans l'année — ${canadaWeek} sur ${weeksInYear}`, paragraph: `Nous sommes à ${canadaWeek} semaines dans ${currentYear}, avec ${Math.max(0, weeksInYear - canadaWeek)} semaines restantes. Ce nombre aide à suivre les bilans trimestriels, l'avancement des projets et la planification scolaire.` },
         ];
       }
       return [
@@ -581,7 +581,7 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
     },
   },
   "weeks-into-the-year": {
-    title: (locale) => (locale === "fr" ? "Semaines parcourues dans l'année — WhatWeek.ca" : "Weeks into the Year So Far — Live Counter"),
+    title: (locale) => (locale === "fr" ? "Combien de semaines se sont écoulées dans l'année?" : "Weeks into the Year So Far — Live Counter"),
     description: (locale) =>
       locale === "fr"
         ? "Combien de semaines se sont écoulées dans l'année? Compteur live avec contexte Canada et ISO — semaines écoulées et restantes."
@@ -599,21 +599,21 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
           question: locale === "fr" ? "Combien de semaines se sont écoulées?" : "How many weeks into the year are we?",
           answer:
             locale === "fr"
-              ? `Nous sommes à ${weekNumber} semaines dans ${currentYear}, sur ${weeksInYear} au total.`
+              ? `Nous sommes à ${weekNumber} semaines écoulées sur ${weeksInYear} en ${currentYear}.`
               : `We are ${weekNumber} weeks into ${currentYear}, out of ${weeksInYear} total.`,
         },
         {
           question: locale === "fr" ? "Combien de semaines reste-t-il?" : "How many weeks of the year are left?",
           answer:
             locale === "fr"
-              ? `Il reste ${weeksLeft} semaines dans ${currentYear} après la semaine ${weekNumber}.`
+              ? `Il reste ${weeksLeft} semaines en ${currentYear} après la semaine ${weekNumber}.`
               : `There are ${weeksLeft} weeks left in ${currentYear} after week ${weekNumber}.`,
         },
         {
-          question: locale === "fr" ? "Comment calcule-t-on les semaines parcourues?" : "How do you calculate weeks into the year?",
+          question: locale === "fr" ? "Comment calculer les semaines écoulées?" : "How do you calculate weeks into the year?",
           answer:
             locale === "fr"
-              ? "On utilise le numéro de semaine actuel selon ISO 8601 (lundi-dimanche) ou Canada (dimanche-samedi)."
+              ? "On utilise le numéro de semaine actuel selon ISO 8601 (lundi–dimanche) ou Canada (dimanche–samedi)."
               : "You use the current ISO 8601 (Mon–Sun) or Canada (Sun–Sat) week number to track elapsed weeks.",
         },
       ];
@@ -653,12 +653,12 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
     h1: (locale) => (locale === "fr" ? "Jour de l'année et jour de la semaine" : "Day of the Year and Day of the Week"),
     intro: (locale) =>
       locale === "fr"
-        ? "Affiche le jour de l'année et le jour de la semaine en temps réel, avec le numéro de semaine Canada."
+        ? "Le jour de l'année et le jour de la semaine en temps réel, avec le numéro de semaine Canada."
         : "Shows the current day of the year and day of the week in real time, with the Canada week number.",
     faq: (locale, currentYear, _w, dayOfYear) => [
       {
-        question: locale === "fr" ? "Quel jour de l'année est aujourd'hui?" : "What day of the year is today?",
-        answer: locale === "fr" ? `Nous sommes le jour ${dayOfYear} de ${currentYear}.` : `Today is day ${dayOfYear} of ${currentYear}.`,
+        question: locale === "fr" ? "Quel jour de l'année sommes-nous aujourd'hui?" : "What day of the year is today?",
+        answer: locale === "fr" ? `Nous sommes au jour ${dayOfYear} de ${currentYear}.` : `Today is day ${dayOfYear} of ${currentYear}.`,
       },
       {
         question: locale === "fr" ? "Combien de jours dans l'année?" : "How many days are in a year?",
@@ -741,11 +741,11 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
         question: locale === "fr" ? "Peut-on voir les semaines passées?" : "Can I see past weeks?",
         answer:
           locale === "fr"
-            ? "Oui, naviguez vers ${currentYear} et sélectionnez la semaine voulue — toutes les dates sont disponibles."
+            ? `Oui, ouvrez le calendrier ${currentYear} et sélectionnez la semaine voulue — toutes les dates sont disponibles.`
             : `Yes, navigate to ${currentYear} and select the week you need — all past dates are available.`,
       },
       {
-        question: locale === "fr" ? "La semaine ${weekNumber} a-t-elle des fériés?" : `Does week ${weekNumber} have holidays?`,
+        question: locale === "fr" ? `La semaine ${weekNumber} contient-elle des jours fériés?` : `Does week ${weekNumber} have holidays?`,
         answer:
           locale === "fr"
             ? "La page de détail de chaque semaine liste tous les jours fériés canadiens pour cette semaine."
