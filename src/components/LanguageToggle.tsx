@@ -10,8 +10,9 @@ type Props = {
 };
 
 export function LanguageToggle({ locale, year, province, system }: Props) {
+  const ariaLabel = locale === "fr" ? "Changer de langue" : "Change language";
   return (
-    <div className="langToggle" aria-label="Language selector">
+    <nav className="langToggle" aria-label={ariaLabel}>
       {locales.map((item) => {
         const params = new URLSearchParams();
         if (year) params.set("year", String(year));
@@ -21,11 +22,18 @@ export function LanguageToggle({ locale, year, province, system }: Props) {
         const href = query ? `/${item}?${query}` : `/${item}`;
         const isActive = item === locale;
         return (
-          <Link key={item} href={href} prefetch={false} className={isActive ? "langActive" : ""}>
+          <Link
+            key={item}
+            href={href}
+            prefetch={false}
+            className={isActive ? "langActive" : ""}
+            aria-current={isActive ? "true" : undefined}
+            lang={item}
+          >
             {item.toUpperCase()}
           </Link>
         );
       })}
-    </div>
+    </nav>
   );
 }

@@ -40,7 +40,9 @@ export function ProvinceSelect({
           </option>
         ))}
       </select>
-      <button type="submit">{applyLabel}</button>
+      <button type="submit" aria-label={applyLabel}>
+        {applyLabel}
+      </button>
     </form>
   );
 }
