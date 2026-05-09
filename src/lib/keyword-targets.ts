@@ -10,7 +10,14 @@ export type KeywordPageKey =
   | "what-day-of-the-week"
   | "weeks-and-months"
   | "year-by-calendar"
-  | "week-by-year";
+  | "week-by-year"
+  | "week-dates-and-iso-number"
+  | "weeks-into-the-year"
+  | "what-week-number"
+  | "day-of-year-and-weekday"
+  | "weeks-and-months-calendar"
+  | "calendar-year-view"
+  | "week-by-year-index";
 
 export type KeywordTargetEntry = {
   keyword: string;
@@ -20,32 +27,51 @@ export type KeywordTargetEntry = {
 };
 
 export const keywordTargetMap: KeywordTargetEntry[] = [
+  // Core "what week is it" cluster
   { keyword: "what week is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
   { keyword: "what week is it today", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
   { keyword: "what week is it right now", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
   { keyword: "what week is it this week", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
   { keyword: "what week of the year is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
   { keyword: "what week of the year is it today", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "weeks of the year", canonicalPath: "/weeks-in-a-year", supportPath: "/year-by-calendar", intent: "primary" },
-  { keyword: "what year is it", canonicalPath: "/what-year-week-is-it", supportPath: "/current-week-number-canada", intent: "supporting" },
-  { keyword: "weeks in a year", canonicalPath: "/weeks-in-a-year", supportPath: "/calendar/[year]", intent: "primary" },
-  { keyword: "how many weeks for year", canonicalPath: "/weeks-in-a-year", supportPath: "/calendar/[year]", intent: "primary" },
-  { keyword: "what's the current week number", canonicalPath: "/current-week-number-canada", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
-  { keyword: "what year week is it", canonicalPath: "/what-year-week-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "current week number", canonicalPath: "/current-week-number-canada", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
-  { keyword: "what day of the year is it", canonicalPath: "/what-day-of-the-year-is-it", supportPath: "/what-day-of-the-week", intent: "primary" },
-  { keyword: "weeks and months", canonicalPath: "/weeks-and-months", supportPath: "/year-by-calendar", intent: "primary" },
-  { keyword: "year by calendar", canonicalPath: "/year-by-calendar", supportPath: "/weeks-in-a-year", intent: "primary" },
-  { keyword: "week of the year", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "week by year", canonicalPath: "/week-by-year", supportPath: "/calendar/[year]", intent: "primary" },
-  { keyword: "what day of the week", canonicalPath: "/what-day-of-the-week", supportPath: "/what-day-of-the-year-is-it", intent: "primary" },
-  { keyword: "how many weeks of the year", canonicalPath: "/weeks-in-a-year", supportPath: "/calendar/[year]", intent: "primary" },
-  { keyword: "what week of the year is it this week", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "weeks into the year", canonicalPath: "/what-day-of-the-year-is-it", supportPath: "/weeks-in-a-year", intent: "supporting" },
   { keyword: "week today", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
   { keyword: "current week", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
   { keyword: "which week is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
-  { keyword: "what week number is it", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what week number is it", canonicalPath: "/what-week-number", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  // Week dates and ISO
+  { keyword: "week dates and ISO week number", canonicalPath: "/week-dates-and-iso-number", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  { keyword: "ISO week number dates", canonicalPath: "/week-dates-and-iso-number", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  { keyword: "what week of the year week dates", canonicalPath: "/week-dates-and-iso-number", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  // Weeks into the year
+  { keyword: "weeks into the year so far", canonicalPath: "/weeks-into-the-year", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  { keyword: "how many weeks into the year", canonicalPath: "/weeks-into-the-year", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  { keyword: "weeks into the year", canonicalPath: "/weeks-into-the-year", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  // Weeks in a year
+  { keyword: "weeks of the year", canonicalPath: "/weeks-in-a-year", supportPath: "/year-by-calendar", intent: "primary" },
+  { keyword: "weeks in a year", canonicalPath: "/weeks-in-a-year", supportPath: "/calendar/[year]", intent: "primary" },
+  { keyword: "how many weeks for year", canonicalPath: "/weeks-in-a-year", supportPath: "/calendar/[year]", intent: "primary" },
+  { keyword: "how many weeks of the year", canonicalPath: "/weeks-in-a-year", supportPath: "/calendar/[year]", intent: "primary" },
+  // Day of year
+  { keyword: "what day of the year is it", canonicalPath: "/what-day-of-the-year-is-it", supportPath: "/what-day-of-the-week", intent: "primary" },
+  { keyword: "day of the year and day of the week", canonicalPath: "/day-of-year-and-weekday", supportPath: "/what-day-of-the-year-is-it", intent: "primary" },
+  { keyword: "what day of the year", canonicalPath: "/what-day-of-the-year-is-it", supportPath: "/what-day-of-the-week", intent: "primary" },
+  // Weeks and months
+  { keyword: "weeks and months in the calendar", canonicalPath: "/weeks-and-months-calendar", supportPath: "/weeks-and-months", intent: "primary" },
+  { keyword: "weeks and months", canonicalPath: "/weeks-and-months", supportPath: "/year-by-calendar", intent: "primary" },
+  // Year by calendar
+  { keyword: "year by calendar view", canonicalPath: "/calendar-year-view", supportPath: "/year-by-calendar", intent: "primary" },
+  { keyword: "year by calendar", canonicalPath: "/year-by-calendar", supportPath: "/weeks-in-a-year", intent: "primary" },
+  // Week by year
+  { keyword: "week by year past and future", canonicalPath: "/week-by-year-index", supportPath: "/week-by-year", intent: "primary" },
+  { keyword: "week by year index", canonicalPath: "/week-by-year-index", supportPath: "/week-by-year", intent: "primary" },
+  { keyword: "week by year", canonicalPath: "/week-by-year", supportPath: "/calendar/[year]", intent: "primary" },
+  // Other
+  { keyword: "what year is it", canonicalPath: "/what-year-week-is-it", supportPath: "/current-week-number-canada", intent: "supporting" },
+  { keyword: "what's the current week number", canonicalPath: "/current-week-number-canada", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  { keyword: "what year week is it", canonicalPath: "/what-year-week-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "current week number", canonicalPath: "/current-week-number-canada", supportPath: "/what-week-of-the-year-is-it", intent: "primary" },
+  { keyword: "week of the year", canonicalPath: "/what-week-of-the-year-is-it", supportPath: "/current-week-number-canada", intent: "primary" },
+  { keyword: "what day of the week", canonicalPath: "/what-day-of-the-week", supportPath: "/what-day-of-the-year-is-it", intent: "primary" },
 ];
 
 export type BodySection = {
@@ -367,6 +393,211 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
       },
     ],
   },
+  "week-dates-and-iso-number": {
+    title: (locale) => (locale === "fr" ? "Dates de la semaine ISO et numéro de semaine" : "Week Dates and ISO Week Number"),
+    description: (locale) =>
+      locale === "fr"
+        ? "Consultez les dates de début et de fin de la semaine ISO actuelle, le numéro de semaine et le contexte Canada."
+        : "See the start and end dates of the current ISO week, the week number, and Canada context — updated live.",
+    h1: (locale) => (locale === "fr" ? "Dates de la semaine et numéro ISO" : "Week Dates and ISO Week Number"),
+    intro: (locale) =>
+      locale === "fr"
+        ? "Voici les dates de la semaine ISO actuelle : lundi au dimanche avec les numéros Canada et ISO 8601."
+        : "Here are the start and end dates of the current ISO week, with both Canada and ISO 8601 week numbers.",
+    faq: (locale, currentYear, weekNumber, dayOfYear) => [
+      {
+        question: locale === "fr" ? "Quelle est la date de début de la semaine ISO?" : "What is the start date of the ISO week?",
+        answer:
+          locale === "fr"
+            ? `La semaine ISO ${weekNumber} commence le lundi de la semaine ${weekNumber} en ${currentYear}.`
+            : `ISO week ${weekNumber} starts on Monday of week ${weekNumber} in ${currentYear}.`,
+      },
+      {
+        question: locale === "fr" ? "Quelle est la date de fin de la semaine ISO?" : "What is the end date of the ISO week?",
+        answer:
+          locale === "fr"
+            ? `La semaine ISO ${weekNumber} se termine le dimanche suivant, soit la fin de la semaine.`
+            : `ISO week ${weekNumber} ends on the following Sunday, which is the end of that week.`,
+      },
+      {
+        question: locale === "fr" ? "Quel jour sommes-nous dans l'année?" : "What day of the year is it?",
+        answer: locale === "fr" ? `Nous sommes le jour ${dayOfYear} de ${currentYear}.` : `It is day ${dayOfYear} of ${currentYear}.`,
+      },
+    ],
+  },
+  "weeks-into-the-year": {
+    title: (locale) => (locale === "fr" ? "Semaines parcourues dans l'année — WhatWeek.ca" : "Weeks into the Year So Far — Live Counter"),
+    description: (locale) =>
+      locale === "fr"
+        ? "Combien de semaines se sont écoulées dans l'année? Compteur live avec contexte Canada et ISO — semaines écoulées et restantes."
+        : "How many weeks have passed so far this year? Live counter with Canada and ISO week context. See weeks elapsed and remaining.",
+    h1: (locale) => (locale === "fr" ? "Combien de semaines dans l'année?" : "Weeks into the Year So Far"),
+    intro: (locale) =>
+      locale === "fr"
+        ? "Voici le nombre de semaines parcourues dans l'année en cours, avec le contexte Canada et ISO."
+        : "Here is how many weeks have passed in the current year, with Canada and ISO week context.",
+    faq: (locale, currentYear, weekNumber) => {
+      const weeksInYear = getWeeksInIsoYear(currentYear);
+      const weeksLeft = Math.max(0, weeksInYear - weekNumber);
+      return [
+        {
+          question: locale === "fr" ? "Combien de semaines se sont écoulées?" : "How many weeks into the year are we?",
+          answer:
+            locale === "fr"
+              ? `Nous sommes à ${weekNumber} semaines dans ${currentYear}, sur ${weeksInYear} au total.`
+              : `We are ${weekNumber} weeks into ${currentYear}, out of ${weeksInYear} total.`,
+        },
+        {
+          question: locale === "fr" ? "Combien de semaines reste-t-il?" : "How many weeks of the year are left?",
+          answer:
+            locale === "fr"
+              ? `Il reste ${weeksLeft} semaines dans ${currentYear} après la semaine ${weekNumber}.`
+              : `There are ${weeksLeft} weeks left in ${currentYear} after week ${weekNumber}.`,
+        },
+        {
+          question: locale === "fr" ? "Comment calcule-t-on les semaines parcourues?" : "How do you calculate weeks into the year?",
+          answer:
+            locale === "fr"
+              ? "On utilise le numéro de semaine actuel selon ISO 8601 (lundi-dimanche) ou Canada (dimanche-samedi)."
+              : "You use the current ISO 8601 (Mon–Sun) or Canada (Sun–Sat) week number to track elapsed weeks.",
+        },
+      ];
+    },
+  },
+  "what-week-number": {
+    title: (locale) => (locale === "fr" ? "Quel est le numéro de semaine?" : "What Week Number Is It?"),
+    description: (locale) =>
+      locale === "fr"
+        ? "Quel est le numéro de semaine actuel? Réponse instantanée en Canada et ISO 8601, mis à jour en direct."
+        : "What week number is it right now? Instant answer in ISO 8601 and Canada week systems, updated live every second.",
+    h1: (locale) => (locale === "fr" ? "Quel est le numéro de semaine?" : "What week number is it?"),
+    intro: (locale) =>
+      locale === "fr"
+        ? "Le numéro de semaine actuel est calculé en direct selon le fuseau horaire canadien."
+        : "The current week number is calculated live using a Canada time zone — updated every second.",
+    faq: (locale, currentYear, weekNumber) => [
+      {
+        question: locale === "fr" ? "Quel est le numéro de semaine actuel?" : "What is the current week number?",
+        answer: locale === "fr" ? `Nous sommes à la semaine ${weekNumber} en ${currentYear}.` : `We are in week ${weekNumber} of ${currentYear}.`,
+      },
+      {
+        question: locale === "fr" ? "La semaine ISO et Canada sont-elles identiques?" : "Are ISO week and Canada week the same?",
+        answer:
+          locale === "fr"
+            ? "La plupart du temps, oui. Elles peuvent différer de 1 autour du 1ᵉʳ janvier et du 31 décembre."
+            : "Most of the time they match. They can differ by 1 around January 1 and December 31.",
+      },
+    ],
+  },
+  "day-of-year-and-weekday": {
+    title: (locale) => (locale === "fr" ? "Jour de l'année et jour de la semaine" : "Day of the Year and Day of the Week"),
+    description: (locale) =>
+      locale === "fr"
+        ? "Quel jour de l'année sommes-nous et quel jour de la semaine? Contexte Canada et ISO mis à jour en direct."
+        : "What day of the year is it and what day of the week? Live Canada and ISO context with week and month alignment.",
+    h1: (locale) => (locale === "fr" ? "Jour de l'année et jour de la semaine" : "Day of the Year and Day of the Week"),
+    intro: (locale) =>
+      locale === "fr"
+        ? "Affiche le jour de l'année et le jour de la semaine en temps réel, avec le numéro de semaine Canada."
+        : "Shows the current day of the year and day of the week in real time, with the Canada week number.",
+    faq: (locale, currentYear, _w, dayOfYear) => [
+      {
+        question: locale === "fr" ? "Quel jour de l'année est aujourd'hui?" : "What day of the year is today?",
+        answer: locale === "fr" ? `Nous sommes le jour ${dayOfYear} de ${currentYear}.` : `Today is day ${dayOfYear} of ${currentYear}.`,
+      },
+      {
+        question: locale === "fr" ? "Combien de jours dans l'année?" : "How many days are in a year?",
+        answer:
+          locale === "fr"
+            ? `${currentYear} a 365 jours, ou 366 les années bissextiles. Jour ${dayOfYear} sur ${new Date(currentYear, 11, 31).getDate()}.`
+            : `${currentYear} has 365 days, or 366 in a leap year. Day ${dayOfYear} of ${new Date(currentYear, 11, 31).getDate()}.`,
+      },
+    ],
+  },
+  "weeks-and-months-calendar": {
+    title: (locale) => (locale === "fr" ? "Semaines et mois dans le calendrier" : "Weeks and Months in the Calendar"),
+    description: (locale) =>
+      locale === "fr"
+        ? "Comprenez comment les semaines ISO s'alignent avec les mois canadiens pour la paie, l'école et les opérations."
+        : "Understand how ISO weeks align with Canadian calendar months for payroll, school terms, and operations. Live reference.",
+    h1: (locale) => (locale === "fr" ? "Semaines et mois dans le calendrier" : "Weeks and Months in the Calendar"),
+    intro: (locale) =>
+      locale === "fr"
+        ? "Un mois contient généralement 4 à 5 semaines. Voici comment les numéros de semaine ISO s'alignent avec les mois."
+        : "A month typically spans 4 to 5 weeks. Here is how ISO week numbers align with calendar months for planning.",
+    faq: (locale, currentYear) => [
+      {
+        question: locale === "fr" ? "Combien de semaines par mois?" : "How many weeks per month?",
+        answer:
+          locale === "fr"
+            ? "Un mois contient 4 à 5 semaines selon son emplacement. La plupart en ont 4 complètes et une partie de la 5ᵉ."
+            : "A month spans 4 to 5 weeks depending on where it falls. Most months have 4 full weeks plus part of a 5th.",
+      },
+      {
+        question: locale === "fr" ? "Peut-on utiliser les semaines ISO pour la paie?" : "Can you use ISO weeks for payroll?",
+        answer:
+          locale === "fr"
+            ? "Oui, ISO 8601 (lundi-dimanche) est recommandé pour la paie internationale et la planification."
+            : "Yes, ISO 8601 (Mon–Sun) is recommended for international payroll and scheduling.",
+      },
+    ],
+  },
+  "calendar-year-view": {
+    title: (locale) => (locale === "fr" ? "Calendrier annuel avec numéros de semaine" : "Calendar Year View with Week Numbers"),
+    description: (locale) =>
+      locale === "fr"
+        ? "Naviguez dans le calendrier annuel avec les numéros de semaine Canada et ISO — années passées et futures."
+        : "Browse the year calendar with Canada and ISO week numbers — past and future years. Live Canada-centric view.",
+    h1: (locale) => (locale === "fr" ? "Calendrier annuel avec semaines" : "Calendar Year View"),
+    intro: (locale) =>
+      locale === "fr"
+        ? "Naviguez dans les calendriers annuels avec les numéros de semaine Canada et ISO pour planifier paie et congés."
+        : "Browse year calendars with Canada and ISO week numbers to plan payroll, school terms, and holidays.",
+    faq: (locale, currentYear) => [
+      {
+        question: locale === "fr" ? `Comment fonctionne le calendrier ${currentYear}?` : `How does the ${currentYear} calendar work?`,
+        answer:
+          locale === "fr"
+            ? `Le calendrier ${currentYear} affiche les numéros de semaine Canada et ISO pour chaque jour de l'année.`
+            : `The ${currentYear} calendar shows Canada and ISO week numbers for each day of the year.`,
+      },
+      {
+        question: locale === "fr" ? "Quelles années sont disponibles?" : "Which years are available?",
+        answer:
+          locale === "fr"
+            ? "De 1900 à 2100 — vous pouvez naviguer vers n'importe quelle année depuis ce calendrier."
+            : "From 1900 to 2100 — you can navigate to any year from this calendar.",
+      },
+    ],
+  },
+  "week-by-year-index": {
+    title: (locale) => (locale === "fr" ? "Semaine par année — Index" : "Week by Year: Past and Future Weeks"),
+    description: (locale) =>
+      locale === "fr"
+        ? "Index semaine par année : trouvez n'importe quelle semaine passée ou future, avec dates et contexte férié."
+        : "Week by year index: find any past or future week with dates, holidays, and long-weekend context. Live navigation.",
+    h1: (locale) => (locale === "fr" ? "Semaine par année" : "Week by Year: Past and Future Weeks"),
+    intro: (locale) =>
+      locale === "fr"
+        ? "Naviguez vers n'importe quelle semaine passée ou future, avec le contexte jour, semaine, mois et férié."
+        : "Navigate to any past or future week with day, week, month, and holiday context. Updated live every second.",
+    faq: (locale, currentYear, weekNumber) => [
+      {
+        question: locale === "fr" ? "Peut-on voir les semaines passées?" : "Can I see past weeks?",
+        answer:
+          locale === "fr"
+            ? "Oui, naviguez vers ${currentYear} et sélectionnez la semaine voulue — toutes les dates sont disponibles."
+            : `Yes, navigate to ${currentYear} and select the week you need — all past dates are available.`,
+      },
+      {
+        question: locale === "fr" ? "La semaine ${weekNumber} a-t-elle des fériés?" : `Does week ${weekNumber} have holidays?`,
+        answer:
+          locale === "fr"
+            ? "La page de détail de chaque semaine liste tous les jours fériés canadiens pour cette semaine."
+            : "Each week detail page lists all Canadian statutory holidays that fall within that week.",
+      },
+    ],
+  },
 };
 
 export const keywordPageOrder: KeywordPageKey[] = [
@@ -378,6 +609,13 @@ export const keywordPageOrder: KeywordPageKey[] = [
   "weeks-and-months",
   "year-by-calendar",
   "week-by-year",
+  "week-dates-and-iso-number",
+  "weeks-into-the-year",
+  "what-week-number",
+  "day-of-year-and-weekday",
+  "weeks-and-months-calendar",
+  "calendar-year-view",
+  "week-by-year-index",
 ];
 
 export function getKeywordSnapshot() {
