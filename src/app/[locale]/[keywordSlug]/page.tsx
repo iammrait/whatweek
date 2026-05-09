@@ -11,6 +11,9 @@ type Props = {
   params: Promise<{ locale: string; keywordSlug: string }>;
 };
 
+/** "Today" and week numbers must reflect request time, not build time. */
+export const dynamic = "force-dynamic";
+
 function isKeywordPageKey(value: string): value is KeywordPageKey {
   return keywordPageOrder.includes(value as KeywordPageKey);
 }

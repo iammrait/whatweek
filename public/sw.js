@@ -1,4 +1,4 @@
-const CACHE_NAME = "whatweek-v1";
+const CACHE_NAME = "whatweek-v2";
 const PRECACHE_URLS = ["/en", "/fr", "/icon.svg"];
 
 self.addEventListener("install", (event) => {
@@ -43,7 +43,14 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Stale-while-revalidate for everything else.
+  // Next.js bundles and RSC fetches must not use stale-while-revalidate here — returning a
+  // cached chunk first can leave navigations showing yesterday's server-rendered content.
+  if (url.pathname.startsWith("/_next/") || url.searchParams.has("_rsc")) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
+  // Stale-while-revalidate for other same-origin static assets (fonts, icons, etc.).
   event.respondWith(
     caches.match(request).then((cached) => {
       const networkFetch = fetch(request)

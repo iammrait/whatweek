@@ -27,6 +27,9 @@ type Props = {
   searchParams: Promise<{ year?: string; province?: string; system?: string }>;
 };
 
+/** Home shows live "today" / current week; avoid freezing dates at build time. */
+export const dynamic = "force-dynamic";
+
 function resolveProvince(locale: Locale, provinceInput: string | undefined): ProvinceCode | null {
   if (provinceInput && isProvinceCode(provinceInput)) return provinceInput;
   return null;
