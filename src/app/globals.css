@@ -278,6 +278,37 @@ a {
   margin: 0;
 }
 
+.keywordHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, var(--accent-light), var(--surface));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--accent-light);
+  text-align: center;
+}
+
+.keywordHeroMetric {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.keywordHeroLabel {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.keywordHeroSubtext {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
 .homeHeroAnswer {
   margin-top: 0.5rem;
   font-size: 1.125rem;

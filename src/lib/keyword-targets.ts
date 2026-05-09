@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { getCanadaWeekNumber, getIsoWeekNumber, getTodayInTimeZone, getWeekYear, getWeeksInIsoYear } from "@/lib/week";
+import { getCanadaWeekNumber, getIsoWeekNumber, getTodayInTimeZone, getWeekYear, getWeeksInIsoYear, startOfIsoWeek } from "@/lib/week";
 
 export type KeywordPageKey =
   | "what-week-of-the-year-is-it"
@@ -80,7 +80,19 @@ export type BodySection = {
   h3?: { heading: string; paragraph: string }[];
 };
 
-export type KeywordSnapshot = ReturnType<typeof getKeywordSnapshot>;
+export type KeywordSnapshot = {
+  today: Date;
+  currentYear: number;
+  canadaWeek: number;
+  isoWeek: number;
+  weekYear: number;
+  dayOfYear: number;
+  dayName: string;
+  weeksInYear: number;
+  weeksLeft: number;
+  weekStart: Date;
+  weekEnd: Date;
+};
 
 type PageContent = {
   title: (locale: Locale) => string;
@@ -261,6 +273,26 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
             : "No. Some ISO years contain 53 weeks depending on where the first Thursday falls.",
       },
     ],
+    bodySections: (locale, snap) => {
+      const { currentYear } = snap;
+      const weeksInYear = getWeeksInIsoYear(currentYear);
+      const daysInYear = new Date(currentYear, 11, 31).getDate();
+      const extraDays = 365 - 7 * 52;
+      if (locale === "fr") {
+        return [
+          { h2: `Combien de semaines en ${currentYear}?`, paragraph: `${currentYear} contient ${weeksInYear} semaines ISO. La plupart des années en ont 52, mais certaines en ont 53 en raison de la façon dont ISO 8601 aligne les semaines avec les jours de la semaine.` },
+          { h2: "52 semaines et jours supplémentaires", paragraph: `52 semaines = 7 jours × 364 jours, soit une année normale de 365 jours moins 1 jour supplémentaire. Une année bissextile de 366 jours a 2 jours supplémentaires. Ces jours supplémentaires expliquent pourquoi le numéro de semaine et la date du calendrier peuvent décaler d'une année à l'autre.` },
+          { h2: "Années à 53 semaines ISO", paragraph: `Une année ISO contient 53 semaines lorsque son premier jeudi tombe le 1ᵉʳ janvier (en année normale) ou les 1ᵉʳ ou 2 janvier (en année bissextile). Exemples récents et à venir : 2009, 2015, 2020, 2026, 2032. Planifiez à l'avance pour la paie hebdomadaire ou les calendriers de rapports qui suivent ISO.` },
+          { h2: `Jours fériés au Canada en ${currentYear}`, paragraph: `Le nombre de jours fériés varie selon la province et le territoire. Consultez les pages fériées de chaque province pour voir combien de congés sont observés en ${currentYear}.` },
+        ];
+      }
+      return [
+        { h2: `How many weeks are in ${currentYear}?`, paragraph: `${currentYear} contains ${weeksInYear} ISO weeks. Most years have 52, but some have 53 due to how ISO 8601 aligns weeks with weekdays.` },
+        { h2: "52 weeks and the extra days", paragraph: `52 weeks = 7 days × 364 days, which is a normal 365-day year minus 1 extra day. A 366-day leap year has 2 extra days. These extra days are why the week number, calendar date, and day-of-year drift relative to each other from year to year.` },
+        { h2: "Years with 53 ISO weeks", paragraph: `An ISO year contains 53 weeks when its first Thursday falls on January 1 (in a regular year) or on January 1 or 2 (in a leap year). Recent and upcoming 53-week ISO years: 2009, 2015, 2020, 2026, 2032. Plan ahead for weekly payroll or reporting calendars that follow ISO standards.` },
+        { h2: `Canadian statutory holidays in ${currentYear}`, paragraph: `The number of statutory holidays varies by province and territory. Check each province's holiday page to see how many days off are observed in ${currentYear}.` },
+      ];
+    },
   },
   "what-day-of-the-year-is-it": {
     title: (locale) => (locale === "fr" ? "Quel jour de l'année sommes-nous?" : "What Day of the Year Is It in Canada?"),
@@ -283,6 +315,24 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
         answer: locale === "fr" ? `Ce jour est dans la semaine ${weekNumber}.` : `This day falls in week ${weekNumber}.`,
       },
     ],
+    bodySections: (locale, snap) => {
+      const { currentYear, dayOfYear, canadaWeek, dayName, weeksInYear } = snap;
+      const daysLeft = (new Date(currentYear, 11, 31).getDate()) - dayOfYear;
+      if (locale === "fr") {
+        return [
+          { h2: `Quel jour de l'année sommes-nous? — Jour ${dayOfYear} sur 365`, paragraph: `Nous sommes le jour ${dayOfYear} de ${currentYear}, dans la semaine Canada ${canadaWeek}. Le jour de l'année (jour ordinal, jour julien, DOY) va de 1 le 1ᵉʳ janvier à 365 ou 366 le 31 décembre.` },
+          { h2: "Jour de l'année et jour de la semaine", paragraph: `Le jour de l'année vous dit où vous êtes dans l'année, tandis que le "${dayName}" vous dit quel jour de la semaine nous sommes aujourd'hui. Ensemble, ils permettent de reconstituer n'importe quelle date sans calendrier — utile pour les ingénieurs, les planificateurs et tous ceux qui alignent des cadences hebdomadaires sur des objectifs annuels.` },
+          { h2: `Progression annuelle : ${dayOfYear} sur 365, ${Math.round((dayOfYear / (new Date(currentYear, 11, 31).getDate())) * 100)}%`, paragraph: `${currentYear} contient ${weeksInYear} semaines ISO. Nous sommes à ${Math.round((dayOfYear / (new Date(currentYear, 11, 31).getDate())) * 100)}% de l'année. Il reste ${daysLeft} jours — utile pour les bilans OKR, les plans de production et les échéanciers.` },
+          { h2: "Jour ordinal et jour julien", paragraph: "Le jour ordinal (DOY) est le nombre de jours depuis le 1ᵉʳ janvier. Janvier 1 = jour 1, janvier 31 = jour 31, etc. Il complète le numéro de semaine pour suivre des objectifs annuels au jour près." },
+        ];
+      }
+      return [
+        { h2: `What day of the year is it? — Day ${dayOfYear} of 365`, paragraph: `Today is day ${dayOfYear} of ${currentYear}, inside Canada week ${canadaWeek}. The day-of-year (ordinal day, Julian day, DOY) runs 1 on January 1 to 365 or 366 on December 31.` },
+        { h2: "Day of the year and day of the week", paragraph: `Day-of-year tells you where you are in the year; the "${dayName}" tells you which weekday today is. Together they let you reconstruct any date without a calendar — useful for engineers, schedulers, and anyone aligning weekly cadences to annual milestones.` },
+        { h2: `Annual progress: day ${dayOfYear} of ${new Date(currentYear, 11, 31).getDate()}, ${Math.round((dayOfYear / (new Date(currentYear, 11, 31).getDate())) * 100)}%`, paragraph: `${currentYear} has ${weeksInYear} ISO weeks. We are ${Math.round((dayOfYear / (new Date(currentYear, 11, 31).getDate())) * 100)}% through the year, with ${daysLeft} days remaining. Useful for OKR check-ins, production plans, and annual timelines.` },
+        { h2: "Ordinal day and Julian day", paragraph: "The ordinal day (DOY) is the number of days since January 1. January 1 = day 1, January 31 = day 31, etc. It complements the week number for tracking annualized goals at daily granularity — engineering, science, agriculture, long-running projects." },
+      ];
+    },
   },
   "what-day-of-the-week": {
     title: (locale) => (locale === "fr" ? "Quel jour de la semaine sommes-nous?" : "What Day of the Week Is It in Canada?"),
@@ -424,6 +474,25 @@ export const keywordPages: Record<KeywordPageKey, PageContent> = {
         answer: locale === "fr" ? `Nous sommes le jour ${dayOfYear} de ${currentYear}.` : `It is day ${dayOfYear} of ${currentYear}.`,
       },
     ],
+    bodySections: (locale, snap) => {
+      const { isoWeek, currentYear, canadaWeek, weekStart, weekEnd, weeksInYear } = snap;
+      const localeCode = locale === "fr" ? "fr-CA" : "en-CA";
+      const opts: Intl.DateTimeFormatOptions = { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" };
+      const isoStart = new Intl.DateTimeFormat(localeCode, opts).format(weekStart);
+      const isoEnd = new Intl.DateTimeFormat(localeCode, opts).format(weekEnd);
+      if (locale === "fr") {
+        return [
+          { h2: "Semaine actuelle — dates ISO et Canada", paragraph: `Nous sommes à la semaine ISO ${isoWeek} en ${currentYear}. La semaine ISO ${isoWeek} va du lundi ${isoStart} au dimanche ${isoEnd}. Au Canada, avec le système dim.–sam., nous sommes à la semaine Canada ${canadaWeek}.` },
+          { h2: "Différence entre ISO 8601 et Canada (dim.–sam.)", paragraph: "Les deux systèmes coïncident la plupart du temps, mais peuvent différer de 1 autour du 1ᵉʳ janvier et du 31 décembre. ISO 8601 commence le lundi, tandis que le système Canada commence le dimanche. Choisissez le système utilisé par vos outils de paie ou d'école." },
+          { h2: `Semaines parcourues dans l'année — ${canadaWeek} sur ${weeksInYear}`, paragraph: `Nous sommes ${canadaWeek} semaines dans ${currentYear}, avec ${Math.max(0, weeksInYear - canadaWeek)} semaines restantes. Ce nombre est utile pour les bilans OKR, l'avancement des projets et la planification scolaire.` },
+        ];
+      }
+      return [
+        { h2: "Current week — ISO and Canada dates", paragraph: `We are in ISO week ${isoWeek} of ${currentYear}. ISO week ${isoWeek} runs from Monday ${isoStart} through Sunday ${isoEnd}. Under Canada's Sun–Sat system, we are in Canada week ${canadaWeek}.` },
+        { h2: "ISO 8601 vs. Canada (Sun–Sat) week systems", paragraph: "Both systems usually match, but can differ by 1 around January 1 and December 31. ISO 8601 starts on Monday; Canada's system starts on Sunday. Pick whichever standard your payroll or school tools use and stick with it all year." },
+        { h2: `Weeks into the year — ${canadaWeek} of ${weeksInYear}`, paragraph: `We are ${canadaWeek} weeks into ${currentYear}, with ${Math.max(0, weeksInYear - canadaWeek)} weeks remaining. This is useful for OKR check-ins, project burn-down, and school-term progress tracking.` },
+      ];
+    },
   },
   "weeks-into-the-year": {
     title: (locale) => (locale === "fr" ? "Semaines parcourues dans l'année — WhatWeek.ca" : "Weeks into the Year So Far — Live Counter"),
@@ -628,5 +697,8 @@ export function getKeywordSnapshot() {
   const dayName = new Intl.DateTimeFormat("en-CA", { weekday: "long", timeZone: defaultCanadaTimeZone }).format(today);
   const weeksInYear = getWeeksInIsoYear(currentYear);
   const weeksLeft = Math.max(0, weeksInYear - canadaWeek);
-  return { today, currentYear, canadaWeek, isoWeek, weekYear, dayOfYear, dayName, weeksInYear, weeksLeft };
+  const weekStart = startOfIsoWeek(today);
+  const weekEnd = new Date(weekStart);
+  weekEnd.setUTCDate(weekStart.getUTCDate() + 6);
+  return { today, currentYear, canadaWeek, isoWeek, weekYear, dayOfYear, dayName, weeksInYear, weeksLeft, weekStart, weekEnd };
 }

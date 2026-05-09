@@ -1,12 +1,8 @@
-Add 7 new keyword target pages for "week dates", "weeks into year", "day of year", "weeks and months calendar", and more
+Add rich body content to keyword pages with live data
 
-New dedicated keyword pages (15 total, all bilingual):
-- /week-dates-and-iso-number — ISO week dates and number
-- /weeks-into-the-year — live counter for weeks elapsed/remaining
-- /what-week-number — short keyword for week number lookup
-- /day-of-year-and-weekday — day of year and day of week combined
-- /weeks-and-months-calendar — weeks and months alignment guide
-- /calendar-year-view — year calendar with week numbers
-- /week-by-year-index — week by year past and future navigation
-
-All pages use getKeywordSnapshot() for live date/week values, bilingual, with FAQ, body sections, and Schema.org FAQPage JSON-LD.
+- Add weekStart/weekEnd to getKeywordSnapshot() for ISO date display on keyword pages
+- Add bodySections to "week-dates-and-iso-number" with live ISO/Canada week dates
+- Add bodySections to "weeks-in-a-year" with 53-week years explanation and holiday context
+- Add bodySections to "what-day-of-the-year-is-it" with annual progress percentage and day-of-week context
+- Add KeywordHero component and CSS for prominent metric display on dedicated keyword pages
+- All body sections use live getKeywordSnapshot() values: week numbers, dates, day-of-year, day-name, weeks-into-year
