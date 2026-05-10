@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { locales } from "@/lib/i18n";
 import { keywordPageOrder } from "@/lib/keyword-targets";
 import { provinceCodes } from "@/lib/provinces";
+import { canadianTimezoneSlugs } from "@/lib/timezones-ca";
 import { getWeeksInIsoYear } from "@/lib/week";
 import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 
@@ -94,10 +95,66 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
             changeFrequency: "weekly",
             priority: 0.85,
           }),
+          await buildEntry(typedLocale, "/pregnancy-week-calculator", {
+            changeFrequency: "monthly",
+            priority: 0.78,
+          }),
+          await buildEntry(typedLocale, "/days-until", {
+            changeFrequency: "daily",
+            priority: 0.85,
+          }),
+          await buildEntry(typedLocale, "/days-between", {
+            changeFrequency: "weekly",
+            priority: 0.8,
+          }),
+          await buildEntry(typedLocale, "/weeks-until", {
+            changeFrequency: "daily",
+            priority: 0.85,
+          }),
+          await buildEntry(typedLocale, "/weeks-between", {
+            changeFrequency: "weekly",
+            priority: 0.8,
+          }),
+          await buildEntry(typedLocale, "/add-weeks", {
+            changeFrequency: "monthly",
+            priority: 0.78,
+          }),
+          await buildEntry(typedLocale, "/subtract-weeks", {
+            changeFrequency: "monthly",
+            priority: 0.78,
+          }),
+          await buildEntry(typedLocale, "/iso-week-to-date", {
+            changeFrequency: "monthly",
+            priority: 0.85,
+          }),
+          await buildEntry(typedLocale, "/code-snippets/iso-week-number", {
+            changeFrequency: "monthly",
+            priority: 0.7,
+          }),
+          await buildEntry(typedLocale, "/api-docs", {
+            changeFrequency: "monthly",
+            priority: 0.7,
+          }),
+          await buildEntry(typedLocale, "/api-keys", {
+            changeFrequency: "monthly",
+            priority: 0.55,
+          }),
           await buildEntry(typedLocale, "/embed", {
             changeFrequency: "monthly",
             priority: 0.4,
           }),
+          await buildEntry(typedLocale, "/timezones", {
+            changeFrequency: "monthly",
+            priority: 0.6,
+          }),
+          ...(await Promise.all(
+            canadianTimezoneSlugs.map((slug) =>
+              buildEntry(typedLocale, `/timezones/${slug}`, {
+                changeFrequency: "weekly",
+                priority: 0.7,
+              }),
+            ),
+          )),
           ...keywordEntries,
           await buildEntry(typedLocale, "/about", {
             changeFrequency: "monthly",
@@ -124,6 +181,10 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
     changeFrequency: "yearly",
     priority: 0.8,
   });
+  const calendarPrintEntry = await buildEntry(typedLocale, `/calendar/${year}/print`, {
+    changeFrequency: "yearly",
+    priority: 0.55,
+  });
 
   const weekEntries = await Promise.all(
     Array.from({ length: getWeeksInIsoYear(year) }, (_, index) => {
@@ -136,15 +197,36 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
   );
 
   const toolEntries: MetadataRoute.Sitemap = [];
+  // Wider window for long-weekends listicles since several past/future years
+  // commonly rank for "Canada long weekends YYYY" queries.
+  const LONG_WEEKEND_MIN = Math.min(2024, TOOL_YEAR_MIN);
+  const LONG_WEEKEND_MAX = Math.max(2030, TOOL_YEAR_MAX);
+  if (year >= LONG_WEEKEND_MIN && year <= LONG_WEEKEND_MAX) {
+    toolEntries.push(
+      await buildEntry(typedLocale, `/long-weekends/${year}`, {
+        changeFrequency: "monthly",
+        priority: 0.78,
+      }),
+    );
+  }
+
   if (year >= TOOL_YEAR_MIN && year <= TOOL_YEAR_MAX) {
     toolEntries.push(
       await buildEntry(typedLocale, `/year/${year}`, {
         changeFrequency: "monthly",
         priority: 0.75,
       }),
-      await buildEntry(typedLocale, `/long-weekends/${year}`, {
+      await buildEntry(typedLocale, `/pay-calendar/${year}`, {
         changeFrequency: "monthly",
-        priority: 0.75,
+        priority: 0.78,
+      }),
+      await buildEntry(typedLocale, `/day-of-year/${year}`, {
+        changeFrequency: "monthly",
+        priority: 0.7,
+      }),
+      await buildEntry(typedLocale, `/weeks-in/${year}`, {
+        changeFrequency: "monthly",
+        priority: 0.78,
       }),
     );
     for (const province of provinceCodes) {
@@ -158,5 +240,5 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
     }
   }
 
-  return [calendarEntry, ...weekEntries, ...toolEntries];
+  return [calendarEntry, calendarPrintEntry, ...weekEntries, ...toolEntries];
 }

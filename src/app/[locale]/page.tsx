@@ -414,14 +414,50 @@ export default async function LocalePage({ params, searchParams }: Props) {
           <Link href={`/${locale}/date-to-week`} prefetch={false}>
             {locale === "fr" ? "Date ↔ Semaine" : "Date ↔ Week converter"}
           </Link>
+          <Link href={`/${locale}/iso-week-to-date`} prefetch={false}>
+            {locale === "fr" ? "Semaine ISO → Date" : "ISO week → Date"}
+          </Link>
           <Link href={`/${locale}/business-days-calculator`} prefetch={false}>
             {locale === "fr" ? "Jours ouvrables" : "Business days"}
           </Link>
           <Link href={`/${locale}/pay-period-calculator`} prefetch={false}>
             {locale === "fr" ? "Période de paie" : "Pay period"}
           </Link>
+          <Link href={`/${locale}/pay-calendar/${year}`} prefetch={false}>
+            {locale === "fr" ? `Calendrier de paie ${year}` : `${year} pay calendar`}
+          </Link>
           <Link href={`/${locale}/long-weekends/${year}`} prefetch={false}>
             {locale === "fr" ? "Longs week-ends" : "Long weekends"}
+          </Link>
+          <Link href={`/${locale}/days-until`} prefetch={false}>
+            {locale === "fr" ? "Jours jusqu'à" : "Days until"}
+          </Link>
+          <Link href={`/${locale}/days-between`} prefetch={false}>
+            {locale === "fr" ? "Jours entre" : "Days between"}
+          </Link>
+          <Link href={`/${locale}/weeks-until`} prefetch={false}>
+            {locale === "fr" ? "Semaines jusqu'à" : "Weeks until"}
+          </Link>
+          <Link href={`/${locale}/weeks-between`} prefetch={false}>
+            {locale === "fr" ? "Semaines entre" : "Weeks between"}
+          </Link>
+          <Link href={`/${locale}/add-weeks`} prefetch={false}>
+            {locale === "fr" ? "Ajouter des semaines" : "Add weeks"}
+          </Link>
+          <Link href={`/${locale}/subtract-weeks`} prefetch={false}>
+            {locale === "fr" ? "Soustraire des semaines" : "Subtract weeks"}
+          </Link>
+          <Link href={`/${locale}/day-of-year/${year}`} prefetch={false}>
+            {locale === "fr" ? `Jour de l'année ${year}` : `${year} day of year`}
+          </Link>
+          <Link href={`/${locale}/weeks-in/${year}`} prefetch={false}>
+            {locale === "fr" ? `Semaines en ${year}` : `Weeks in ${year}`}
+          </Link>
+          <Link href={`/${locale}/code-snippets/iso-week-number`} prefetch={false}>
+            {locale === "fr" ? "Code semaine ISO" : "ISO week code"}
+          </Link>
+          <Link href={`/${locale}/api-docs`} prefetch={false}>
+            {locale === "fr" ? "API jours fériés" : "Holidays API"}
           </Link>
         </div>
       </section>

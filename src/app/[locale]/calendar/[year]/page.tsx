@@ -151,6 +151,13 @@ export default async function CalendarYearPage({ params }: Props) {
             ? `Consultez le calendrier complet de l'année ${year} avec les numéros de semaine ISO 8601. Idéal pour la planification professionnelle et la gestion de projet au Canada.`
             : `View the full ${year} calendar with ISO 8601 week numbers. Perfect for business planning and project management in Canada.`}
         </p>
+        <p style={{ marginTop: "0.75rem" }}>
+          <Link href={`/${locale}/calendar/${year}/print`} prefetch={false}>
+            {locale === "fr"
+              ? `Version imprimable du calendrier ${year} →`
+              : `Printable ${year} calendar →`}
+          </Link>
+        </p>
       </section>
     </main>
   );

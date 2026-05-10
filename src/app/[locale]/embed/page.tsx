@@ -63,6 +63,15 @@ export default async function EmbedDocsPage({ params }: Props) {
   style="border:0;border-radius:12px;background:transparent">
 </iframe>`;
 
+  const holidaysSnippet = `<iframe
+  src="https://whatweek.ca/${locale}/embed/holidays?province=on"
+  title="WhatWeek.ca upcoming Canadian holidays"
+  width="320"
+  height="280"
+  loading="lazy"
+  style="border:0;border-radius:12px;background:transparent">
+</iframe>`;
+
   const apiSnippet = `curl "https://whatweek.ca/api/week.json?province=on&locale=${locale}"`;
 
   return (
@@ -157,6 +166,29 @@ export default async function EmbedDocsPage({ params }: Props) {
         </pre>
         <p className="subtle">
           <code>?year=2026</code> {isFr ? "pour une année spécifique" : "for a specific year"}
+        </p>
+      </section>
+
+      <section className="panel contentSection">
+        <h2>{isFr ? "Widget jours fériés" : "Holidays widget"}</h2>
+        <p className="subtle">
+          {isFr
+            ? "Liste des prochains jours fériés au Canada, optionnellement filtrée par province."
+            : "List of upcoming Canadian holidays, optionally filtered by province."}
+        </p>
+        <iframe
+          src={`/${locale}/embed/holidays?province=on`}
+          title={isFr ? "Aperçu du widget jours fériés" : "Holidays widget preview"}
+          width={320}
+          height={280}
+          loading="lazy"
+          style={{ border: 0, borderRadius: 12, background: "transparent" }}
+        />
+        <pre className="codeBlock">
+          <code>{holidaysSnippet}</code>
+        </pre>
+        <p className="subtle">
+          <code>?province=on</code> · <code>?year=2026</code> · <code>?limit=6</code>
         </p>
       </section>
 

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { checkApiAccess, rateLimitHeaders, rateLimitResponse } from "@/lib/api-keys";
 import { getHolidaysForDateRange, getNextLongWeekend } from "@/lib/holidays-ca";
 import {
   defaultCanadaTimeZone,
@@ -43,6 +44,9 @@ function ymd(date: Date): string {
 }
 
 export async function GET(request: Request) {
+  const access = checkApiAccess(request);
+  if (!access.allowed) return rateLimitResponse(access);
+
   const url = new URL(request.url);
   const province = parseProvince(url.searchParams.get("province"));
   const localeParam = url.searchParams.get("locale");
@@ -121,6 +125,7 @@ export async function GET(request: Request) {
       "Cache-Control": "public, max-age=600, s-maxage=1800, stale-while-revalidate=86400",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET",
+      ...rateLimitHeaders(access),
     },
   });
 }

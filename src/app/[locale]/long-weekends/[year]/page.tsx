@@ -8,8 +8,10 @@ import { isProvinceCode, provinceCodes, provinceNames, type ProvinceCode } from 
 import { buildFaqJsonLd } from "@/lib/seo-metadata";
 import { formatDateLong, getIsoWeekNumber } from "@/lib/week";
 
-const MIN_YEAR = new Date().getUTCFullYear() - 2;
-const MAX_YEAR = new Date().getUTCFullYear() + 4;
+// Pre-render an extended window so 2024–2030 (and a few years either side)
+// always have static long-weekend pages — competitors rank multiple years.
+const MIN_YEAR = Math.min(2024, new Date().getUTCFullYear() - 2);
+const MAX_YEAR = Math.max(2030, new Date().getUTCFullYear() + 4);
 
 type Props = {
   params: Promise<{ locale: string; year: string }>;
