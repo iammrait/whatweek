@@ -6,7 +6,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getHolidaysForYear, type Holiday } from "@/lib/holidays-ca";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import {
+  buildBreadcrumbJsonLd,
+  buildFaqJsonLd,
+  buildLocaleAlternates,
+  buildWebApplicationJsonLd,
+} from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 
 type Props = {
@@ -158,20 +163,26 @@ export default async function PayPeriodPage({ params }: Props) {
     ],
   };
 
-  const softwareAppJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: isFr ? "Calculatrice de périodes de paie au Canada" : "Canadian Pay Period Calculator",
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Any",
+  const title = isFr
+    ? "Calculatrice de périodes de paie au Canada"
+    : "Canadian Pay Period Calculator";
+  const description = isFr
+    ? "Générez votre calendrier de paie hebdomadaire, aux 2 semaines, bimensuel ou mensuel, avec les jours fériés canadiens et les paies décalées en cas de week-end."
+    : "Generate a weekly, bi-weekly, semi-monthly, or monthly pay schedule with Canadian statutory holidays and weekend shifts handled automatically.";
+
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? "Période de paie" : "Pay period", path: "/pay-period-calculator" },
+  ]);
+  const webAppJsonLd = buildWebApplicationJsonLd({
+    name: title,
+    description,
     url: `https://whatweek.ca/${locale}/pay-period-calculator`,
-    inLanguage: isFr ? "fr-CA" : "en-CA",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "CAD" },
-  };
+    applicationCategory: "BusinessApplication",
+  });
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Période de paie" : "Pay period", path: "/pay-period-calculator" }]), faqJsonLd, howToJsonLd, softwareAppJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, howToJsonLd, webAppJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

@@ -6,7 +6,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getHolidaysForYear, type Holiday } from "@/lib/holidays-ca";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import {
+  buildBreadcrumbJsonLd,
+  buildFaqJsonLd,
+  buildLocaleAlternates,
+  buildWebApplicationJsonLd,
+} from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 
 type Props = {
@@ -84,6 +89,13 @@ export default async function BusinessDaysPage({ params }: Props) {
   const defaultEnd = new Date(today);
   defaultEnd.setUTCDate(today.getUTCDate() + 30);
 
+  const title = isFr
+    ? "Calculatrice de jours ouvrables au Canada"
+    : "Canadian Business Days Calculator";
+  const description = isFr
+    ? "Comptez les jours ouvrables entre deux dates ou ajoutez N jours ouvrables, en excluant les week-ends et les jours fériés canadiens par province."
+    : "Count business days between two dates or add N business days, with Canadian provincial statutory holidays automatically excluded.";
+
   const faq = [
     {
       question: isFr
@@ -111,13 +123,10 @@ export default async function BusinessDaysPage({ params }: Props) {
     },
   ];
 
-  const faqJsonLd = buildFaqJsonLd(faq);
   const howToJsonLd = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    name: isFr
-      ? "Compter les jours ouvrables au Canada"
-      : "Count business days in Canada",
+    name: isFr ? "Compter les jours ouvrables au Canada" : "Count business days in Canada",
     step: [
       {
         "@type": "HowToStep",
@@ -146,20 +155,19 @@ export default async function BusinessDaysPage({ params }: Props) {
     ],
   };
 
-  const softwareAppJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: isFr ? "Calculatrice de jours ouvrables au Canada" : "Canadian Business Days Calculator",
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Any",
+  const faqJsonLd = buildFaqJsonLd(faq);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? "Jours ouvrables" : "Business days", path: "/business-days-calculator" },
+  ]);
+  const webAppJsonLd = buildWebApplicationJsonLd({
+    name: title,
+    description,
     url: `https://whatweek.ca/${locale}/business-days-calculator`,
-    inLanguage: isFr ? "fr-CA" : "en-CA",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "CAD" },
-  };
+  });
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Jours ouvrables" : "Business days", path: "/business-days-calculator" }]), faqJsonLd, howToJsonLd, softwareAppJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, howToJsonLd, webAppJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

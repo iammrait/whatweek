@@ -5,7 +5,7 @@ import { DateWeekConverter } from "@/components/DateWeekConverter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates, buildWebApplicationJsonLd } from "@/lib/seo-metadata";
 import {
   getCanadaWeekNumber,
   getIsoWeekNumber,
@@ -135,20 +135,23 @@ export default async function DateToWeekPage({ params }: Props) {
     ],
   };
 
-  const softwareAppJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: isFr ? "Convertisseur date ↔ numéro de semaine" : "Date ↔ Week Number Converter",
-    applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Any",
+  const title = isFr
+    ? "Convertisseur date ↔ numéro de semaine"
+    : "Date ↔ Week Number Converter";
+  const description = isFr
+    ? "Convertissez n'importe quelle date en numéro de semaine ISO ou Canada, avec les dates de début et de fin correspondantes."
+    : "Convert any date to an ISO or Canada week number, with the corresponding start and end dates shown instantly.";
+
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [{ name: title, path: "/date-to-week" }]);
+  const webAppJsonLd = buildWebApplicationJsonLd({
+    name: title,
+    description,
     url: `https://whatweek.ca/${locale}/date-to-week`,
-    inLanguage: isFr ? "fr-CA" : "en-CA",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "CAD" },
-  };
+  });
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Convertisseur date ↔ semaine" : "Date ↔ Week converter", path: "/date-to-week" }]), faqJsonLd, howToJsonLd, softwareAppJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, howToJsonLd, webAppJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

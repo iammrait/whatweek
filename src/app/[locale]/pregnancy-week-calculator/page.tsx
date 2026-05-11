@@ -5,7 +5,7 @@ import { PregnancyWeekCalculator } from "@/components/PregnancyWeekCalculator";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates, buildWebApplicationJsonLd } from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 import { addDays, ymd } from "@/lib/date-math";
 
@@ -89,11 +89,27 @@ export default async function PregnancyWeekCalculatorPage({ params }: Props) {
     },
   ];
 
+  const title = isFr
+    ? "Calculatrice de semaines de grossesse (DPA + ISO)"
+    : "Pregnancy Week Calculator (Due Date + ISO Weeks)";
+  const description = isFr
+    ? "Calculatrice bilingue de grossesse : indiquez la date des dernières règles, la date prévue d'accouchement ou de conception. Affiche les 40 semaines, le trimestre, les jalons et la semaine ISO."
+    : "Bilingual pregnancy calculator: enter your last menstrual period, due date, or conception date. Shows all 40 weeks, trimester, milestones, and ISO week of the due date.";
+
   const faqJsonLd = buildFaqJsonLd(faq);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
     { name: isFr ? "Semaines de grossesse" : "Pregnancy weeks", path: "/pregnancy-week-calculator" },
   ]);
-  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
+  const webAppJsonLd = buildWebApplicationJsonLd({
+    name: title,
+    description,
+    url: `https://whatweek.ca/${locale}/pregnancy-week-calculator`,
+  });
+
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd],
+  };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (

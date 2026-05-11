@@ -180,3 +180,24 @@ export function buildBreadcrumbJsonLd(
     ],
   };
 }
+
+/**
+ * Build a WebApplication JSON-LD object for tool-based pages.
+ */
+export function buildWebApplicationJsonLd(options: {
+  name: string;
+  description: string;
+  url: string;
+  applicationCategory?: string;
+}): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: options.name,
+    description: options.description,
+    url: options.url,
+    applicationCategory: options.applicationCategory || "UtilityApplication",
+    operatingSystem: "All",
+    browserRequirements: "Requires JavaScript",
+  };
+}

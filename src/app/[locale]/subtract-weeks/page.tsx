@@ -5,7 +5,7 @@ import { AddSubtractWeeks } from "@/components/AddSubtractWeeks";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates, buildWebApplicationJsonLd } from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 import { ymd } from "@/lib/date-math";
 
@@ -60,16 +60,27 @@ export default async function SubtractWeeksPage({ params }: Props) {
     },
   ];
 
+  const title = isFr ? "Soustraire des semaines d'une date" : "Subtract Weeks from a Date Calculator";
+  const description = isFr
+    ? "Soustrayez N semaines d'une date pour retrouver la date passée, le jour de la semaine et la semaine ISO correspondante."
+    : "Subtract N weeks from any date and get the past date, weekday, and matching ISO week number — instantly.";
+
   const faqJsonLd = buildFaqJsonLd(faq);
-  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
-    { name: isFr ? "Soustraire des semaines" : "Subtract weeks", path: "/subtract-weeks" },
-  ]);
-  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
-  const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Soustraire" : "Subtract weeks", path: "/subtract-weeks" }]);
+  const webAppJsonLd = buildWebApplicationJsonLd({
+    name: title,
+    description,
+    url: `https://whatweek.ca/${locale}/subtract-weeks`,
+  });
+
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd],
+  };
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd).replace(/</g, "\\u003c") }} />
       <SiteHeader locale={locale} />
 
       <section className="hero">

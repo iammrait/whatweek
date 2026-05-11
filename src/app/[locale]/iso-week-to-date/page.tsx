@@ -5,7 +5,7 @@ import { IsoWeekToDateForm } from "@/components/IsoWeekToDateForm";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates, buildWebApplicationJsonLd } from "@/lib/seo-metadata";
 import { getIsoWeekNumber, getIsoWeekYear, getTodayInTimeZone } from "@/lib/week";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -68,16 +68,27 @@ export default async function IsoWeekToDatePage({ params }: Props) {
     },
   ];
 
+  const title = isFr ? "Semaine ISO → date — convertisseur" : "ISO Week to Date Converter";
+  const description = isFr
+    ? "Convertissez un numéro de semaine ISO 8601 et une année en plage de dates lundi–dimanche, avec contexte Canada et calendrier."
+    : "Convert any ISO 8601 week number and year into its Monday–Sunday date range, with Canadian calendar context and quick links.";
+
   const faqJsonLd = buildFaqJsonLd(faq);
-  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
-    { name: isFr ? "Semaine ISO → date" : "ISO week to date", path: "/iso-week-to-date" },
-  ]);
-  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
-  const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [{ name: isFr ? "ISO → Date" : "ISO to Date", path: "/iso-week-to-date" }]);
+  const webAppJsonLd = buildWebApplicationJsonLd({
+    name: title,
+    description,
+    url: `https://whatweek.ca/${locale}/iso-week-to-date`,
+  });
+
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd],
+  };
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd).replace(/</g, "\\u003c") }} />
       <SiteHeader locale={locale} year={defaultYear} />
 
       <section className="hero">

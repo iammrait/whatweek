@@ -236,6 +236,10 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
           changeFrequency: "monthly",
           priority: 0.7,
         }),
+        await buildEntry(typedLocale, `/school-year/${slug}/${year}`, {
+          changeFrequency: "monthly",
+          priority: 0.7,
+        }),
       );
     }
   }
