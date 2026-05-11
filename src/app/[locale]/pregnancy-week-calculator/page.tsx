@@ -5,7 +5,8 @@ import { PregnancyWeekCalculator } from "@/components/PregnancyWeekCalculator";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates, buildWebApplicationJsonLd } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates, buildWebApplicationJsonLd, buildWebPageJsonLd } from "@/lib/seo-metadata";
+import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 import { getTodayInTimeZone } from "@/lib/week";
 import { addDays, ymd } from "@/lib/date-math";
 
@@ -134,9 +135,21 @@ export default async function PregnancyWeekCalculatorPage({ params }: Props) {
     ],
   };
 
+  const lastModified = await getSitemapLastmod(locale, "/pregnancy-week-calculator");
+  const webPageJsonLd = buildWebPageJsonLd({
+    locale,
+    name: isFr ? "Calculateur de semaine de grossesse" : "Pregnancy Week Calculator",
+    description: isFr
+      ? "Calculez votre semaine de grossesse actuelle et votre date d'accouchement."
+      : "Calculate your current pregnancy week and estimated due date.",
+    url: `https://whatweek.ca/${locale}/pregnancy-week-calculator`,
+    dateModified: lastModified,
+    isSpeakable: true,
+  });
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd, howToJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd, howToJsonLd, webPageJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

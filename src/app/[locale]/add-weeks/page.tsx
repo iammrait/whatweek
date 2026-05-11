@@ -5,7 +5,8 @@ import { AddSubtractWeeks } from "@/components/AddSubtractWeeks";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates, buildWebApplicationJsonLd } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates, buildWebApplicationJsonLd, buildWebPageJsonLd } from "@/lib/seo-metadata";
+import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 import { getTodayInTimeZone } from "@/lib/week";
 import { ymd } from "@/lib/date-math";
 
@@ -107,9 +108,21 @@ export default async function AddWeeksPage({ params }: Props) {
     ],
   };
 
+  const lastModified = await getSitemapLastmod(locale, "/add-weeks");
+  const webPageJsonLd = buildWebPageJsonLd({
+    locale,
+    name: isFr ? "Ajouter des semaines à une date" : "Add Weeks to a Date",
+    description: isFr
+      ? "Calculez une date future en ajoutant des semaines."
+      : "Calculate a future date by adding weeks.",
+    url: `https://whatweek.ca/${locale}/add-weeks`,
+    dateModified: lastModified,
+    isSpeakable: true,
+  });
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd, howToJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd, howToJsonLd, webPageJsonLd],
   };
 
   return (
