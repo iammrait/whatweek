@@ -205,16 +205,21 @@ export default async function BusinessDaysPage({ params }: Props) {
       </section>
 
       <section className="panel contentSection">
-        <h2>{isFr ? "Comment ça fonctionne" : "How it works"}</h2>
+        <h2>{isFr ? "Calcul Précis des Jours Ouvrables au Canada" : "Accurate Business Day Calculation in Canada"}</h2>
         <p>
           {isFr
-            ? "Le décompte de jours ouvrables exclut le samedi, le dimanche et chaque jour férié statutaire applicable à la province sélectionnée. Les jours fériés proviennent de l’API publique Nager.Date pour le Canada, ce qui couvre les jours fériés nationaux et provinciaux."
-            : "Business-day counts exclude Saturday, Sunday, and every statutory holiday that applies to the selected province. Holiday data is sourced from the Nager.Date public API for Canada, covering national and provincial observances."}
+            ? "Déterminer le nombre exact de jours ouvrables au Canada nécessite de prendre en compte les variations provinciales. Contrairement à une simple soustraction de week-ends, notre outil intègre automatiquement les jours fériés statutaires spécifiques à chaque province et territoire canadien (comme le Jour de la Famille, la Fête de la Reine ou le Congé Civique)."
+            : "Determining the exact number of business days in Canada requires accounting for provincial variations. Unlike a simple weekend subtraction, our tool automatically integrates statutory holidays specific to each Canadian province and territory (such as Family Day, Victoria Day, or Civic Holiday)."}
         </p>
         <p>
           {isFr
-            ? "Le mode « Ajouter » avance ou recule jour par jour à partir d’une date de départ et compte uniquement les jours ouvrables. C’est l’outil de référence pour les délais légaux, les SLA, la livraison et la planification de projet."
-            : "The ‘Add’ mode steps forward or backward one day at a time from a starting date, counting only business days. It’s the go-to tool for legal deadlines, SLAs, delivery promises, and project planning."}
+            ? "Le décompte de jours ouvrables exclut systématiquement le samedi et le dimanche. En sélectionnant votre province, l’outil interroge les données officielles pour exclure les jours non travaillés applicables. C'est essentiel pour les professionnels de la paie, les services juridiques calculant des délais de prescription, et les gestionnaires de projet gérant des SLA (Service Level Agreements)."
+            : "Business-day counts systematically exclude Saturday and Sunday. By selecting your province, the tool queries official data to exclude applicable non-working days. This is essential for payroll professionals, legal departments calculating limitation periods, and project managers handling Service Level Agreements (SLAs)."}
+        </p>
+        <p>
+          {isFr
+            ? "Le mode « Ajouter des Jours » est particulièrement utile pour les contrats : entrez une date de départ et le nombre de jours ouvrables requis pour obtenir instantanément la date d'échéance réelle, en tenant compte des ponts et des jours fériés."
+            : "The ‘Add Days’ mode is particularly useful for contracts: enter a start date and the number of required business days to instantly get the actual due date, accounting for long weekends and statutory holidays."}
         </p>
       </section>
 

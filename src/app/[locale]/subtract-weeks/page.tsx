@@ -73,9 +73,37 @@ export default async function SubtractWeeksPage({ params }: Props) {
     url: `https://whatweek.ca/${locale}/subtract-weeks`,
   });
 
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: isFr ? "Comment soustraire des semaines d'une date" : "How to subtract weeks from a date",
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: isFr ? "Choisir la date de départ" : "Pick the start date",
+        text: isFr ? "Sélectionnez la date initiale dans le calendrier." : "Select the initial date in the date picker.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: isFr ? "Saisir le nombre de semaines" : "Enter number of weeks",
+        text: isFr ? "Entrez le nombre de semaines à soustraire." : "Input the number of weeks you want to subtract.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: isFr ? "Lire la date passée" : "Read the past date",
+        text: isFr
+          ? "L'outil affiche immédiatement la date résultante dans le passé."
+          : "The tool instantly displays the resulting date in the past.",
+      },
+    ],
+  };
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd, howToJsonLd],
   };
 
   return (

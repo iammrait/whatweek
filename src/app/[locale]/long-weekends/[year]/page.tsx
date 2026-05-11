@@ -225,6 +225,25 @@ export default async function LongWeekendsPage({ params, searchParams }: Props) 
         ))}
       </section>
 
+      <section className="panel contentSection">
+        <h2>{isFr ? `Planifiez vos vacances en ${year}` : `Plan Your ${year} Vacations`}</h2>
+        <p>
+          {isFr
+            ? `Les longs week-ends au Canada sont le moment idéal pour se ressourcer. En ${year}, nous avons identifié ${longWeekends.length} occasions de profiter de trois jours consécutifs ou plus en combinant les jours fériés statutaires et les fins de semaine.`
+            : `Long weekends in Canada are the perfect time to recharge. In ${year}, we have identified ${longWeekends.length} opportunities to enjoy three or more consecutive days off by combining statutory holidays with weekends.`}
+        </p>
+        <p>
+          {isFr
+            ? "Veuillez noter que certains jours fériés (comme le Jour du Souvenir ou le Jour de la Famille) varient selon la province ou le secteur d'activité (fédéral vs provincial). Notre liste se concentre sur les congés les plus largement observés pour vous aider dans votre planification personnelle et professionnelle."
+            : "Please note that certain holidays (like Remembrance Day or Family Day) vary by province or employment sector (federal vs. provincial). Our list focuses on the most widely observed breaks to assist you with your personal and professional planning."}
+        </p>
+        <p>
+          {isFr
+            ? `Utilisez les liens vers les numéros de semaine pour synchroniser vos projets avec le calendrier ISO 8601, le standard utilisé par la plupart des outils de gestion de projet au Canada.`
+            : `Use the week number links to sync your projects with the ISO 8601 calendar, the standard used by most project management tools in Canada.`}
+        </p>
+      </section>
+
       <section className="panel quickLinks">
         <h2>{isFr ? "Choisir une province" : "Pick a province"}</h2>
         <div className="linkGrid">

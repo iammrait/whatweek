@@ -186,16 +186,21 @@ export default async function DateToWeekPage({ params }: Props) {
       </section>
 
       <section className="panel contentSection">
-        <h2>{isFr ? "Comment ça fonctionne" : "How it works"}</h2>
+        <h2>{isFr ? "Comprendre les numéros de semaine au Canada" : "Understanding Week Numbers in Canada"}</h2>
         <p>
           {isFr
-            ? "Le mode « Date → Semaine » prend une date civile et calcule à la fois le numéro de semaine ISO 8601 (du lundi au dimanche) et le numéro de semaine Canada (du dimanche au samedi). Il affiche aussi le jour de la semaine et le jour de l’année—pratique pour la paie, la planification de projet et l’école."
-            : "Date → Week mode takes a calendar date and computes both the ISO 8601 week number (Monday–Sunday) and the Canada week number (Sunday–Saturday). It also reports the weekday and day-of-year, which are useful for payroll, project planning, and school terms."}
+            ? "Au Canada, deux systèmes de numérotation des semaines coexistent souvent. Le standard international (ISO 8601) commence la semaine le lundi et est utilisé universellement dans les logiciels, la logistique et les affaires mondiales. Cependant, de nombreuses institutions canadiennes et calendriers personnels commencent la semaine le dimanche."
+            : "In Canada, two week-numbering systems often coexist. The international standard (ISO 8601) starts the week on Monday and is used universally in software, logistics, and global business. However, many Canadian institutions and personal calendars start the week on Sunday."}
         </p>
         <p>
           {isFr
-            ? "Le mode « Semaine → Dates » prend une année et un numéro de semaine ISO et retourne la plage de dates correspondante. Si vous demandez la semaine 53 d’une année qui n’en a que 52, l’outil signale l’erreur."
-            : "Week → Dates mode takes an ISO year and week number and returns the matching date range. If you request week 53 of a year that only has 52 weeks, the tool flags the input as out of range."}
+            ? "Notre convertisseur calcule les deux simultanément. Le mode « Date → Semaine » prend une date civile et calcule à la fois le numéro de semaine ISO 8601 (lun–dim) et le numéro de semaine Canada (dim–sam). Il affiche aussi le jour de la semaine et le jour de l’année—essentiel pour la paie, la planification de projet et les calendriers scolaires."
+            : "Our converter calculates both simultaneously. The ‘Date → Week’ mode takes a calendar date and computes both the ISO 8601 week number (Mon–Sun) and the Canada week number (Sun–Sat). It also reports the weekday and day-of-year—essential for payroll, project planning, and school schedules."}
+        </p>
+        <p>
+          {isFr
+            ? "Le mode « Semaine → Dates » fonctionne dans l'autre sens : entrez une année et un numéro de semaine ISO pour obtenir la plage de dates exacte. C'est l'outil idéal pour traduire les dates de livraison « Semaine 42 » en jours civils concrets."
+            : "The ‘Week → Dates’ mode works the other way: enter an ISO year and week number to get the exact date range. This is the perfect tool for translating 'Week 42' delivery dates into concrete calendar days."}
         </p>
       </section>
 

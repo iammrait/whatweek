@@ -81,9 +81,39 @@ export default async function IsoWeekToDatePage({ params }: Props) {
     url: `https://whatweek.ca/${locale}/iso-week-to-date`,
   });
 
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: isFr ? "Convertir une semaine ISO en date" : "Convert ISO week to date",
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: isFr ? "Entrer l'année" : "Enter the year",
+        text: isFr ? "Saisissez l'année ISO 8601 souhaitée." : "Input the desired ISO 8601 year.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: isFr ? "Entrer la semaine" : "Enter the week",
+        text: isFr
+          ? "Saisissez le numéro de semaine (1 à 53)."
+          : "Input the week number (1 to 53).",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: isFr ? "Lire la plage de dates" : "Read the date range",
+        text: isFr
+          ? "Le calendrier affiche instantanément la plage lundi–dimanche correspondante."
+          : "The calendar instantly displays the matching Monday–Sunday range.",
+      },
+    ],
+  };
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd, howToJsonLd],
   };
 
   return (

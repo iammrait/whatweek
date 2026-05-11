@@ -106,9 +106,37 @@ export default async function PregnancyWeekCalculatorPage({ params }: Props) {
     url: `https://whatweek.ca/${locale}/pregnancy-week-calculator`,
   });
 
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: isFr ? "Comment calculer sa semaine de grossesse" : "How to calculate your pregnancy week",
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: isFr ? "Choisir le mode de calcul" : "Choose calculation mode",
+        text: isFr ? "Sélectionnez : dernières règles, date prévue ou date de conception." : "Select: last period, due date, or conception date.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: isFr ? "Saisir la date" : "Enter the date",
+        text: isFr ? "Entrez la date correspondant au mode choisi." : "Input the date corresponding to your chosen mode.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: isFr ? "Suivre son calendrier" : "Track your calendar",
+        text: isFr
+          ? "L'outil génère votre calendrier de 40 semaines avec les jalons clés."
+          : "The tool generates your 40-week calendar with key milestones.",
+      },
+    ],
+  };
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd, howToJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

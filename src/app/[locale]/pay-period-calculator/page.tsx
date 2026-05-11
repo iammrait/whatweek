@@ -219,16 +219,21 @@ export default async function PayPeriodPage({ params }: Props) {
       </section>
 
       <section className="panel contentSection">
-        <h2>{isFr ? "Conseils pour la paie au Canada" : "Canadian payroll tips"}</h2>
+        <h2>{isFr ? "Planification du Cycle de Paie au Canada" : "Canadian Payroll Cycle Planning"}</h2>
         <p>
           {isFr
-            ? "Au Canada, la paie est typiquement gérée selon ISO 8601 ou Sun–Sat. Pour les paies hebdomadaires/aux 2 semaines, utilisez le numéro de semaine ISO comme période de référence et conservez le même système toute l’année—mélanger ISO et Sun–Sat est la cause la plus fréquente d’erreurs de paie."
-            : "Canadian payroll usually runs on ISO 8601 or Sun–Sat weeks. For weekly/bi-weekly cycles, use the ISO week number as your reference period and keep the same system all year—mixing ISO and Sun–Sat mid-year is the leading cause of payroll errors."}
+            ? "Gérer un calendrier de paie au Canada demande de la précision, surtout avec les variations des jours fériés statutaires entre les provinces. Que vous soyez une petite entreprise gérant sa propre paie ou un employé souhaitant prévoir ses revenus, comprendre la structure de votre période de paie est crucial."
+            : "Managing a payroll schedule in Canada requires precision, especially with statutory holiday variations between provinces. Whether you are a small business owner running your own payroll or an employee wanting to forecast your income, understanding your pay period structure is crucial."}
         </p>
         <p>
           {isFr
-            ? "Pour la conformité ARC : les remises de retenues à la source dépendent de votre seuil de remettant et de la fréquence. Vérifiez les dates limites avec votre logiciel de paie ou votre comptable—cet outil aide à planifier mais ne remplace pas un avis fiscal."
-            : "For CRA compliance: source-deduction remittance dates depend on your remitter threshold and pay frequency. Confirm exact deadlines with your payroll software or accountant—this tool helps you plan but is not tax advice."}
+            ? "La plupart des entreprises canadiennes utilisent soit le système de semaine ISO 8601 (lun–dim), soit le système traditionnel (dim–sam). Pour les cycles hebdomadaires ou aux deux semaines, nous recommandons d'utiliser le numéro de semaine ISO comme référence constante. Mélanger les systèmes en cours d'année est l'une des causes principales d'erreurs dans les rapports de fin d'année et les remises de retenues à la source."
+            : "Most Canadian businesses use either the ISO 8601 week system (Mon–Sun) or the traditional system (Sun–Sat). For weekly or bi-weekly cycles, we recommend using the ISO week number as a constant reference. Mixing systems mid-year is a primary cause of errors in year-end reporting and source deduction remittances."}
+        </p>
+        <p>
+          {isFr
+            ? "Conformité ARC : Les dates de remise des retenues à la source à l'Agence du revenu du Canada dépendent de votre fréquence de paie et de votre type de remettant. Notre outil vous aide à visualiser les dates de paiement réelles, en ajustant automatiquement les paies qui tombent un samedi, un dimanche ou un jour férié provincial, vous assurant ainsi de ne jamais manquer une échéance critique."
+            : "CRA Compliance: Source deduction remittance dates to the Canada Revenue Agency depend on your pay frequency and remitter type. Our tool helps you visualize actual payment dates, automatically adjusting for paydays that land on a Saturday, Sunday, or provincial holiday, ensuring you never miss a critical deadline."}
         </p>
       </section>
 

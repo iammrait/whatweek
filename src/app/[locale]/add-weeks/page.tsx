@@ -79,9 +79,37 @@ export default async function AddWeeksPage({ params }: Props) {
     url: `https://whatweek.ca/${locale}/add-weeks`,
   });
 
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: isFr ? "Comment ajouter des semaines à une date" : "How to add weeks to a date",
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: isFr ? "Choisir la date de départ" : "Pick the start date",
+        text: isFr ? "Sélectionnez la date initiale dans le calendrier." : "Select the initial date in the date picker.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: isFr ? "Saisir le nombre de semaines" : "Enter number of weeks",
+        text: isFr ? "Entrez le nombre de semaines à ajouter." : "Input the number of weeks you want to add.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: isFr ? "Lire la date finale" : "Read the final date",
+        text: isFr
+          ? "L'outil affiche immédiatement la date résultante et sa semaine ISO."
+          : "The tool instantly displays the resulting date and its ISO week.",
+      },
+    ],
+  };
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, webAppJsonLd, howToJsonLd],
   };
 
   return (
