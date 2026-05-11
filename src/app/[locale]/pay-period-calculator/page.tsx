@@ -11,7 +11,9 @@ import {
   buildFaqJsonLd,
   buildLocaleAlternates,
   buildWebApplicationJsonLd,
+  buildWebPageJsonLd,
 } from "@/lib/seo-metadata";
+import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 import { getTodayInTimeZone } from "@/lib/week";
 
 type Props = {
@@ -180,9 +182,19 @@ export default async function PayPeriodPage({ params }: Props) {
     applicationCategory: "BusinessApplication",
   });
 
+  const lastModified = await getSitemapLastmod(locale, "/pay-period-calculator");
+  const webPageJsonLd = buildWebPageJsonLd({
+    locale,
+    name: title,
+    description,
+    url: `https://whatweek.ca/${locale}/pay-period-calculator`,
+    dateModified: lastModified,
+    isSpeakable: true,
+  });
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, faqJsonLd, howToJsonLd, webAppJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, howToJsonLd, webAppJsonLd, webPageJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

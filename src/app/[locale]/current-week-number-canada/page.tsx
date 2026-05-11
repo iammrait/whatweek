@@ -81,10 +81,26 @@ export default async function CurrentWeekNumberCanadaPage({ params }: Props) {
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
     { name: locale === "fr" ? "Semaine actuelle" : "Current week", path: "/current-week-number-canada" },
   ]);
+  const speakableJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${canonical}#webpage`,
+    url: canonical,
+    inLanguage: locale === "fr" ? "fr-CA" : "en-CA",
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".hero h1", ".hero .subtle", ".currentWeek"],
+    },
+  };
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbJsonLd, speakableJsonLd],
+  };
+  const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} />
       <section className="hero">
         <nav className="breadcrumbs" aria-label="Breadcrumb">

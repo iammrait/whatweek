@@ -5,7 +5,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getLongWeekendsForYear } from "@/lib/holidays-ca";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { isProvinceCode, provinceCodes, provinceNames, type ProvinceCode } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildWebPageJsonLd } from "@/lib/seo-metadata";
+import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 import { formatDateLong, getIsoWeekNumber } from "@/lib/week";
 
 // Pre-render an extended window so 2024–2030 (and a few years either side)
@@ -132,21 +133,50 @@ export default async function LongWeekendsPage({ params, searchParams }: Props) 
   const faqJsonLd = buildFaqJsonLd(faq);
 
   const itemListJsonLd = {
-    "@context": "https://schema.org",
     "@type": "ItemList",
     name: isFr ? `Longs week-ends ${year}` : `${year} long weekends`,
     itemListElement: longWeekends.map((weekend, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      name: isFr ? weekend.labelFr : weekend.labelEn,
-      startDate: weekend.start.toISOString().slice(0, 10),
-      endDate: weekend.end.toISOString().slice(0, 10),
+      item: {
+        "@type": "Event",
+        name: isFr ? weekend.labelFr : weekend.labelEn,
+        startDate: weekend.start.toISOString().slice(0, 10),
+        endDate: weekend.end.toISOString().slice(0, 10),
+        eventStatus: "https://schema.org/EventScheduled",
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        location: {
+          "@type": "Place",
+          name: geo,
+          address: {
+            "@type": "PostalAddress",
+            addressCountry: "CA",
+          },
+        },
+      },
     })),
   };
 
+  const lastModified = await getSitemapLastmod(locale, `/long-weekends/${year}`);
+  const webPageJsonLd = buildWebPageJsonLd({
+    locale,
+    name: isFr ? `Longs week-ends ${year}` : `${year} long weekends`,
+    description: isFr
+      ? `${longWeekends.length} longs week-ends prévus en ${year}. Cliquez sur une semaine pour voir les détails.`
+      : `${longWeekends.length} long weekends scheduled in ${year}. Click any week to see its calendar detail.`,
+    url: `https://whatweek.ca/${locale}/long-weekends/${year}`,
+    dateModified: lastModified,
+    isSpeakable: true,
+  });
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? `Longs week-ends ${year}` : `${year} long weekends`, path: `/long-weekends/${year}` }]), faqJsonLd, itemListJsonLd],
+    "@graph": [
+      buildBreadcrumbJsonLd(locale, [{ name: isFr ? `Longs week-ends ${year}` : `${year} long weekends`, path: `/long-weekends/${year}` }]),
+      faqJsonLd,
+      itemListJsonLd,
+      webPageJsonLd,
+    ],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

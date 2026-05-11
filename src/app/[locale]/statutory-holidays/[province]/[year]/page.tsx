@@ -5,7 +5,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getHolidaysForYearByProvince, getLongWeekendsForYear } from "@/lib/holidays-ca";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { isProvinceCode, provinceCodes, provinceNames, type ProvinceCode } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildWebPageJsonLd } from "@/lib/seo-metadata";
+import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 import { formatDateLong, getIsoWeekNumber } from "@/lib/week";
 
 const MIN_YEAR = new Date().getUTCFullYear() - 2;
@@ -168,10 +169,26 @@ export default async function ProvinceHolidaysPage({ params }: Props) {
   ];
 
   const faqJsonLd = buildFaqJsonLd(faq);
+  faqJsonLd.speakable = {
+    "@type": "SpeakableSpecification",
+    cssSelector: [".hero h1", ".heroLead", ".faqEntry h3"],
+  };
+
+  const lastModified = await getSitemapLastmod(locale, `/statutory-holidays/${slug}/${year}`);
+  const webPageJsonLd = buildWebPageJsonLd({
+    locale,
+    name: isFr ? `Jours fériés ${geo} ${year}` : `${geo} ${year} statutory holidays`,
+    description: isFr
+      ? `${geo} observe ${holidays.length} jours fériés statutaires en ${year}.`
+      : `${geo} observes ${holidays.length} statutory holidays in ${year}.`,
+    url: `https://whatweek.ca/${locale}/statutory-holidays/${slug}/${year}`,
+    dateModified: lastModified,
+    isSpeakable: true,
+  });
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, faqJsonLd, ...eventsJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, ...eventsJsonLd, webPageJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

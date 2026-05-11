@@ -5,7 +5,14 @@ import { DateWeekConverter } from "@/components/DateWeekConverter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates, buildWebApplicationJsonLd } from "@/lib/seo-metadata";
+import {
+  buildBreadcrumbJsonLd,
+  buildFaqJsonLd,
+  buildLocaleAlternates,
+  buildWebApplicationJsonLd,
+  buildWebPageJsonLd,
+} from "@/lib/seo-metadata";
+import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 import {
   getCanadaWeekNumber,
   getIsoWeekNumber,
@@ -142,16 +149,25 @@ export default async function DateToWeekPage({ params }: Props) {
     ? "Convertissez n'importe quelle date en numéro de semaine ISO ou Canada, avec les dates de début et de fin correspondantes."
     : "Convert any date to an ISO or Canada week number, with the corresponding start and end dates shown instantly.";
 
+  const lastModified = await getSitemapLastmod(locale, "/date-to-week");
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [{ name: title, path: "/date-to-week" }]);
   const webAppJsonLd = buildWebApplicationJsonLd({
     name: title,
     description,
     url: `https://whatweek.ca/${locale}/date-to-week`,
   });
+  const webPageJsonLd = buildWebPageJsonLd({
+    locale,
+    name: title,
+    description,
+    url: `https://whatweek.ca/${locale}/date-to-week`,
+    dateModified: lastModified,
+    isSpeakable: true,
+  });
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, faqJsonLd, howToJsonLd, webAppJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, howToJsonLd, webAppJsonLd, webPageJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

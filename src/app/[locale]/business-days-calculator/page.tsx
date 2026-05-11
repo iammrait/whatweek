@@ -11,7 +11,9 @@ import {
   buildFaqJsonLd,
   buildLocaleAlternates,
   buildWebApplicationJsonLd,
+  buildWebPageJsonLd,
 } from "@/lib/seo-metadata";
+import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 import { getTodayInTimeZone } from "@/lib/week";
 
 type Props = {
@@ -155,6 +157,7 @@ export default async function BusinessDaysPage({ params }: Props) {
     ],
   };
 
+  const lastModified = await getSitemapLastmod(locale, "/business-days-calculator");
   const faqJsonLd = buildFaqJsonLd(faq);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
     { name: isFr ? "Jours ouvrables" : "Business days", path: "/business-days-calculator" },
@@ -164,10 +167,18 @@ export default async function BusinessDaysPage({ params }: Props) {
     description,
     url: `https://whatweek.ca/${locale}/business-days-calculator`,
   });
+  const webPageJsonLd = buildWebPageJsonLd({
+    locale,
+    name: title,
+    description,
+    url: `https://whatweek.ca/${locale}/business-days-calculator`,
+    dateModified: lastModified,
+    isSpeakable: true,
+  });
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, faqJsonLd, howToJsonLd, webAppJsonLd],
+    "@graph": [breadcrumbJsonLd, faqJsonLd, howToJsonLd, webAppJsonLd, webPageJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

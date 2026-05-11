@@ -182,6 +182,41 @@ export function buildBreadcrumbJsonLd(
 }
 
 /**
+ * Build a WebPage JSON-LD object.
+ */
+export function buildWebPageJsonLd(options: {
+  locale: Locale;
+  name: string;
+  description: string;
+  url: string;
+  datePublished?: string;
+  dateModified?: string;
+  isSpeakable?: boolean;
+}) {
+  return {
+    "@type": "WebPage",
+    "@id": `${options.url}/#webpage`,
+    url: options.url,
+    name: options.name,
+    description: options.description,
+    inLanguage: options.locale === "fr" ? "fr-CA" : "en-CA",
+    ...(options.datePublished ? { datePublished: options.datePublished } : {}),
+    ...(options.dateModified ? { dateModified: options.dateModified } : {}),
+    ...(options.isSpeakable
+      ? {
+          speakable: {
+            "@type": "SpeakableSpecification",
+            cssSelector: ["h1", ".heroLead"],
+          },
+        }
+      : {}),
+    isPartOf: {
+      "@id": `https://whatweek.ca/${options.locale}/#website`,
+    },
+  };
+}
+
+/**
  * Build a WebApplication JSON-LD object for tool-based pages.
  */
 export function buildWebApplicationJsonLd(options: {
@@ -191,13 +226,18 @@ export function buildWebApplicationJsonLd(options: {
   applicationCategory?: string;
 }): Record<string, unknown> {
   return {
-    "@context": "https://schema.org",
     "@type": "WebApplication",
+    "@id": `${options.url}/#software`,
     name: options.name,
     description: options.description,
     url: options.url,
     applicationCategory: options.applicationCategory || "UtilityApplication",
     operatingSystem: "All",
     browserRequirements: "Requires JavaScript",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
   };
 }
