@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getSeoOverride } from "@/lib/seo-overrides";
-import { getIsoWeekPeriodStart, weekDetailDescription, weekDetailTitle } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, getIsoWeekPeriodStart, weekDetailDescription, weekDetailTitle } from "@/lib/seo-metadata";
 import { formatDateLong, getWeeksInIsoYear } from "@/lib/week";
 
 type Props = {
@@ -45,6 +45,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? [`semaine ${week} ${year}`, `détails semaine ${week}`, `dates semaine ${week}`, `calendrier semaine ${week}`]
+      : [`week ${week} ${year}`, `week ${week} details`, `week ${week} dates`, `week ${week} calendar`],
     alternates: {
       canonical,
       languages: {
@@ -84,30 +87,10 @@ export default async function WeekDetailPage({ params }: Props) {
   end.setUTCDate(start.getUTCDate() + 6);
   const dateLocale = locale === "fr" ? "fr-CA" : "en-CA";
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: locale === "fr" ? "Accueil" : "Home",
-        item: `https://whatweek.ca/${locale}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: year.toString(),
-        item: `https://whatweek.ca/${locale}/calendar/${year}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: `${locale === "fr" ? "Semaine" : "Week"} ${week}`,
-        item: `https://whatweek.ca/${locale}/week/${year}/${week}`,
-      },
-    ],
-  };
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: year.toString(), path: `/calendar/${year}` },
+    { name: `${locale === "fr" ? "Semaine" : "Week"} ${week}`, path: `/week/${year}/${week}` },
+  ]);
 
   const nextWeek = week === maxWeeks ? 1 : week + 1;
   const nextYear = week === maxWeeks ? year + 1 : year;

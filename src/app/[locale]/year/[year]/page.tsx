@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getHolidaysForYearByProvince, getLongWeekendsForYear } from "@/lib/holidays-ca";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { provinceCodes, provinceNames } from "@/lib/provinces";
-import { buildFaqJsonLd } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/lib/seo-metadata";
 import { formatDateLong, getWeeksInIsoYear } from "@/lib/week";
 
 const MIN_YEAR = new Date().getUTCFullYear() - 5;
@@ -133,12 +133,16 @@ export default async function YearFactsPage({ params }: Props) {
   ];
 
   const faqJsonLd = buildFaqJsonLd(faq);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? `Année ${year}` : `Year ${year}`, path: `/year/${year}` },
+  ]);
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
 
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} year={year} />
 
       <section className="hero">

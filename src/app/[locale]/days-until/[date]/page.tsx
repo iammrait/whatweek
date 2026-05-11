@@ -5,7 +5,7 @@ import { DaysCalculator } from "@/components/DaysCalculator";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/lib/seo-metadata";
 import { getIsoWeekNumber, getTodayInTimeZone } from "@/lib/week";
 import {
   diffInDays,
@@ -159,11 +159,16 @@ export default async function DaysUntilDatePage({ params }: Props) {
   ];
 
   const faqJsonLd = buildFaqJsonLd(faq);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? "Jours jusqu'à" : "Days until", path: "/days-until" },
+    { name: date, path: `/days-until/${date}` },
+  ]);
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} year={year} />
 
       <section className="hero">

@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getHolidaysForYear, type Holiday } from "@/lib/holidays-ca";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/lib/seo-metadata";
 import { formatDateLong, getIsoWeekNumber, getTodayInTimeZone } from "@/lib/week";
 import { addDays, ymd } from "@/lib/date-math";
 
@@ -194,7 +194,7 @@ export default async function PayCalendarPage({ params, searchParams }: Props) {
       startDate: ymd(row.paid),
     })),
   };
-  const graphJsonLd = { "@context": "https://schema.org", "@graph": [faqJsonLd, itemListJsonLd] };
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? `Calendrier de paie ${year}` : `${year} pay calendar`, path: `/pay-calendar/${year}` }]), faqJsonLd, itemListJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   const upcomingIndex = schedule.findIndex((row) => row.paid.getTime() >= today.getTime());

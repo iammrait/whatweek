@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import { provinceCodes, provinceNames } from "@/lib/provinces";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -76,7 +76,7 @@ export default async function ApiDocsPage({ params }: Props) {
     inLanguage: isFr ? "fr-CA" : "en-CA",
   };
 
-  const graphJsonLd = { "@context": "https://schema.org", "@graph": [faqJsonLd, apiJsonLd] };
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? "API jours fériés" : "Holidays API", path: "/api-docs" }]), faqJsonLd, apiJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   const exampleHolidays = `curl https://whatweek.ca/api/holidays.json?year=2026&province=on`;

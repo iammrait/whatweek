@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/lib/seo-metadata";
 import { dayOfYear, daysInYear, isLeapYear, ymd } from "@/lib/date-math";
 import { formatDateLong, getIsoWeekNumber, getIsoWeekYear, getTodayInTimeZone } from "@/lib/week";
 
@@ -112,6 +112,10 @@ export default async function DayOfYearPage({ params }: Props) {
   ];
 
   const faqJsonLd = buildFaqJsonLd(faq);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? `Jour de l'année ${year}` : `${year} day of year`, path: `/day-of-year/${year}` },
+  ]);
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   // Group by month for navigability, but render compactly.
@@ -126,7 +130,7 @@ export default async function DayOfYearPage({ params }: Props) {
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} year={year} />
 
       <section className="hero">

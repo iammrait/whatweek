@@ -5,7 +5,7 @@ import { YearCalendar } from "@/components/YearCalendar";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { calendarYearDescription, calendarYearTitle } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, calendarYearDescription, calendarYearTitle } from "@/lib/seo-metadata";
 import { getTodayInTimeZone, getWeeksInIsoYear, getYearCalendar } from "@/lib/week";
 
 type Props = {
@@ -34,6 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? [`calendrier ${year}`, `numéros de semaine ${year}`, `calendrier canada ${year}`, `planning ${year}`, `semaine iso ${year}`]
+      : [`${year} calendar`, `${year} week numbers`, `canada calendar ${year}`, `${year} planner`, `iso weeks ${year}`],
     alternates: {
       canonical,
       languages: {
@@ -69,24 +72,9 @@ export default async function CalendarYearPage({ params }: Props) {
   const today = getTodayInTimeZone(defaultCanadaTimeZone);
   const months = getYearCalendar(year, today, "iso");
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: locale === "fr" ? "Accueil" : "Home",
-        item: `https://whatweek.ca/${locale}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: year.toString(),
-        item: `https://whatweek.ca/${locale}/calendar/${year}`,
-      },
-    ],
-  };
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: year.toString(), path: `/calendar/${year}` },
+  ]);
 
   const faqJsonLd = {
     "@context": "https://schema.org",

@@ -5,7 +5,7 @@ import { WeeksCalculator } from "@/components/WeeksCalculator";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 import { popularCanadianDates, resolvePopularDate, ymd } from "@/lib/date-math";
 
@@ -29,6 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["semaines avant une date", "compte à rebours semaines", "combien de semaines", "temps restant", "calculateur de délais"]
+      : ["weeks until date", "weeks countdown", "how many weeks", "time remaining", "deadline calculator"],
     alternates: buildLocaleAlternates("/weeks-until"),
     openGraph: {
       title,
@@ -79,11 +82,15 @@ export default async function WeeksUntilLandingPage({ params }: Props) {
   ];
 
   const faqJsonLd = buildFaqJsonLd(faq);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? "Semaines jusqu'à" : "Weeks until", path: "/weeks-until" },
+  ]);
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} />
 
       <section className="hero">

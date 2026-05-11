@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getHolidaysForYearByProvince, getLongWeekendsForYear } from "@/lib/holidays-ca";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { isProvinceCode, provinceCodes, provinceNames, type ProvinceCode } from "@/lib/provinces";
-import { buildFaqJsonLd } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/lib/seo-metadata";
 import { formatDateLong, getIsoWeekNumber } from "@/lib/week";
 
 const MIN_YEAR = new Date().getUTCFullYear() - 2;
@@ -69,6 +69,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? [`jours fériés ${year} ${geo}`, `congés statutaires ${year}`, `calendrier fériés ${province}`, `fêtes canada ${year}`]
+      : [`${year} holidays ${geo}`, `statutory holidays ${year}`, `${province} holiday calendar`, `canada public holidays ${year}`],
     alternates: {
       canonical,
       languages: {
@@ -113,30 +116,10 @@ export default async function ProvinceHolidaysPage({ params }: Props) {
 
   const icsHref = `/api/holidays.ics?province=${slug}&year=${year}&locale=${locale}`;
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: isFr ? "Accueil" : "Home",
-        item: `https://whatweek.ca/${locale}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: isFr ? "Jours fériés" : "Statutory holidays",
-        item: `https://whatweek.ca/${locale}/statutory-holidays/${slug}/${year}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: `${geo} ${year}`,
-        item: `https://whatweek.ca/${locale}/statutory-holidays/${slug}/${year}`,
-      },
-    ],
-  };
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? "Jours fériés" : "Statutory holidays", path: `/statutory-holidays/${slug}/${year}` },
+    { name: `${geo} ${year}`, path: `/statutory-holidays/${slug}/${year}` },
+  ]);
 
   const eventsJsonLd = holidays.map((holiday) => ({
     "@context": "https://schema.org",

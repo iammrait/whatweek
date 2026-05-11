@@ -31,11 +31,29 @@ export const metadata: Metadata = {
   authors: [{ name: "whatweek.ca" }],
   creator: "whatweek.ca",
   publisher: "whatweek.ca",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml", sizes: "any" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   verification: {
     google: "-1kAoDQ7unIxAkV5bPCkChU32yBHLe9FSqXp0uGZhf4",
     yandex: "71d354bd6770d616",
     other: {
       "msvalidate.01": "1ABB4698830808FB5C2E81CF22FA73AF",
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
 };
@@ -56,6 +74,10 @@ export default async function RootLayout({
     <html lang={lang} className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
         <link
           rel="search"
           type="application/opensearchdescription+xml"

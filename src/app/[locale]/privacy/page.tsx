@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
+import { buildBreadcrumbJsonLd } from "@/lib/seo-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -50,24 +51,9 @@ export default async function PrivacyPage({ params }: Props) {
   const dictionary = getDictionary(locale);
   const dateModified = new Date().toISOString().slice(0, 10);
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: locale === "fr" ? "Accueil" : "Home",
-        item: `https://whatweek.ca/${locale}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: dictionary.linkPrivacy,
-        item: `https://whatweek.ca/${locale}/privacy`,
-      },
-    ],
-  };
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: dictionary.linkPrivacy, path: "/privacy" },
+  ]);
 
   const webPageJsonLd = {
     "@context": "https://schema.org",

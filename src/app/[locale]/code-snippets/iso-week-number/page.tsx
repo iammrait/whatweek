@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -246,7 +246,7 @@ export default async function CodeSnippetsPage({ params }: Props) {
     proficiencyLevel: "Beginner",
     mainEntityOfPage: `https://whatweek.ca/${locale}/code-snippets/iso-week-number`,
   };
-  const graphJsonLd = { "@context": "https://schema.org", "@graph": [faqJsonLd, techArticleJsonLd] };
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Code semaine ISO" : "ISO week code", path: "/code-snippets/iso-week-number" }]), faqJsonLd, techArticleJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (

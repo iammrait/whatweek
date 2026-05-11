@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { isoWeekCanadaDescription, isoWeekCanadaTitle } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, isoWeekCanadaDescription, isoWeekCanadaTitle } from "@/lib/seo-metadata";
 import { formatDateLong, getIsoWeekNumber, getTodayInTimeZone, startOfIsoWeek } from "@/lib/week";
 
 type Props = {
@@ -25,6 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["numéro de semaine iso canada", "semaine iso 8601", "calendrier iso", "numéro de semaine international", "standard iso semaine"]
+      : ["iso week number canada", "iso 8601 week", "iso calendar", "international week number", "iso week standard"],
     alternates: {
       canonical,
       languages: {
@@ -62,24 +65,9 @@ export default async function IsoWeekNumberCanadaPage({ params }: Props) {
   end.setUTCDate(start.getUTCDate() + 6);
 
   const canonical = `https://whatweek.ca/${locale}/iso-week-number-canada`;
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: locale === "fr" ? "Accueil" : "Home",
-        item: `https://whatweek.ca/${locale}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: locale === "fr" ? "Semaine ISO" : "ISO week",
-        item: canonical,
-      },
-    ],
-  };
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: locale === "fr" ? "Semaine ISO" : "ISO week", path: "/iso-week-number-canada" },
+  ]);
 
   return (
     <main className="container">

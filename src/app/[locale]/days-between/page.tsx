@@ -5,7 +5,7 @@ import { DaysCalculator } from "@/components/DaysCalculator";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 import { ymd } from "@/lib/date-math";
 
@@ -84,7 +84,7 @@ export default async function DaysBetweenPage({ params }: Props) {
     inLanguage: isFr ? "fr-CA" : "en-CA",
     offers: { "@type": "Offer", price: "0", priceCurrency: "CAD" },
   };
-  const graphJsonLd = { "@context": "https://schema.org", "@graph": [faqJsonLd, softwareAppJsonLd] };
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Jours entre deux dates" : "Days between dates", path: "/days-between" }]), faqJsonLd, softwareAppJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (

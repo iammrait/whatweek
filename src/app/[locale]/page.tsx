@@ -111,13 +111,6 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     robots: {
       index: !hasSearchParams,
       follow: true,
-      googleBot: {
-        index: !hasSearchParams,
-        follow: true,
-        "max-snippet": -1,
-        "max-image-preview": "large",
-        "max-video-preview": -1,
-      },
     },
   };
 }

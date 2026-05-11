@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
+import { buildBreadcrumbJsonLd } from "@/lib/seo-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -19,6 +20,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["à propos de whatweek", "calendrier semaine canada", "numérotation des semaines", "norme iso 8601", "outil calendrier"]
+      : ["about whatweek", "canada week calendar", "week numbering", "iso 8601 standard", "calendar tool"],
     alternates: {
       canonical,
       languages: {
@@ -50,24 +54,9 @@ export default async function AboutPage({ params }: Props) {
   const dictionary = getDictionary(locale);
   const dateModified = new Date().toISOString().slice(0, 10);
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: locale === "fr" ? "Accueil" : "Home",
-        item: `https://whatweek.ca/${locale}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: locale === "fr" ? "À propos" : "About",
-        item: `https://whatweek.ca/${locale}/about`,
-      },
-    ],
-  };
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: locale === "fr" ? "À propos" : "About", path: "/about" },
+  ]);
 
   const webPageJsonLd = {
     "@context": "https://schema.org",

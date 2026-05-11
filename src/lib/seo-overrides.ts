@@ -44,6 +44,38 @@ export const seoOverrides: Record<string, SeoOverride> = {
     title: "Combien de semaines dans une année?",
     description: "Découvrez combien de semaines compte une année et accédez aux calendriers canadiens par année.",
   },
+  "/en/date-to-week": {
+    title: "Date to Week Number Converter",
+    description: "Convert any date to an ISO or Canada week number. Supports 1900–2100 with start and end dates.",
+  },
+  "/fr/date-to-week": {
+    title: "Convertisseur Date en Numéro de Semaine",
+    description: "Convertissez n'importe quelle date en numéro de semaine ISO ou Canada. Supporte 1900–2100.",
+  },
+  "/en/business-days-calculator": {
+    title: "Canada Business Days Calculator",
+    description: "Count working days between two dates in Canada, excluding statutory holidays and weekends.",
+  },
+  "/fr/business-days-calculator": {
+    title: "Calculatrice de Jours Ouvrables Canada",
+    description: "Comptez les jours travaillés entre deux dates au Canada, hors jours fériés et week-ends.",
+  },
+  "/en/pay-period-calculator": {
+    title: "2026 Canada Pay Period Calculator",
+    description: "Plan your payroll with the 2026 Canada pay period calculator. Supports biweekly, semi-monthly, and weekly cycles.",
+  },
+  "/fr/pay-period-calculator": {
+    title: "Calculateur de Périodes de Paie 2026 Canada",
+    description: "Planifiez votre paie avec le calculateur 2026. Supporte les cycles bi-hebdomadaires, semi-mensuels et hebdomadaires.",
+  },
+  "/en/long-weekends/2026": {
+    title: "2026 Long Weekends in Canada",
+    description: "See all scheduled 2026 long weekends in Canada with exact dates and statutory holidays for every province.",
+  },
+  "/fr/long-weekends/2026": {
+    title: "Longs Week-ends 2026 au Canada",
+    description: "Consultez tous les longs week-ends prévus en 2026 au Canada avec dates exactes et jours fériés par province.",
+  },
 };
 
 /**

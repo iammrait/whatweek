@@ -5,7 +5,7 @@ import { IsoWeekToDateForm } from "@/components/IsoWeekToDateForm";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import { getIsoWeekNumber, getIsoWeekYear, getTodayInTimeZone } from "@/lib/week";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -28,6 +28,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["semaine iso en date", "convertisseur semaine", "calendrier semaine iso", "plage de dates semaine", "semaine canada"]
+      : ["iso week to date", "week number converter", "iso week calendar", "week date range", "canada week schedule"],
     alternates: buildLocaleAlternates("/iso-week-to-date"),
     openGraph: { title, description, type: "website", url: `https://whatweek.ca/${locale}/iso-week-to-date`, locale: isFr ? "fr_CA" : "en_CA", images: [{ url: ogImage, width: 1200, height: 630, alt: title }] },
     twitter: { card: "summary_large_image", title, description, images: [ogImage] },
@@ -66,11 +69,15 @@ export default async function IsoWeekToDatePage({ params }: Props) {
   ];
 
   const faqJsonLd = buildFaqJsonLd(faq);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? "Semaine ISO → date" : "ISO week to date", path: "/iso-week-to-date" },
+  ]);
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} year={defaultYear} />
 
       <section className="hero">

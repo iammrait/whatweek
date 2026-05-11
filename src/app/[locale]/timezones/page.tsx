@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
-import { buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import {
   canadianTimezoneSlugs,
   canadianTimezones,
@@ -27,10 +27,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = isFr
     ? "Heure en direct et numéros de semaine ISO 8601 pour les six fuseaux horaires du Canada : Pacifique, Rocheuses, Centre, Est, Atlantique, Terre-Neuve."
     : "Live time and ISO 8601 week numbers for all six Canadian time zones: Pacific, Mountain, Central, Eastern, Atlantic, Newfoundland.";
+  const ogImage = `https://whatweek.ca/${locale}/opengraph-image`;
   return {
     title,
     description,
+    keywords: isFr
+      ? ["fuseaux horaires canada", "heure canada", "semaine iso canada", "décalage horaire", "heure pacifique", "heure de l'est"]
+      : ["canada time zones", "current time canada", "iso week canada", "time difference", "pacific time", "eastern time"],
     alternates: buildLocaleAlternates("/timezones"),
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://whatweek.ca/${locale}/timezones`,
+      locale: isFr ? "fr_CA" : "en_CA",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
@@ -42,6 +60,7 @@ export default async function TimezonesIndexPage({ params }: Props) {
 
   return (
     <main className="container">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Fuseaux horaires" : "Time zones", path: "/timezones" }])) }} />
       <SiteHeader locale={locale} />
       <section className="hero">
         <nav className="breadcrumbs" aria-label="Breadcrumb">

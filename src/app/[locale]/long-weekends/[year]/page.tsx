@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getLongWeekendsForYear } from "@/lib/holidays-ca";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { isProvinceCode, provinceCodes, provinceNames, type ProvinceCode } from "@/lib/provinces";
-import { buildFaqJsonLd } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/lib/seo-metadata";
 import { formatDateLong, getIsoWeekNumber } from "@/lib/week";
 
 // Pre-render an extended window so 2024–2030 (and a few years either side)
@@ -57,6 +57,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? [`longs week-ends ${year}`, `ponts ${year}`, `vacances canada ${year}`, `week-ends prolongés`, `planifier vacances`]
+      : [`long weekends ${year}`, `holiday weekends ${year}`, `canada vacation ${year}`, `extended weekends`, `trip planning`],
     alternates: {
       canonical,
       languages: {
@@ -143,7 +146,7 @@ export default async function LongWeekendsPage({ params, searchParams }: Props) 
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [faqJsonLd, itemListJsonLd],
+    "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? `Longs week-ends ${year}` : `${year} long weekends`, path: `/long-weekends/${year}` }]), faqJsonLd, itemListJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

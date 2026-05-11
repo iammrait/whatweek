@@ -5,7 +5,7 @@ import { AddSubtractWeeks } from "@/components/AddSubtractWeeks";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 import { ymd } from "@/lib/date-math";
 
@@ -29,6 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["soustraire des semaines", "date passée", "moins n semaines", "calculateur de date", "soustraire temps"]
+      : ["subtract weeks from date", "past date calculator", "minus n weeks", "date math", "time subtractor"],
     alternates: buildLocaleAlternates("/subtract-weeks"),
     openGraph: { title, description, type: "website", url: `https://whatweek.ca/${locale}/subtract-weeks`, locale: isFr ? "fr_CA" : "en_CA", images: [{ url: ogImage, width: 1200, height: 630, alt: title }] },
     twitter: { card: "summary_large_image", title, description, images: [ogImage] },
@@ -58,11 +61,15 @@ export default async function SubtractWeeksPage({ params }: Props) {
   ];
 
   const faqJsonLd = buildFaqJsonLd(faq);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? "Soustraire des semaines" : "Subtract weeks", path: "/subtract-weeks" },
+  ]);
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} />
 
       <section className="hero">

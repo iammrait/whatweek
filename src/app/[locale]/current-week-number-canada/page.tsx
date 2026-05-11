@@ -7,7 +7,7 @@ import { defaultCanadaTimeZone } from "@/lib/provinces";
 import { formatDateLong, getCanadaWeekNumber, getIsoWeekNumber, getTodayInTimeZone, startOfCanadaWeek, startOfIsoWeek } from "@/lib/week";
 
 import { getSeoOverride } from "@/lib/seo-overrides";
-import { currentWeekCanadaDescription, currentWeekCanadaTitle } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, currentWeekCanadaDescription, currentWeekCanadaTitle } from "@/lib/seo-metadata";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -33,6 +33,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["numéro de semaine actuelle canada", "quelle semaine sommes-nous", "semaine en cours", "calendrier canada", "numéro de semaine aujourd'hui"]
+      : ["current week number canada", "what week is it", "this week number", "canada calendar", "today week number"],
     alternates: {
       canonical,
       languages: {
@@ -75,24 +78,9 @@ export default async function CurrentWeekNumberCanadaPage({ params }: Props) {
   isoEnd.setUTCDate(isoStart.getUTCDate() + 6);
 
   const canonical = `https://whatweek.ca/${locale}/current-week-number-canada`;
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: locale === "fr" ? "Accueil" : "Home",
-        item: `https://whatweek.ca/${locale}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: locale === "fr" ? "Semaine actuelle" : "Current week",
-        item: canonical,
-      },
-    ],
-  };
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: locale === "fr" ? "Semaine actuelle" : "Current week", path: "/current-week-number-canada" },
+  ]);
 
   return (
     <main className="container">

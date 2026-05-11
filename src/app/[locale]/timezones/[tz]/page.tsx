@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { TimezoneClock } from "@/components/TimezoneClock";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import {
+  buildBreadcrumbJsonLd,
   buildFaqJsonLd,
   buildLocaleAlternates,
 } from "@/lib/seo-metadata";
@@ -24,6 +25,7 @@ import {
   startOfIsoWeek,
 } from "@/lib/week";
 import { formatLong } from "@/lib/date-math";
+
 
 type Props = {
   params: Promise<{ locale: string; tz: string }>;
@@ -137,11 +139,16 @@ export default async function TimezonePage({ params }: Props) {
   ];
 
   const faqJsonLd = buildFaqJsonLd(faq);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? "Fuseaux horaires" : "Time zones", path: "/timezones" },
+    { name: getTimezoneName(data, locale), path: `/timezones/${tz}` },
+  ]);
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} />
 
       <section className="hero">

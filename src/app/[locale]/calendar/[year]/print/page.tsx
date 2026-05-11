@@ -7,6 +7,7 @@ import { getDictionary, isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
 import { buildLocaleAlternates } from "@/lib/seo-metadata";
 import { getTodayInTimeZone, getWeeksInIsoYear, getYearCalendar } from "@/lib/week";
+import { buildBreadcrumbJsonLd } from "@/lib/seo-metadata";
 
 type Props = {
   params: Promise<{ locale: string; year: string }>;
@@ -46,7 +47,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: buildLocaleAlternates(`/calendar/${year}/print`),
-    robots: { index: true, follow: true },
   };
 }
 
@@ -63,6 +63,7 @@ export default async function CalendarYearPrintPage({ params }: Props) {
 
   return (
     <main className="container printContainer">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(locale, [{ name: String(year), path: `/calendar/${year}` }, { name: isFr ? "Imprimer" : "Print", path: `/calendar/${year}/print` }])) }} />
       <PrintTrigger />
 
       <section className="hero printOnlyHeader">

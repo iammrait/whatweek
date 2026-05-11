@@ -5,7 +5,7 @@ import { DaysCalculator } from "@/components/DaysCalculator";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 import { popularCanadianDates, resolvePopularDate, ymd } from "@/lib/date-math";
 
@@ -29,6 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["jours jusqu'à", "compte à rebours jours", "combien de jours avant", "calculateur de jours", "temps restant jours"]
+      : ["days until date", "days countdown", "how many days", "day counter", "days remaining calculator"],
     alternates: buildLocaleAlternates("/days-until"),
     openGraph: {
       title,
@@ -99,7 +102,7 @@ export default async function DaysUntilLandingPage({ params }: Props) {
     inLanguage: isFr ? "fr-CA" : "en-CA",
     offers: { "@type": "Offer", price: "0", priceCurrency: "CAD" },
   };
-  const graphJsonLd = { "@context": "https://schema.org", "@graph": [faqJsonLd, softwareAppJsonLd] };
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Jours jusqu'à" : "Days until", path: "/days-until" }]), faqJsonLd, softwareAppJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd } from "@/lib/seo-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -21,10 +22,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = isFr
     ? "Demandez une clé API gratuite pour /api/holidays.json et /api/week.json. Limites anonymes et limites partenaires expliquées."
     : "Request a free API key for /api/holidays.json and /api/week.json. Anonymous limits and partner limits explained.";
+  const ogImage = `https://whatweek.ca/${locale}/opengraph-image`;
   return {
     title,
     description,
+    keywords: isFr
+      ? ["api jours fériés canada", "clé api whatweek", "limites api", "développeur api canada", "calendrier api", "données fériés"]
+      : ["canada holidays api", "whatweek api key", "rate limits", "api developer canada", "calendar api", "holiday data"],
     alternates: buildLocaleAlternates("/api-keys"),
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://whatweek.ca/${locale}/api-keys`,
+      locale: isFr ? "fr_CA" : "en_CA",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
@@ -43,6 +62,7 @@ export default async function ApiKeysPage({ params }: Props) {
 
   return (
     <main className="container">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Clés API" : "API keys", path: "/api-keys" }])) }} />
       <SiteHeader locale={locale} />
       <section className="hero">
         <nav className="breadcrumbs" aria-label="Breadcrumb">

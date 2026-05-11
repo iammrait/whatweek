@@ -5,7 +5,7 @@ import { DateWeekConverter } from "@/components/DateWeekConverter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import {
   getCanadaWeekNumber,
   getIsoWeekNumber,
@@ -37,6 +37,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["date en numéro de semaine", "semaine en date", "convertisseur semaine iso", "numéro de semaine canada", "calculateur plage de dates", "calendrier semaine"]
+      : ["date to week number", "week number to date", "iso week converter", "canada week number", "week range calculator", "date converter"],
     alternates: buildLocaleAlternates("/date-to-week"),
     openGraph: {
       title,
@@ -145,7 +148,7 @@ export default async function DateToWeekPage({ params }: Props) {
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [faqJsonLd, howToJsonLd, softwareAppJsonLd],
+    "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Convertisseur date ↔ semaine" : "Date ↔ Week converter", path: "/date-to-week" }]), faqJsonLd, howToJsonLd, softwareAppJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

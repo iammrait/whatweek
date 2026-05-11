@@ -148,3 +148,35 @@ export function buildFaqJsonLd(
     })),
   };
 }
+
+/**
+ * Build a BreadcrumbList JSON-LD object from an ordered list of crumbs.
+ * Each crumb has a `name` (display label) and a `path` (path WITHOUT locale prefix).
+ * The locale prefix is prepended automatically.
+ *
+ * The final crumb in the list is the current page.
+ */
+export function buildBreadcrumbJsonLd(
+  locale: "en" | "fr",
+  crumbs: Array<{ name: string; path: string }>,
+): Record<string, unknown> {
+  const BASE = "https://whatweek.ca";
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: locale === "fr" ? "Accueil" : "Home",
+        item: `${BASE}/${locale}`,
+      },
+      ...crumbs.map((crumb, index) => ({
+        "@type": "ListItem",
+        position: index + 2,
+        name: crumb.name,
+        item: `${BASE}/${locale}${crumb.path}`,
+      })),
+    ],
+  };
+}

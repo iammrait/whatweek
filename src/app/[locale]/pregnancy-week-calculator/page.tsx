@@ -5,7 +5,7 @@ import { PregnancyWeekCalculator } from "@/components/PregnancyWeekCalculator";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 import { addDays, ymd } from "@/lib/date-math";
 
@@ -31,6 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["calculatrice de grossesse", "semaines de grossesse", "date d'accouchement", "suivi de grossesse", "calendrier de grossesse"]
+      : ["pregnancy calculator", "pregnancy weeks", "due date calculator", "pregnancy tracker", "pregnancy calendar"],
     alternates: buildLocaleAlternates("/pregnancy-week-calculator"),
     openGraph: {
       title,
@@ -87,11 +90,15 @@ export default async function PregnancyWeekCalculatorPage({ params }: Props) {
   ];
 
   const faqJsonLd = buildFaqJsonLd(faq);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
+    { name: isFr ? "Semaines de grossesse" : "Pregnancy weeks", path: "/pregnancy-week-calculator" },
+  ]);
+  const graphJsonLd = { "@context": "https://schema.org", "@graph": [breadcrumbJsonLd, faqJsonLd] };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
     <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} />
 
       <section className="hero">

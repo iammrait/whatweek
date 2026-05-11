@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getHolidaysForYear, type Holiday } from "@/lib/holidays-ca";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 
 type Props = {
@@ -34,6 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["jours ouvrables canada", "calculatrice jours ouvrables", "compter jours travaillés", "jours fériés canadiens", "décompte jours de semaine"]
+      : ["canadian business days", "business day calculator", "count working days", "canada statutory holidays", "weekday counter"],
     alternates: buildLocaleAlternates("/business-days-calculator"),
     openGraph: {
       title,
@@ -156,7 +159,7 @@ export default async function BusinessDaysPage({ params }: Props) {
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [faqJsonLd, howToJsonLd, softwareAppJsonLd],
+    "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Jours ouvrables" : "Business days", path: "/business-days-calculator" }]), faqJsonLd, howToJsonLd, softwareAppJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

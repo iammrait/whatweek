@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getHolidaysForYear, type Holiday } from "@/lib/holidays-ca";
 import { isLocale, locales, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import { getTodayInTimeZone } from "@/lib/week";
 
 type Props = {
@@ -34,6 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: isFr
+      ? ["périodes de paie 2026", "calendrier de paie canada", "bi-hebdomadaire paie", "dates de paie", "calculateur cycle de paie"]
+      : ["2026 pay periods", "canada pay calendar", "biweekly pay dates", "payroll schedule", "pay cycle calculator"],
     alternates: buildLocaleAlternates("/pay-period-calculator"),
     openGraph: {
       title,
@@ -168,7 +171,7 @@ export default async function PayPeriodPage({ params }: Props) {
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [faqJsonLd, howToJsonLd, softwareAppJsonLd],
+    "@graph": [buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Période de paie" : "Pay period", path: "/pay-period-calculator" }]), faqJsonLd, howToJsonLd, softwareAppJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

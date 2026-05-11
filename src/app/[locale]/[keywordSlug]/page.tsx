@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { getKeywordSnapshot, keywordPageOrder, keywordPages, type KeywordPageKey } from "@/lib/keyword-targets";
-import { buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildFaqJsonLd, buildLocaleAlternates } from "@/lib/seo-metadata";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
 import { getSeoOverride } from "@/lib/seo-overrides";
 
@@ -91,7 +91,7 @@ export default async function KeywordIntentPage({ params }: Props) {
 
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [faqJsonLd, itemListJsonLd],
+    "@graph": [buildBreadcrumbJsonLd(locale, [{ name: page.h1(locale), path: `/${keywordSlug}` }]), faqJsonLd, itemListJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
