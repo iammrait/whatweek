@@ -44,7 +44,7 @@ const sitemap = read("src/app/sitemap.ts");
 assertIncludes(sitemap, "MIN_YEAR", "sitemap min year bound");
 assertIncludes(sitemap, "MAX_YEAR", "sitemap max year bound");
 assertIncludes(sitemap, "generateSitemaps", "segmented sitemap ids");
-assertIncludes(sitemap, "startOfIsoWeek", "week-based lastModified logic");
+assertIncludes(sitemap, "getSitemapLastmod", "centralized lastModified logic");
 
 const sitemapIndexRoute = read("src/app/sitemap-index/route.ts");
 assertIncludes(sitemapIndexRoute, "sitemapindex", "sitemap index XML route");
