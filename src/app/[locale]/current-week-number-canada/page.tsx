@@ -7,7 +7,8 @@ import { defaultCanadaTimeZone } from "@/lib/provinces";
 import { formatDateLong, getCanadaWeekNumber, getIsoWeekNumber, getTodayInTimeZone, startOfCanadaWeek, startOfIsoWeek } from "@/lib/week";
 
 import { getSeoOverride } from "@/lib/seo-overrides";
-import { buildBreadcrumbJsonLd, currentWeekCanadaDescription, currentWeekCanadaTitle } from "@/lib/seo-metadata";
+import { buildBreadcrumbJsonLd, buildWebPageJsonLd, currentWeekCanadaDescription, currentWeekCanadaTitle } from "@/lib/seo-metadata";
+import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -81,20 +82,21 @@ export default async function CurrentWeekNumberCanadaPage({ params }: Props) {
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
     { name: locale === "fr" ? "Semaine actuelle" : "Current week", path: "/current-week-number-canada" },
   ]);
-  const speakableJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": `${canonical}#webpage`,
+  const lastModified = await getSitemapLastmod(locale, "/current-week-number-canada");
+  const webPageJsonLd = buildWebPageJsonLd({
+    locale,
+    name: locale === "fr" ? "Numéro de semaine actuel au Canada" : "Current Week Number in Canada",
+    description: locale === "fr"
+      ? "Consultez le numéro de semaine actuel au Canada."
+      : "Check the current week number in Canada.",
     url: canonical,
-    inLanguage: locale === "fr" ? "fr-CA" : "en-CA",
-    speakable: {
-      "@type": "SpeakableSpecification",
-      cssSelector: [".hero h1", ".hero .subtle", ".currentWeek"],
-    },
-  };
+    dateModified: lastModified,
+    isSpeakable: true,
+  });
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, speakableJsonLd],
+    "@graph": [breadcrumbJsonLd, webPageJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
