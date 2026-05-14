@@ -62,7 +62,7 @@ export default async function CalendarYearPrintPage({ params }: Props) {
   const months = getYearCalendar(year, today, "iso");
 
   return (
-    <main className="container printContainer">
+    <main id="main-content" className="container printContainer">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(locale, [{ name: String(year), path: `/calendar/${year}` }, { name: isFr ? "Imprimer" : "Print", path: `/calendar/${year}/print` }])) }} />
       <PrintTrigger />
 

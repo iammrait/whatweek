@@ -40,6 +40,13 @@ export type Dictionary = {
   aboutNav: string;
   linkAbout: string;
   linkPrivacy: string;
+  /** First focusable link in layout: skip to `#main-content`. */
+  skipToContent: string;
+  linkContact: string;
+  linkTerms: string;
+  linkEditorial: string;
+  /** Short trust / attribution line for footers (E-E-A-T). */
+  trustByline: string;
   cookieBannerText: string;
   cookieAccept: string;
   cookieDecline: string;
@@ -74,6 +81,9 @@ export type Dictionary = {
       h3YearByCalendar: { heading: string; body: string };
       h3WeekByYear: { heading: string; body: string };
     };
+    /** Homepage shows one month; full grid lives on /calendar/[year]. */
+    monthSnapshotSectionTitle: string;
+    fullYearCalendarCta: (year: number) => string;
   };
   faq: {
     heading: string;
@@ -139,6 +149,12 @@ const dictionaries: Record<Locale, Dictionary> = {
     aboutNav: "About",
     linkAbout: "About / methodology",
     linkPrivacy: "Privacy",
+    skipToContent: "Skip to main content",
+    linkContact: "Contact",
+    linkTerms: "Terms of service",
+    linkEditorial: "Editorial policy",
+    trustByline:
+      "Maintained by the whatweek.ca team. Week calculations follow documented ISO 8601 rules where noted; Canadian holiday dates are sourced from Nager.Date and cached on our servers.",
     cookieBannerText:
       "We use optional analytics (Google Analytics and Ahrefs) to understand traffic. Accept to enable cookies/scripts, or decline to use the site without them.",
     cookieAccept: "Accept analytics",
@@ -209,6 +225,8 @@ const dictionaries: Record<Locale, Dictionary> = {
             "Browse week-by-year indexes to jump straight to a specific week (e.g. week 27 of 2027), compare equivalent weeks across multiple years, or check 53-week ISO years before locking in payroll cycles.",
         },
       },
+      monthSnapshotSectionTitle: "This month’s week calendar",
+      fullYearCalendarCta: (y) => `Open full ${y} calendar (all 12 months)`,
     },
     faq: {
       heading: "Frequently asked questions about week numbers",
@@ -304,6 +322,12 @@ const dictionaries: Record<Locale, Dictionary> = {
     aboutNav: "À propos",
     linkAbout: "À propos / méthodologie",
     linkPrivacy: "Confidentialité",
+    skipToContent: "Passer au contenu principal",
+    linkContact: "Contact",
+    linkTerms: "Conditions d'utilisation",
+    linkEditorial: "Politique éditoriale",
+    trustByline:
+      "Maintenu par l’équipe whatweek.ca. Les calculs de semaine suivent les règles ISO 8601 documentées lorsque c’est indiqué ; les jours fériés canadiens proviennent de Nager.Date et sont mis en cache sur nos serveurs.",
     cookieBannerText:
       "Nous utilisons des analyses facultatives (Google Analytics et Ahrefs) pour comprendre le trafic. Acceptez pour activer cookies/scripts, ou refusez pour utiliser le site sans eux.",
     cookieAccept: "Accepter les analyses",
@@ -374,6 +398,8 @@ const dictionaries: Record<Locale, Dictionary> = {
             "Parcourez les index semaine-par-année pour aller directement à une semaine précise (par ex. semaine 27 de 2027), comparer la même semaine sur plusieurs années, ou repérer les années ISO à 53 semaines avant de fixer un cycle de paie.",
         },
       },
+      monthSnapshotSectionTitle: "Calendrier du mois en cours (semaines)",
+      fullYearCalendarCta: (y) => `Ouvrir le calendrier complet ${y} (12 mois)`,
     },
     faq: {
       heading: "Questions fréquentes sur les numéros de semaine",

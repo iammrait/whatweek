@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n";
+import { getHolidaysForDateRange } from "@/lib/holidays-ca";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getSeoOverride } from "@/lib/seo-overrides";
 import { buildBreadcrumbJsonLd, getIsoWeekPeriodStart, weekDetailDescription, weekDetailTitle } from "@/lib/seo-metadata";
@@ -87,10 +88,76 @@ export default async function WeekDetailPage({ params }: Props) {
   end.setUTCDate(start.getUTCDate() + 6);
   const dateLocale = locale === "fr" ? "fr-CA" : "en-CA";
 
+  const holidaysInWeek = await getHolidaysForDateRange(start, end, null);
+  const holidayNames =
+    holidaysInWeek.length > 0
+      ? holidaysInWeek.map((h) => (locale === "fr" ? h.nameFr : h.nameEn)).join(", ")
+      : null;
+
+  const canonical = `https://whatweek.ca/${locale}/week/${year}/${week}`;
+
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
     { name: year.toString(), path: `/calendar/${year}` },
     { name: `${locale === "fr" ? "Semaine" : "Week"} ${week}`, path: `/week/${year}/${week}` },
   ]);
+
+  const faqJsonLd = {
+    "@type": "FAQPage",
+    "@id": `${canonical}#faq`,
+    mainEntity: [
+      {
+        "@type": "Question",
+        name:
+          locale === "fr"
+            ? `Quelles dates couvre la semaine ${week} de l’année de semaine ISO ${year} ?`
+            : `What dates does ISO week ${week} of ISO week-year ${year} cover?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            locale === "fr"
+              ? `La semaine ${week} (${year}) commence le ${formatDateLong(start, dateLocale)} et se termine le ${formatDateLong(end, dateLocale)}, selon la norme ISO 8601 (lundi à dimanche).`
+              : `Week ${week} of ${year} begins on ${formatDateLong(start, dateLocale)} and ends on ${formatDateLong(end, dateLocale)}, per ISO 8601 (Monday through Sunday).`,
+        },
+      },
+      {
+        "@type": "Question",
+        name:
+          locale === "fr"
+            ? `Quels jours fériés fédéraux tombent dans la semaine ${week} (${year}) ?`
+            : `What federal statutory holidays fall in ISO week ${week} of ${year}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: holidayNames
+            ? locale === "fr"
+              ? `Pour la plage de dates affichée, les jours fériés à caractère national suivants tombent dans cette semaine : ${holidayNames}. Les jours fériés provinciaux varient selon la province.`
+              : `For the displayed date range, these nationally relevant statutory holidays fall in this week: ${holidayNames}. Province-specific observed holidays vary.`
+            : locale === "fr"
+              ? "Aucun jour férié fédéral à caractère national ne tombe sur ces dates. Des jours fériés provinciaux peuvent tout de même s’appliquer—utilisez le calendrier de la page d’accueil avec une province sélectionnée."
+              : "No nationally scoped federal statutory holidays fall on these dates. Province-specific holidays may still apply—use the home calendar with a province selected.",
+        },
+      },
+      {
+        "@type": "Question",
+        name:
+          locale === "fr"
+            ? "Cette page utilise-t-elle le calendrier de semaines ISO 8601 ?"
+            : "Does this page use the ISO 8601 week calendar?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            locale === "fr"
+              ? "Oui. Les numéros de semaine et les dates correspondent à la semaine ISO (lundi–dimanche) pour l’année de semaine ISO indiquée dans l’URL, ce qui est courant pour la paie et les outils internationaux."
+              : "Yes. Week numbers and dates follow ISO weeks (Monday–Sunday) for the ISO week-year shown in the URL, which is common for payroll tooling and international alignment.",
+        },
+      },
+    ],
+  };
+
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbJsonLd, faqJsonLd],
+  };
+  const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   const nextWeek = week === maxWeeks ? 1 : week + 1;
   const nextYear = week === maxWeeks ? year + 1 : year;
@@ -98,8 +165,8 @@ export default async function WeekDetailPage({ params }: Props) {
   const prevYear = week === 1 ? year - 1 : year;
 
   return (
-    <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+    <main id="main-content" className="container">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} year={year} />
       
       <section className="hero">

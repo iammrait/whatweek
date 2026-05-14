@@ -72,7 +72,7 @@ export default async function EmbedMonth({ params, searchParams }: Props) {
   const homeHref = `https://whatweek.ca/${locale}`;
 
   return (
-    <main className="embedWidget embedMonth">
+    <main id="main-content" className="embedWidget embedMonth">
       <div className="embedMonthHeader">
         <strong className="embedMonthTitle">{monthLabel}</strong>
         <span className="embedMonthSystem">

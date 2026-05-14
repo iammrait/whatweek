@@ -200,7 +200,7 @@ export default async function PayCalendarPage({ params, searchParams }: Props) {
   const upcomingIndex = schedule.findIndex((row) => row.paid.getTime() >= today.getTime());
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} year={year} />
 

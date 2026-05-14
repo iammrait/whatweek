@@ -65,7 +65,7 @@ export default async function EmbedYear({ params, searchParams }: Props) {
   const homeHref = `https://whatweek.ca/${locale}`;
 
   return (
-    <main className="embedWidget embedYear">
+    <main id="main-content" className="embedWidget embedYear">
       <div className="embedYearHeader">
         <strong className="embedYearTitle">{year}</strong>
         <span className="embedYearSystem">

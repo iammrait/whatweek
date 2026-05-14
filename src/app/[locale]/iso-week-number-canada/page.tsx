@@ -4,7 +4,13 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { defaultCanadaTimeZone } from "@/lib/provinces";
-import { buildBreadcrumbJsonLd, isoWeekCanadaDescription, isoWeekCanadaTitle } from "@/lib/seo-metadata";
+import {
+  buildBreadcrumbJsonLd,
+  buildWebPageJsonLd,
+  isoWeekCanadaDescription,
+  isoWeekCanadaTitle,
+} from "@/lib/seo-metadata";
+import { getSitemapLastmod } from "@/lib/sitemap-lastmod";
 import { formatDateLong, getIsoWeekNumber, getTodayInTimeZone, startOfIsoWeek } from "@/lib/week";
 
 type Props = {
@@ -68,10 +74,76 @@ export default async function IsoWeekNumberCanadaPage({ params }: Props) {
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(locale, [
     { name: locale === "fr" ? "Semaine ISO" : "ISO week", path: "/iso-week-number-canada" },
   ]);
+  const lastModified = await getSitemapLastmod(locale, "/iso-week-number-canada");
+  const webPageJsonLd = buildWebPageJsonLd({
+    locale,
+    name: locale === "fr" ? "Numéro de semaine ISO au Canada" : "ISO Week Number in Canada",
+    description: locale === "fr"
+      ? "Consultez la semaine ISO 8601 en cours au Canada."
+      : "Check the current ISO 8601 week number in Canada.",
+    url: canonical,
+    dateModified: lastModified,
+    isSpeakable: true,
+  });
+
+  const faqJsonLd = {
+    "@type": "FAQPage",
+    "@id": `${canonical}#faq`,
+    mainEntity: [
+      {
+        "@type": "Question",
+        name:
+          locale === "fr"
+            ? "Qu’est-ce que le numéro de semaine ISO 8601 au Canada ?"
+            : "What is the ISO 8601 week number in Canada?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            locale === "fr"
+              ? `La norme ISO 8601 numérote les semaines du lundi au dimanche. Aujourd’hui, la semaine ISO en cours est la semaine ${week} du ${formatDateLong(start, localeCode, defaultCanadaTimeZone)} au ${formatDateLong(end, localeCode, defaultCanadaTimeZone)}.`
+              : `ISO 8601 numbers weeks from Monday through Sunday. Right now the current ISO week is week ${week}, from ${formatDateLong(start, localeCode, defaultCanadaTimeZone)} through ${formatDateLong(end, localeCode, defaultCanadaTimeZone)}.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name:
+          locale === "fr"
+            ? "Quand la semaine ISO commence-t-elle et finit-elle ?"
+            : "When does an ISO week start and end?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            locale === "fr"
+              ? "Chaque semaine ISO commence le lundi à minuit (selon le calendrier utilisé ici en UTC pour les dates affichées) et se termine le dimanche. C’est le repère utilisé par beaucoup de systèmes internationaux et de logiciels."
+              : "Each ISO week begins on Monday (dates here use UTC for the displayed calendar boundaries) and ends on Sunday. This is the convention used by many international systems and software libraries.",
+        },
+      },
+      {
+        "@type": "Question",
+        name:
+          locale === "fr"
+            ? "Pourquoi la semaine ISO 1 peut-elle se trouver en janvier ou en décembre ?"
+            : "Why can ISO week 1 fall in January or December?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            locale === "fr"
+              ? "L’année de semaine ISO est centrée sur le jeudi : la semaine qui contient le premier jeudi de janvier est la semaine 1. Des semaines en bord d’année civile peuvent donc appartenir à une autre année ISO que l’année du calendrier."
+              : "ISO week-year is anchored around Thursdays: the week containing the first Thursday of January is week 1. Week-long ranges at calendar year boundaries can therefore belong to a different ISO week-year than the civil year label.",
+        },
+      },
+    ],
+  };
+
+  const graphJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [breadcrumbJsonLd, webPageJsonLd, faqJsonLd],
+  };
+  const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
-    <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+    <main id="main-content" className="container">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} />
       <section className="hero">
         <nav className="breadcrumbs" aria-label="Breadcrumb">

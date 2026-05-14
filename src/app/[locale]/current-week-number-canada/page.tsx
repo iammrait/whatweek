@@ -94,14 +94,63 @@ export default async function CurrentWeekNumberCanadaPage({ params }: Props) {
     isSpeakable: true,
   });
 
+  const faqJsonLd = {
+    "@type": "FAQPage",
+    "@id": `${canonical}#faq`,
+    mainEntity: [
+      {
+        "@type": "Question",
+        name:
+          locale === "fr"
+            ? "Quel est le numéro de semaine actuel au Canada aujourd’hui ?"
+            : "What is the current week number in Canada today?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            locale === "fr"
+              ? `Cette page affiche la semaine « Canada » (souvent dimanche à samedi) comme semaine ${canadaWeek} du ${formatDateLong(caStart, localeCode, defaultCanadaTimeZone)} au ${formatDateLong(caEnd, localeCode, defaultCanadaTimeZone)}, et la semaine ISO 8601 (lundi à dimanche) comme semaine ${isoWeek} du ${formatDateLong(isoStart, localeCode, defaultCanadaTimeZone)} au ${formatDateLong(isoEnd, localeCode, defaultCanadaTimeZone)}.`
+              : `This page shows the common Canada week (often Sunday–Saturday) as week ${canadaWeek} from ${formatDateLong(caStart, localeCode, defaultCanadaTimeZone)} through ${formatDateLong(caEnd, localeCode, defaultCanadaTimeZone)}, and the ISO 8601 week (Monday–Sunday) as week ${isoWeek} from ${formatDateLong(isoStart, localeCode, defaultCanadaTimeZone)} through ${formatDateLong(isoEnd, localeCode, defaultCanadaTimeZone)}.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name:
+          locale === "fr"
+            ? "Comment le numéro de semaine « Canada » est-il calculé ?"
+            : "How is the Canadian (Sunday–Saturday) week number calculated?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            locale === "fr"
+              ? "La semaine Canada commence généralement le dimanche et se termine le samedi. Le numéro de semaine compte à partir du premier dimanche tombant dans l’année civile concernée (règle pratique courante pour calendriers et paie au Canada), distinct de la semaine ISO 8601."
+              : "The Canada-style week usually runs Sunday through Saturday. The week number counts from the first Sunday-based week anchor in the relevant calendar year (a common convention for Canadian calendars and payroll), which is separate from ISO 8601 week numbering.",
+        },
+      },
+      {
+        "@type": "Question",
+        name:
+          locale === "fr"
+            ? "Pourquoi la semaine ISO peut-elle différer du numéro de semaine Canada ?"
+            : "Why can the ISO week number differ from the Canada week number?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            locale === "fr"
+              ? "L’ISO 8601 définit des semaines lundi–dimanche et une année de semaines qui peut chevaucher deux années civiles. La semaine Canada (souvent dimanche–samedi) suit une autre coupure hebdomadaire, donc les numéros et les bornes de dates ne coïncident pas toujours."
+              : "ISO 8601 defines Monday–Sunday weeks and a week-numbering year that can span two calendar years. The common Canada week (often Sunday–Saturday) uses a different weekly boundary, so week numbers and date ranges do not always match.",
+        },
+      },
+    ],
+  };
+
   const graphJsonLd = {
     "@context": "https://schema.org",
-    "@graph": [breadcrumbJsonLd, webPageJsonLd],
+    "@graph": [breadcrumbJsonLd, webPageJsonLd, faqJsonLd],
   };
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} />
       <section className="hero">

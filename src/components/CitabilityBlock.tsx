@@ -18,11 +18,11 @@ export function CitabilityBlock({ locale, dictionary }: Props) {
       </ul>
       <p className="subtle citabilitySources">
         {locale === "fr" ? "Sources : " : "Sources: "}
-        <a href="https://www.iso.org/iso-8601-date-and-time-format.html" rel="nofollow noreferrer" target="_blank">
+        <a href="https://www.iso.org/iso-8601-date-and-time-format.html" rel="nofollow noreferrer noopener" target="_blank">
           ISO.org
         </a>
         {" · "}
-        <a href="https://date.nager.at/swagger/index.html" rel="nofollow noreferrer" target="_blank">
+        <a href="https://date.nager.at/swagger/index.html" rel="nofollow noreferrer noopener" target="_blank">
           Nager.Date API
         </a>
         {" · "}

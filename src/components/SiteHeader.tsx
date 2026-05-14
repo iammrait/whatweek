@@ -51,6 +51,9 @@ export function SiteHeader({ locale, year, province, system }: Props) {
         <Link href={`/${locale}/about`} prefetch={false} className="headerBlogLink">
           {dictionary.aboutNav}
         </Link>
+        <Link href={`/${locale}/contact`} prefetch={false} className="headerBlogLink">
+          {dictionary.linkContact}
+        </Link>
         <a
           href="https://blog.whatweek.ca/"
           className="headerBlogLink"

@@ -106,7 +106,7 @@ export default async function ApiDocsPage({ params }: Props) {
 }`;
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} />
 

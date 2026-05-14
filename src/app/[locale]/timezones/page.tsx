@@ -59,7 +59,7 @@ export default async function TimezonesIndexPage({ params }: Props) {
   const isFr = locale === "fr";
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Fuseaux horaires" : "Time zones", path: "/timezones" }])) }} />
       <SiteHeader locale={locale} />
       <section className="hero">

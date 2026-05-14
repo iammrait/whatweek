@@ -164,6 +164,18 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
             changeFrequency: "monthly",
             priority: 0.4,
           }),
+          await buildEntry(typedLocale, "/contact", {
+            changeFrequency: "monthly",
+            priority: 0.45,
+          }),
+          await buildEntry(typedLocale, "/terms", {
+            changeFrequency: "monthly",
+            priority: 0.4,
+          }),
+          await buildEntry(typedLocale, "/editorial", {
+            changeFrequency: "monthly",
+            priority: 0.4,
+          }),
         ];
       }),
     );

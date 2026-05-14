@@ -74,8 +74,7 @@ export default async function RootLayout({
     <html lang={lang} className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.webmanifest" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Geist is self-hosted via next/font; no google fonts connection needed */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
         <link
@@ -86,9 +85,13 @@ export default async function RootLayout({
         />
         <meta name="theme-color" content="#e11d48" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
       </head>
       <body>
+        {/* Inline bootstrap before other body nodes — avoids a parser-blocking script in <head> */}
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+        <a className="skipToContent" href="#main-content">
+          {d.skipToContent}
+        </a>
         <ConsentAndAnalytics
           bannerText={d.cookieBannerText}
           acceptLabel={d.cookieAccept}

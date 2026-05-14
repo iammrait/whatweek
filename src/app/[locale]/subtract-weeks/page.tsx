@@ -120,7 +120,7 @@ export default async function SubtractWeeksPage({ params }: Props) {
   };
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd).replace(/</g, "\\u003c") }} />
       <SiteHeader locale={locale} />
 

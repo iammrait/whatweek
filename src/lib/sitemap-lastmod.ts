@@ -10,6 +10,9 @@ type RouteKind =
   | "isoWeek"
   | "about"
   | "privacy"
+  | "contact"
+  | "terms"
+  | "editorial"
   | "keyword"
   | "calendarYear"
   | "weekYear"
@@ -68,6 +71,12 @@ function getSourcePathForKind(kind: RouteKind): string {
       return path.join(process.cwd(), "src/app/[locale]/about/page.tsx");
     case "privacy":
       return path.join(process.cwd(), "src/app/[locale]/privacy/page.tsx");
+    case "contact":
+      return path.join(process.cwd(), "src/app/[locale]/contact/page.tsx");
+    case "terms":
+      return path.join(process.cwd(), "src/app/[locale]/terms/page.tsx");
+    case "editorial":
+      return path.join(process.cwd(), "src/app/[locale]/editorial/page.tsx");
     case "keyword":
       return path.join(process.cwd(), "src/app/[locale]/[keywordSlug]/page.tsx");
     case "calendarYear":
@@ -117,6 +126,9 @@ function getKindFromPath(pathWithoutLocale: string): RouteKind | undefined {
   if (pathWithoutLocale === "/iso-week-number-canada") return "isoWeek";
   if (pathWithoutLocale === "/about") return "about";
   if (pathWithoutLocale === "/privacy") return "privacy";
+  if (pathWithoutLocale === "/contact") return "contact";
+  if (pathWithoutLocale === "/terms") return "terms";
+  if (pathWithoutLocale === "/editorial") return "editorial";
   if (pathWithoutLocale === "/date-to-week") return "dateToWeek";
   if (pathWithoutLocale === "/business-days-calculator") return "businessDays";
   if (pathWithoutLocale === "/pay-period-calculator") return "payPeriod";

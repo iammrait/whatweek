@@ -62,7 +62,7 @@ export default async function EmbedWeek({ params, searchParams }: Props) {
   const homeHref = `https://whatweek.ca/${locale}`;
 
   return (
-    <main className="embedWidget">
+    <main id="main-content" className="embedWidget">
       <div className="embedWeek" aria-label={isFr ? "Numéro de semaine" : "Week number"}>
         W{isoWeek}
       </div>

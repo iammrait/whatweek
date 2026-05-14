@@ -72,7 +72,7 @@ export default async function PrivacyPage({ params }: Props) {
   };
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }} />
       <SiteHeader locale={locale} />
       <section className="hero">
@@ -126,6 +126,12 @@ export default async function PrivacyPage({ params }: Props) {
 
       <p className="subtle" style={{ textAlign: "center" }}>
         <Link href={`/${locale}/about`}>{dictionary.linkAbout}</Link>
+        {" · "}
+        <Link href={`/${locale}/contact`}>{dictionary.linkContact}</Link>
+        {" · "}
+        <Link href={`/${locale}/terms`}>{dictionary.linkTerms}</Link>
+        {" · "}
+        <Link href={`/${locale}/editorial`}>{dictionary.linkEditorial}</Link>
         {" · "}
         <Link href={`/${locale}`}>{locale === "fr" ? "Retour au calendrier" : "Back to calendar"}</Link>
       </p>

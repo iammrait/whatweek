@@ -71,7 +71,7 @@ export default async function EmbedHolidays({ params, searchParams }: Props) {
   const homeHref = `https://whatweek.ca/${locale}/long-weekends/${year}${province ? `?province=${province.replace("CA-", "").toLowerCase()}` : ""}`;
 
   return (
-    <main className="embedWidget">
+    <main id="main-content" className="embedWidget">
       <div className="embedMonthHeader">
         <strong className="embedMonthTitle">
           {isFr ? "Prochains jours fériés" : "Upcoming holidays"}

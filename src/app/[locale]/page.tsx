@@ -274,7 +274,7 @@ export default async function LocalePage({ params, searchParams }: Props) {
   const renderJsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: renderJsonLd(graphJsonLd) }} />
       <SiteHeader locale={locale} year={year} province={province} system={system} />
 
@@ -296,7 +296,6 @@ export default async function LocalePage({ params, searchParams }: Props) {
           <Link
             href={buildHomeHref(locale, { year, province, system: "iso" })}
             prefetch={false}
-            rel="nofollow"
             className={system === "iso" ? "systemActive" : undefined}
             aria-current={system === "iso" ? "page" : undefined}
           >
@@ -305,7 +304,6 @@ export default async function LocalePage({ params, searchParams }: Props) {
           <Link
             href={buildHomeHref(locale, { year, province, system: "canada" })}
             prefetch={false}
-            rel="nofollow"
             className={system === "canada" ? "systemActive" : undefined}
             aria-current={system === "canada" ? "page" : undefined}
           >
@@ -473,14 +471,15 @@ export default async function LocalePage({ params, searchParams }: Props) {
         </p>
         <p className="subtle">
           {locale === "fr" ? "Sources de données : " : "Data sources: "}
-          <a href="https://date.nager.at/swagger/index.html" rel="nofollow noreferrer" target="_blank">
+          <a href="https://date.nager.at/swagger/index.html" rel="nofollow noreferrer noopener" target="_blank">
             Nager.Date API
           </a>
           {" · "}
-          <a href="https://www.iso.org/iso-8601-date-and-time-format.html" rel="nofollow noreferrer" target="_blank">
+          <a href="https://www.iso.org/iso-8601-date-and-time-format.html" rel="nofollow noreferrer noopener" target="_blank">
             ISO 8601
           </a>
         </p>
+        <p className="subtle">{dictionary.trustByline}</p>
         <p className="subtle">
           <Link href={`/${locale}/about`} prefetch={false}>
             {dictionary.linkAbout}
@@ -488,6 +487,18 @@ export default async function LocalePage({ params, searchParams }: Props) {
           {" · "}
           <Link href={`/${locale}/privacy`} prefetch={false}>
             {dictionary.linkPrivacy}
+          </Link>
+          {" · "}
+          <Link href={`/${locale}/contact`} prefetch={false}>
+            {dictionary.linkContact}
+          </Link>
+          {" · "}
+          <Link href={`/${locale}/terms`} prefetch={false}>
+            {dictionary.linkTerms}
+          </Link>
+          {" · "}
+          <Link href={`/${locale}/editorial`} prefetch={false}>
+            {dictionary.linkEditorial}
           </Link>
           {" · "}
           <a href="https://blog.whatweek.ca/" target="_blank" rel="noopener noreferrer">

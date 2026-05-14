@@ -94,7 +94,7 @@ export default async function EmbedDocsPage({ params }: Props) {
   const apiSnippet = `curl "https://whatweek.ca/api/week.json?province=on&locale=${locale}"`;
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(locale, [{ name: isFr ? "Intégrer" : "Embed", path: "/embed" }])) }} />
       <SiteHeader locale={locale} />
       <section className="hero">

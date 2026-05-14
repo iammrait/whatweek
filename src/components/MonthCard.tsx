@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { type Dictionary, type Locale, toLocaleCode } from "@/lib/i18n";
-import { type MonthCalendar, type WeekSystem } from "@/lib/week";
+import { getIsoWeekNumber, getIsoWeekYear, type MonthCalendar, type WeekSystem } from "@/lib/week";
 
 type MonthCardProps = {
   dictionary: Dictionary;
@@ -12,15 +12,23 @@ type MonthCardProps = {
   daysShort: string[];
 };
 
-export function MonthCard({ dictionary, locale, month, todayStr, year, system, daysShort }: MonthCardProps) {
+export function MonthCard({
+  dictionary,
+  locale,
+  month,
+  todayStr,
+  year,
+  system: _system,
+  daysShort,
+}: MonthCardProps) {
   const localeCode = toLocaleCode(locale);
-  const caption = `${dictionary.monthsLong[month.monthIndex]} ${year}`;
+
+  const headingId = `month-${month.monthIndex}-title`;
 
   return (
     <article className="monthCard">
-      <h2>{dictionary.monthsLong[month.monthIndex]}</h2>
-      <table>
-        <caption className="srOnly">{caption}</caption>
+      <h2 id={headingId}>{dictionary.monthsLong[month.monthIndex]}</h2>
+      <table aria-labelledby={headingId}>
         <thead>
           <tr>
             <th scope="col">{dictionary.weekAbbrev}</th>
@@ -30,35 +38,38 @@ export function MonthCard({ dictionary, locale, month, todayStr, year, system, d
           </tr>
         </thead>
         <tbody>
-          {month.weeks.map((week) => (
-            <tr key={`${month.monthIndex}-${week.weekNumber}`} className={week.isCurrentWeek ? "currentRow" : ""}>
-              <th className="weekNum" scope="row">
-                {system === "iso" ? (
-                  <Link href={`/${locale}/week/${year}/${week.weekNumber}`} prefetch={false}>
+          {month.weeks.map((week) => {
+            const anchor = week.days[0]?.date;
+            const isoLinkYear = anchor ? getIsoWeekYear(anchor) : year;
+            const isoLinkWeek = anchor ? getIsoWeekNumber(anchor) : week.weekNumber;
+            const weekDetailHref = `/${locale}/week/${isoLinkYear}/${isoLinkWeek}`;
+
+            return (
+              <tr key={`${month.monthIndex}-${week.weekNumber}-${anchor?.toISOString() ?? ""}`} className={week.isCurrentWeek ? "currentRow" : ""}>
+                <th className="weekNum" scope="row">
+                  <Link href={weekDetailHref} prefetch={false}>
                     {String(week.weekNumber).padStart(2, "0")}
                   </Link>
-                ) : (
-                  String(week.weekNumber).padStart(2, "0")
-                )}
-              </th>
+                </th>
               {week.days.map((day) => {
                 const isToday = day.date.toISOString() === todayStr;
+                const title = new Intl.DateTimeFormat(localeCode, {
+                  dateStyle: "full",
+                  timeZone: "UTC",
+                }).format(day.date);
                 return (
-                  <td key={day.date.toISOString()} className={`${day.inMonth ? "inMonth" : "outMonth"} ${isToday ? "isToday" : ""}`}>
-                    <span
-                      title={new Intl.DateTimeFormat(localeCode, {
-                        dateStyle: "full",
-                        timeZone: "UTC",
-                      }).format(day.date)}
-                      className={isToday ? "todayBadge" : ""}
-                    >
-                      {day.dayOfMonth}
-                    </span>
+                  <td
+                    key={day.date.toISOString()}
+                    title={title}
+                    className={`${day.inMonth ? "inMonth" : "outMonth"}${isToday ? " isToday" : ""}`}
+                  >
+                    {day.dayOfMonth}
                   </td>
                 );
               })}
-            </tr>
-          ))}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </article>

@@ -75,7 +75,7 @@ export default async function AboutPage({ params }: Props) {
   };
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }} />
       <SiteHeader locale={locale} />
       <section className="hero">
@@ -85,6 +85,14 @@ export default async function AboutPage({ params }: Props) {
           <span>{dictionary.aboutNav}</span>
         </nav>
         <h1>{locale === "fr" ? "À propos de WhatWeek.ca" : "About WhatWeek.ca"}</h1>
+        <p className="subtle" style={{ maxWidth: "720px", margin: "0.75rem auto 0", lineHeight: 1.65 }}>
+          <time dateTime={dateModified}>
+            {locale === "fr" ? "Dernière mise à jour : " : "Last updated: "}
+            {dateModified}
+          </time>
+          {". "}
+          {dictionary.trustByline}
+        </p>
         <p className="subtle" style={{ maxWidth: "720px", margin: "0.75rem auto 0", lineHeight: 1.65 }}>
           {locale === "fr"
             ? "WhatWeek.ca est un calendrier bilingue axé sur le Canada : numéros de semaine (ISO 8601 ou semaine dimanche–samedi), jours fériés et repères de longs week-ends par province. Les guides détaillés sont publiés séparément sur le blog."
@@ -97,7 +105,7 @@ export default async function AboutPage({ params }: Props) {
         <ul style={{ paddingLeft: "1.25rem", lineHeight: 1.6 }}>
           <li>
             {locale === "fr" ? "Jours fériés : " : "Public holidays: "}
-            <a href="https://date.nager.at/swagger/index.html" rel="nofollow noreferrer" target="_blank">
+            <a href="https://date.nager.at/swagger/index.html" rel="nofollow noreferrer noopener" target="_blank">
               Nager.Date API
             </a>
             {locale === "fr"
@@ -106,7 +114,7 @@ export default async function AboutPage({ params }: Props) {
           </li>
           <li>
             {locale === "fr" ? "Semaines ISO : " : "ISO weeks: "}
-            <a href="https://www.iso.org/iso-8601-date-and-time-format.html" rel="nofollow noreferrer" target="_blank">
+            <a href="https://www.iso.org/iso-8601-date-and-time-format.html" rel="nofollow noreferrer noopener" target="_blank">
               ISO 8601
             </a>
             {locale === "fr" ? " (lundi–dimanche)." : " (Monday–Sunday)."}
@@ -231,7 +239,13 @@ export default async function AboutPage({ params }: Props) {
       </section>
 
       <p className="subtle" style={{ textAlign: "center" }}>
+        <Link href={`/${locale}/contact`}>{dictionary.linkContact}</Link>
+        {" · "}
         <Link href={`/${locale}/privacy`}>{dictionary.linkPrivacy}</Link>
+        {" · "}
+        <Link href={`/${locale}/terms`}>{dictionary.linkTerms}</Link>
+        {" · "}
+        <Link href={`/${locale}/editorial`}>{dictionary.linkEditorial}</Link>
         {" · "}
         <Link href={`/${locale}`}>{locale === "fr" ? "Retour au calendrier" : "Back to calendar"}</Link>
       </p>
