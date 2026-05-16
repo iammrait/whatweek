@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { ConsentAndAnalytics } from "@/components/ConsentAndAnalytics";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { themeBootstrapScript } from "@/components/ThemeToggle";
@@ -101,6 +102,7 @@ export default async function RootLayout({
         />
         <ServiceWorkerRegister />
         {children}
+        <Analytics />
       </body>
     </html>
   );
