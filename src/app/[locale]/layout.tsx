@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ConsentAndAnalytics } from "@/components/ConsentAndAnalytics";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
@@ -85,6 +86,13 @@ export default async function RootLayout({
         />
         <meta name="theme-color" content="#e11d48" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
+        {/* Google AdSense site verification + ad library loader */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9118571872700675"
+          crossOrigin="anonymous"
+          strategy="beforeInteractive"
+        />
       </head>
       <body>
         {/* Inline bootstrap before other body nodes — avoids a parser-blocking script in <head> */}
